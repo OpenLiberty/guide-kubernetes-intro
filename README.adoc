@@ -41,6 +41,21 @@ Learn how to...
 // https://openliberty.io/guides/rest-intro.html
 // https://github.com/OpenLiberty/guide-rest-intro
 
+To build:
+
+1. Install minikube, docker, kubernetes-cli, kubernetes-helm, some VM software like VirtualBox
+2. Run `minikube start`
+3. Run `helm init`
+4. Run `helm repo add ibm-charts https://raw.githubusercontent.com/IBM/charts/master/repo/stable/`
+5. Start the Docker daemon and run `eval $(minikube docker-env)`
+6. Navigate to `finish` and run `mvn package`
+7. Run `docker images` and verify that `name:1.0-SNAPSHOT` has been created.
+8. Run `helm search ibm` and make sure that `ibm-charts/ibm-open-liberty` is in the list.
+9. Run `helm install --name open-liberty --set image.pullPolicy=IfNotPresent --set image.repository=name --set image.tag=1.0-SNAPSHOT --set autoscaling.enabled=true --set autoscaling.minReplicas=3 --set autoscaling.maxReplicas=6 --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty --debug`
+10. Wait until all 3 pods are running. Ignore any getsockopt errors.
+11. Run `kubectl get services` and note the nodePort or run whats displayed at the end of helm installation.
+12. Run `minikube ip` to get the id address of minikube
+13. Curl `<minikube ip>:nodePort/api/name` repeatedly to see different container names displayed.
 
 == What you'll learn
 // Write about what the user will learn in a meaningful intro paragraph.
