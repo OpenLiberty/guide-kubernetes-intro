@@ -1,0 +1,119 @@
+// INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
+// INSTRUCTION: The copyright statement must appear at the top of the file
+//
+// Copyright (c) 2017 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+//   https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//     IBM Corporation
+//
+:page-layout: guide
+// INSTRUCTION: The project id is the part of the git repository after the guide- and must be specified
+:projectid: github repo name without the guide- prefix
+// INSTRUCTION: Provide an estimate of how long the guide will take to go through.
+:page-duration: 15 minutes
+// INSTRUCTION: Provide the date when the guide is published.  Format is YYYY-MM-DD.
+:page-releasedate: 2017-11-17
+// INSTRUCTION: Provide a description for the guide index page.
+:page-description: Learn how to create a REST service with JAX-RS, JSON-P, and Open Liberty.
+// INSTUCTION: Please provide relevant tags, try to avoid inventing new ones, tags where there is 1 guide for the tag isn't useful.
+:page-tags: ['REST', 'Getting Started']
+// INSTRUCTION: Specify the unique name of the guide that is used in the permalink.  For example below, it is rest-service
+:page-related-guides: ['']
+// INSTRUCTION: Specify the slug in the website. This must be unique.
+:page-permalink: /guides/rest-service
+// INSTRUCTION: You should have this to source the common page elements, clone git@github.com:OpenLiberty/guides-common.git
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+// INSTRUCTION: You can't have a new line between the attributes and the title.
+// The details of what to fill in for this template are in the comments. So, read the source for this template to see the comments.
+//
+// Example title: Creating a RESTful web service
+= Title of guide, starting with a gerund (Creating, Administering, and so on)
+
+// Start the introduction with "You'll explore how to..." or something similarly catchy:
+Learn how to...
+// Write no more than two sentences, or about fifty words with meaningful information on what the user can accomplish with this guide.
+// Do not start the introduction with "This guide...".
+
+// See the REST guide at as an exemplar guide.
+// https://openliberty.io/guides/rest-intro.html
+// https://github.com/OpenLiberty/guide-rest-intro
+
+
+== What you'll learn
+// Write about what the user will learn in a meaningful intro paragraph.
+// Follow the intro paragraph with more details of what the user will learn, but still keep it brief compared to the overall guide.
+
+// You'll next add the various sections that are needed for a particular guide.
+
+
+// Add this getting started section to your guide if it is applicable. Use the following include to pull in the git clone instructions from the guides-common repo.
+== Getting started
+include::{common-includes}/gitclone.adoc[]
+
+// This is a subsection of the "Getting started" section above. It should briefly walk the user through
+// how to setup everything in the "finish" directory and try out the finished version of what
+// they will be building.
+//=== Try what you’ll build
+include::{common-includes}/trywhatyoubuild-intro.adoc[]
+
+// Describe what user expects to see after running the complete version of the application.
+
+include::{common-includes}/trywhatyoubuild-end.adoc[]
+
+// Add this section to your guide if it is applicable.
+// Put this section in the appropriate order in your guide.
+== Building and running the application
+
+// Use the following include to pull in the Maven build instructions from the guides-common repo.
+include::{common-includes}/mvnbuild.adoc[]
+
+// In between here, you should state where you application can be found now that its running (ie. what urls)
+
+// Use the following include to pull in the Liberty start/stop server instructions from the guides-common repo.
+include::{common-includes}/mvnpackage.adoc[]
+
+
+== Section title for this section, starting with a gerund like Creating, Building, etc
+// Read the wiki for the general rules of thumb to help you with formatting these next few sections:
+// https://github.com/OpenLiberty/guides-common/wiki/Rules-of-thumb-for-formatting
+
+// Start each additional section title with a meaningful gerund such as Creating, Building, Testing, Configuring, or Administering.
+// Follow the gerund with a meaningful noun phrase. For example: Creating a JAX-RS application
+// Have as many sections and section titles as needed.
+
+// What to add for each section:
+// We'll be writing these sections by following a flow similar to technical blog posts or college textbooks so that the user thinks about the content.
+// Start each section with a meaningful description about what the user is doing in the section.
+// Include code snippets.
+// Avoid making all the documentation a series of steps and tasks, bullets, or numbered lists.
+// Use tick marks around directories, files, values, class names, method names, and so on.
+// Example: `this-is-a-file`, `this/is/a/path`, `thisIsAMethod`.
+
+
+// Include this section if appropriate
+== Running the tests
+
+// Include this for info on how to run the tests
+include::{common-includes}/mvnverify.adoc[]
+
+// Including a listing block with test results here
+
+// OPTIONAL: after listing the test results, mention a simple change a user can make/introduce that
+// will cause the tests to fail. Be brief and don't give the users all of the instructions. At this
+// point, they should be comfortable enough to figure it out on their own.
+
+
+== Great work! You're done!
+
+// Briefly summarize what the user achieved in this guide (1-2 sentences).
+
+// OPTIONAL: briefly state what the user could do next now that they've learned the technologies in this guide.
+
+// Include the below from the guides-common repo to tell users how they can contribute to the guide
+include::{common-includes}/finish.adoc[]
+
+// DO NO CREATE ANYMORE SECTIONS AT THIS POINT
+// Related guides will be added in automatically here if you included them in ":page-related-guides"
