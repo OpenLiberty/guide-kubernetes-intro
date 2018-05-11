@@ -12,13 +12,15 @@ import javax.ws.rs.ProcessingException;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 import io.openliberty.guides.ping.client.NameClient;
 import io.openliberty.guides.ping.client.UnknownUrlException;
 
 @RequestScoped
-@Path("/ping")
+@Path("")
 public class PingResource {
 
     @GET
@@ -33,8 +35,9 @@ public class PingResource {
             nameClient.getContainerName();
             return "pong";
         } catch (ProcessingException ex) {
-            // check if UnknownHostException is nested inside and rethrow if its not.
-            if (wasCausedByUnknownHostException(ex)) {
+            // Checking if UnknownHostException is nested inside and rethrowing if not.
+            Throwable rootEx = ExceptionUtils.getRootCause(ex);
+            if (rootEx != null && rootEx instanceof UnknownHostException) {
                 System.err.println("The specified host is unknown");
                 ex.printStackTrace();
             } else {
@@ -48,13 +51,6 @@ public class PingResource {
             ex.printStackTrace();
         }
         return "Bad response from " + host + "\nCheck the console log for more info.";
-    }
-    
-    /**
-     * Returns whether or not the given ProcessingException was caused by an UnknownHostException.
-     */
-    private boolean wasCausedByUnknownHostException(ProcessingException ex) {
-        return ex.getCause() != null && ex.getCause().getCause() instanceof UnknownHostException;
     }
     
 }

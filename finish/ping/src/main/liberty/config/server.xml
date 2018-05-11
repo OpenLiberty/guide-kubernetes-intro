@@ -3,12 +3,12 @@
   <featureManager>
     <feature>jaxrs-2.0</feature>
     <feature>cdi-1.2</feature>
-    <feature>ssl-1.0</feature>
+    <!-- <feature>ssl-1.0</feature> -->
     <feature>mpRestClient-1.0</feature>
     <feature>mpConfig-1.2</feature>
   </featureManager>
 
   <httpEndpoint host="*" httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>
 
-  <webApplication location="ping.war" contextRoot="/"/>
+  <webApplication location="ping.war" contextRoot="api"/>
 </server>

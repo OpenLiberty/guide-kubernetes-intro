@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @RequestScoped
-@Path("/name")
+@Path("/")
 public class NameResource {
 
     @GET
