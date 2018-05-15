@@ -82,7 +82,7 @@ tool for managing your Kubernetes cluster.
 - `kubernetes-helm` - a package manager for Kubernetes.
 - `minikube` - a local virtual machine that runs a single node Kubernetes cluster.
 
-Finally, you will need a software for building containers. 
+Finally, you will need a software for building containers.
 
 // =================================================================================================
 // Getting Started
@@ -174,8 +174,8 @@ To build:
 7. Run `docker images` and verify that `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` have been created.
 8. Run `minikube addons enable ingress`
 9. Run `helm search ibm` and make sure that `ibm-charts/ibm-open-liberty` is in the list.
-10. Run `helm install --name ol-name --set image.pullPolicy=IfNotPresent --set image.repository=name --set image.tag=1.0-SNAPSHOT --set replicaCount=3 --set ingress.enabled=true --set ingress.secureBackends=false --set ingress.rewriteTarget=/api --set ingress.path=/name --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 /Users/dima/Documents/repos/charts/stable/ibm-open-liberty --debug` and
-run `helm install --name ol-ping --set image.pullPolicy=IfNotPresent --set image.repository=ping --set image.tag=1.0-SNAPSHOT --set replicaCount=1 --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 /Users/dima/Documents/repos/charts/stable/ibm-open-liberty --debug`
+10. Run `helm install --name ol-name --set image.pullPolicy=IfNotPresent --set image.repository=name --set image.tag=1.0-SNAPSHOT --set replicaCount=3 --set ingress.enabled=true --set ingress.secureBackends=false --set ingress.rewriteTarget=/api --set ingress.path=/name --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty --debug` and
+run `helm install --name ol-ping --set image.pullPolicy=IfNotPresent --set image.repository=ping --set image.tag=1.0-SNAPSHOT --set replicaCount=1 --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty --debug`
 11. Run `minikube dashboard`, navigate to `Ingresses`, select your ingress, click `Edit` near the top and add:
 ```
 path: /ping
