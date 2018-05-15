@@ -9,37 +9,159 @@
 // Contributors:
 //     IBM Corporation
 //
+:projectid: kubernetes
 :page-layout: guide
-// INSTRUCTION: The project id is the part of the git repository after the guide- and must be specified
-:projectid: github repo name without the guide- prefix
-// INSTRUCTION: Provide an estimate of how long the guide will take to go through.
-:page-duration: 15 minutes
-// INSTRUCTION: Provide the date when the guide is published.  Format is YYYY-MM-DD.
-:page-releasedate: 2017-11-17
-// INSTRUCTION: Provide a description for the guide index page.
-:page-description: Learn how to create a REST service with JAX-RS, JSON-P, and Open Liberty.
-// INSTUCTION: Please provide relevant tags, try to avoid inventing new ones, tags where there is 1 guide for the tag isn't useful.
-:page-tags: ['REST', 'Getting Started']
-// INSTRUCTION: Specify the unique name of the guide that is used in the permalink.  For example below, it is rest-service
-:page-related-guides: ['']
-// INSTRUCTION: Specify the slug in the website. This must be unique.
-:page-permalink: /guides/rest-service
-// INSTRUCTION: You should have this to source the common page elements, clone git@github.com:OpenLiberty/guides-common.git
+:page-duration: 30 minutes
+// :page-releasedate: 2018-03-16
+:page-description: Explore how to deploy, scale, and manage microservices on Kubernetes using Helm charts.
+:page-tags: ['microservices']
+:page-permalink: /guides/{projectid}
+:page-related-guides: ['docker']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
-// INSTRUCTION: You can't have a new line between the attributes and the title.
-// The details of what to fill in for this template are in the comments. So, read the source for this template to see the comments.
-//
-// Example title: Creating a RESTful web service
-= Title of guide, starting with a gerund (Creating, Administering, and so on)
+:source-highlighter: prettify
+= Deploying microservices on Kubernetes
 
-// Start the introduction with "You'll explore how to..." or something similarly catchy:
-Learn how to...
-// Write no more than two sentences, or about fifty words with meaningful information on what the user can accomplish with this guide.
-// Do not start the introduction with "This guide...".
+Explore how to deploy, scale, and manage microservices on Kubernetes using Helm charts.
 
-// See the REST guide at as an exemplar guide.
-// https://openliberty.io/guides/rest-intro.html
-// https://github.com/OpenLiberty/guide-rest-intro
+:default-minikube-ip: 192.168.99.102
+
+== What you'll learn
+
+You will learn how to deploy two microservices on a local Kubernetes cluster using Helm charts. You will
+then scale these microservices, setup an Ingress to load balance traffic and persist HTTPs sessions,
+edit resources to accommodate for new microservices, and automatically rollout updates to deployments
+using Maven.
+
+The two microservices you will deploy are called `name` and `ping` and are provided for you under the
+`start/src` directory. The `name` microservice simply displays a brief greeting and the name of the container
+that it runs in. This will make it easy to distinguish one instance of this microservice from another when you
+replicate it. The `ping` microservice simply "pings" the Kubernetes service that runs multiple replicas
+of the `name` microservice. This will demonstrate how communication between microservices can be established
+inside of a cluster.
+
+You will use Minikube as your local Kubernetes cluster and Kubernetes Helm to deploy the `name` and
+`ping` microservices using preconfigured Kubernetes packages called charts. You will also use NGINX
+as the Ingress controller which comes as an addon in Minikube.
+
+
+// =================================================================================================
+// What is Kubernetes
+// =================================================================================================
+
+== What is Kubernetes?
+
+Kubernetes is an open-source container orchestrator that automates many tasks involved in deploying,
+managing, and scaling containerized applications.
+
+=== Architecture
+
+A typical Kubernetes setup consists of one or more clusters, each consisting of a collection of physical
+or virtual machines called `nodes` that run containerized applications. A simple cluster consists of
+a single master `node` that manages the overall cluster and multiple worker `nodes` that run `pods`.
+Each worker `node` runs the `kubelet` service which it uses to communicate with the master `node`.
+
+`Pods` are groupings of one or more containers that together make up a single application. You can
+think of `pods` as application wrappers. `Pods` are created and managed using `controllers`,
+which handle replication, rollout of updates, and "self-healing" of `pods`. `Pods` are further grouped
+inside `services`, which define a set of rules by which the `pods` can be accessed.
+
+
+=== Why use Kubernetes?
+
+
+
+
+// =================================================================================================
+// Prerequisites
+// =================================================================================================
+
+Before you begin, make sure have the following tools installed:
+
+- `kubernetes-cli` - a command line interface for Kubernetes called `kubectl`. This is your primary
+tool for managing your Kubernetes cluster.
+- `kubernetes-helm` - a package manager for Kubernetes.
+- `minikube` - a local virtual machine that runs a single node Kubernetes cluster.
+
+Finally, you will need a software for building containers. 
+
+// =================================================================================================
+// Getting Started
+// =================================================================================================
+
+include::{common-includes}/gitclone.adoc[]
+
+// Try what you'll build is omitted because it would be too long + it would involve setting up  and
+// later tearing down the whole cluster.
+
+
+// =================================================================================================
+// Staring and preparing your cluster for deployment
+// =================================================================================================
+
+== Starting and preparing your cluster for deployment
+
+To begin working with your Minikube cluster, first start it by running the following command from
+the command line:
+
+```
+minikube start
+```
+
+When you need to stop your cluster, simply run `minikube stop`.
+
+Next, setup Helm to begin working with Kubernetes packages called charts. To do this, run the following
+command:
+
+```
+helm init
+```
+
+This command initializes Helm on the client side and installs Tiller on the server side (into your cluster),
+which is used to manage installations of your charts.
+
+Next, add the IBM Helm chart repository:
+
+```
+helm repo add ibm-charts https://raw.githubusercontent.com/IBM/charts/master/repo/stable/
+```
+
+Finally, run the following command to configure the Docker CLI to use the Minikube Docker daemon.
+By doing this, you will be able to build Docker images directly to Minikube:
+
+```
+eval $(minikube docker-env)
+```
+
+When you no longer wish to use the Minikube host, run `eval $(minikube docker-env -u)` to resume useing
+your local Docker daemon.
+
+
+// =================================================================================================
+// Installing a chart archive
+// =================================================================================================
+
+== Installing a chart archive
+
+```
+helm install --name ol-name --set image.pullPolicy=IfNotPresent --set replicaCount=1 --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty --debug
+```
+
+This will install an empty Open Liberty runtime. To view the stauts of your Pods, run `kubectl get pods`.
+Similarly, you can also view their status on the minikube dashboard.
+
+The cluster uses Minikube's IP, so all you need is to get the port number on which your pod is served.
+To do this run `kubectl get service` and note the port mapping.
+
+Then hit http://{default-minikube-ip}:<nodePort>
+
+
+// =================================================================================================
+// Editing deployments
+// =================================================================================================
+
+== Editing deployments
+
+- Maven build
 
 To build:
 
@@ -59,7 +181,7 @@ run `helm install --name ol-ping --set image.pullPolicy=IfNotPresent --set image
 path: /ping
     etc. (follow same pattern as name but for ping)
 ```
-Altenratively, use `kubectl edit ingress <ingress-name>`
+Alternatively, use `kubectl edit ingress <ingress-name>`
 12. Wait until all pods are running.
 13. Run `minikube ip` to get the id address of minikube
 14. Run `curl -k https://<minikube-ip>/name/name` repeatedly to see different container names displayed.

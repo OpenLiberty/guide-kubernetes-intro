@@ -14,10 +14,6 @@
     <artifactId>ping</artifactId>
     <packaging>war</packaging>
 
-    <properties>
-        <img.name>ping</img.name>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -43,7 +39,51 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-extension-providers</artifactId>
+        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>update-deployment</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${version.exec-maven-plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>update-kubernetes-deployment</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <workingDirectory>.</workingDirectory>
+                                    <!-- kubectl${kubectl.extension -->
+                                    <executable>kubectl</executable>
+                                    <arguments>
+                                        <argument>set</argument>
+                                        <argument>image</argument>
+                                        <argument>deployment/ol-${project.artifactId}-ibm-open-liberty</argument>
+                                        <argument>ibm-open-liberty=${project.artifactId}:${project.version}</argument>
+                                        <argument>--record</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -88,6 +128,7 @@
                             <appsDirectory>apps</appsDirectory>
                             <stripVersion>true</stripVersion>
                             <installAppPackages>project</installAppPackages>
+                            <looseApplication>true</looseApplication>
                         </configuration>
                     </execution>
                     <execution>
