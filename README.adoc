@@ -13,35 +13,37 @@
 :page-layout: guide
 :page-duration: 30 minutes
 // :page-releasedate: 2018-03-16
-:page-description: Explore how to deploy, scale, and manage microservices on Kubernetes using Helm charts.
+:page-description: Explore how to deploy microservices to Kubernetes using Helm charts, setup an Ingress, and automatically rollout updates.
 :page-tags: ['microservices']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
-= Deploying microservices on Kubernetes
+= Deploying microservices to Kubernetes
 
-Explore how to deploy, scale, and manage microservices on Kubernetes using Helm charts.
+Explore how to deploy microservices to Kubernetes using Helm charts, setup an Ingress, and automatically rollout updates.
 
-:default-minikube-ip: 192.168.99.102
+:minikube-ip: 192.168.99.100
+
 
 == What you'll learn
 
-You will learn how to deploy two microservices on a local Kubernetes cluster using Helm charts. You will
-then scale these microservices, setup an Ingress to load balance traffic and persist HTTPs sessions,
-edit resources to accommodate for new microservices, and automatically rollout updates to deployments
-using Maven.
+You will learn how to deploy two microservices to a local Kubernetes cluster using Helm charts. This
+will include building and containerizing the microservices, running the containers inside Kubernetes pods,
+setting up an ingress to load balance traffic and persists sessions, establishing communicating
+between the microservices, scaling deployments, and automatically rolling out new updates when the
+microservices are rebuilt.
 
 The two microservices you will deploy are called `name` and `ping` and are provided for you under the
-`start/src` directory. The `name` microservice simply displays a brief greeting and the name of the container
-that it runs in. This will make it easy to distinguish one instance of this microservice from another when you
-replicate it. The `ping` microservice simply "pings" the Kubernetes service that runs multiple replicas
-of the `name` microservice. This will demonstrate how communication between microservices can be established
-inside of a cluster.
+`start/src` directory. The `name` microservice simply displays a brief greeting and the name of the
+container that it runs in. This makes it easy to distinguish one running instance of this microservices
+from another when its containerized and replicated. The `ping` microservice simply "pings" the Kubernetes
+service that encapsulates the pods running the `name` microservice. This demonstrates how communication
+between microservices can be established inside of a cluster.
 
-You will use Minikube as your local Kubernetes cluster and Kubernetes Helm to deploy the `name` and
-`ping` microservices using preconfigured Kubernetes packages called charts. You will also use NGINX
-as the Ingress controller which comes as an addon in Minikube.
+You will use Minikube as your local Kubernetes cluster and the Helm package manager for Kubernetes to
+deploy the two microservices. You will also use NGINX as your ingress controller, which you will enable
+as an optional addon in Minikube.
 
 
 // =================================================================================================
@@ -55,16 +57,23 @@ managing, and scaling containerized applications.
 
 === Architecture
 
-A typical Kubernetes setup consists of one or more clusters, each consisting of a collection of physical
-or virtual machines called `nodes` that run containerized applications. A simple cluster consists of
-a single master `node` that manages the overall cluster and multiple worker `nodes` that run `pods`.
-Each worker `node` runs the `kubelet` service which it uses to communicate with the master `node`.
+A typical Kubernetes cluster is a collection of physical or virtual machines called `nodes`. A
+cluster is made up of one master `node`, which manages the cluster, and multiple worker `nodes`,
+which run the actual application instances inside Kuberntes objects called `pods`.
 
-`Pods` are groupings of one or more containers that together make up a single application. You can
-think of `pods` as application wrappers. `Pods` are created and managed using `controllers`,
-which handle replication, rollout of updates, and "self-healing" of `pods`. `Pods` are further grouped
-inside `services`, which define a set of rules by which the `pods` can be accessed.
+A `Pod` is a basic building block in a Kubernets cluster. It represents a single running process which
+encapsulates an application container or in some scenarios multiple closely-coupled containers. `Pods`
+can be replicated to scale applications and handle more traffic. A single `pod` or a group of replicated
+`pods` are managed by Kubernetes objects called `controllers`. A `controller` handles replication,
+self-healing, rollout of updates, and general management of `pods`. Some examples of `controllers`
+are: `Deployment`, `StatefulSet`, and `DaemonSet`. In this guide, you will work with `deployments`.
 
+A `pod` or a group of replicated `pods` are further grouped inside Kubernetes objects called `services`,
+which define a set of rules by which the `pods` can be accessed. In a basic scenario, a Kubernetes
+`service` will expose a node port, which can be used together with the cluster IP address to access
+the `pods` encapsulated by the `service`. In this guide however, you will set up an `ingress`, which is
+a Kubernetes object that maps external requests to the services in a cluster, as well as provides
+additional functionality.
 
 === Why use Kubernetes?
 
@@ -78,11 +87,16 @@ inside `services`, which define a set of rules by which the `pods` can be access
 Before you begin, make sure have the following tools installed:
 
 - `kubernetes-cli` - a command line interface for Kubernetes called `kubectl`. This is your primary
-tool for managing your Kubernetes cluster.
-- `kubernetes-helm` - a package manager for Kubernetes.
+tool for communicating with and managing your Kubernetes cluster.
+- `kubernetes-helm` - a package manager for Kubernetes called Helm. Helm allows you to install packages
+or "charts", which are sets of preconfigured Kubernetes resources. Installing charts is much more
+convenient as they can provide a lot of preconfigured functionality out of the box that normally needs
+to be created manually.
 - `minikube` - a local virtual machine that runs a single node Kubernetes cluster.
 
-Finally, you will need a software for building containers.
+Finally, you will need a containerization software for building containers. Kubernetes supports a variety
+of container types and while you're not limited to any of them in particular, this guide will focus
+around Docker.
 
 // =================================================================================================
 // Getting Started
@@ -90,8 +104,7 @@ Finally, you will need a software for building containers.
 
 include::{common-includes}/gitclone.adoc[]
 
-// Try what you'll build is omitted because it would be too long + it would involve setting up  and
-// later tearing down the whole cluster.
+// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
 
 
 // =================================================================================================
@@ -100,24 +113,22 @@ include::{common-includes}/gitclone.adoc[]
 
 == Starting and preparing your cluster for deployment
 
-To begin working with your Minikube cluster, first start it by running the following command from
-the command line:
+To begin working with your Minikube cluster run the following command from the command line:
 
 ```
 minikube start
 ```
 
-When you need to stop your cluster, simply run `minikube stop`.
+This command will setup and start your cluster. Minikube will also configure the cluster so it will
+be ready to run out of the box. When you need to stop your cluster, run `minikube stop`.
 
-Next, setup Helm to begin working with Kubernetes packages called charts. To do this, run the following
-command:
+Next, run the following command to initialize Helm to begin installing charts:
 
 ```
 helm init
 ```
 
-This command initializes Helm on the client side and installs Tiller on the server side (into your cluster),
-which is used to manage installations of your charts.
+This command installs `Tiller` into your cluster which manages installations of your charts.
 
 Next, add the IBM Helm chart repository:
 
@@ -125,43 +136,134 @@ Next, add the IBM Helm chart repository:
 helm repo add ibm-charts https://raw.githubusercontent.com/IBM/charts/master/repo/stable/
 ```
 
+This will give you access to a variety of IBM charts, including the Open Liberty chart, which you
+will use to run the `name` and `ping` microservices.
+
 Finally, run the following command to configure the Docker CLI to use the Minikube Docker daemon.
-By doing this, you will be able to build Docker images directly to Minikube:
+By doing this, you will be able to build Docker images directly to Minikube from your host machine:
 
 ```
 eval $(minikube docker-env)
 ```
 
-When you no longer wish to use the Minikube host, run `eval $(minikube docker-env -u)` to resume useing
-your local Docker daemon.
+When you no longer wish to use the Minikube Docker daemon, run `eval $(minikube docker-env -u)` to
+point back to your host.
 
 
 // =================================================================================================
-// Installing a chart archive
+// Building and containerizing the microservices
 // =================================================================================================
 
-== Installing a chart archive
+== Building and containerizing the microservices
+
+The first step of deploying to Kubernetes is to build your microservices and containerize them with Docker.
+
+The Java project located under the `start` directory is a multi-module Maven project thats made up of the `name`
+and `ping` microservices, each residing under their respective directories. Each of these directories
+contains a Dockerfile, which is picked up by the `dockerfile-maven` plugin defined in the parent
+POM. Hence, building the microservices and the Docker images can be done simultaneously through Maven.
+To do this, run the Maven `package` goal from the command line:
 
 ```
-helm install --name ol-name --set image.pullPolicy=IfNotPresent --set replicaCount=1 --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty --debug
+mvn package
 ```
 
-This will install an empty Open Liberty runtime. To view the stauts of your Pods, run `kubectl get pods`.
-Similarly, you can also view their status on the minikube dashboard.
+The `package` goal will automatically invoke the `dockerfile-maven:build` goal which pickups the Dockerfile
+located in the same directory as the POM and creates a Docker image from it.
+In the output returned by Maven, you see various Docker messages and the images being built. When
+the build is finished, run `docker images` from the command line to verify that `name:1.0-SNAPSHOT`
+and `ping:1.0-SNAPSHOT` have been successfully built. Be sure that these images have also built to
+Minikube rather than your local Docker cache:
 
-The cluster uses Minikube's IP, so all you need is to get the port number on which your pod is served.
-To do this run `kubectl get service` and note the port mapping.
-
-Then hit http://{default-minikube-ip}:<nodePort>
+[source, role="no_copy"]
+----
+REPOSITORY                                                       TAG
+ping                                                             1.0-SNAPSHOT
+name                                                             1.0-SNAPSHOT
+open-liberty                                                     latest
+gcr.io/kubernetes-helm/tiller                                    v2.9.0
+k8s.gcr.io/kube-proxy-amd64                                      v1.10.0
+k8s.gcr.io/kube-controller-manager-amd64                         v1.10.0
+k8s.gcr.io/kube-apiserver-amd64                                  v1.10.0
+k8s.gcr.io/kube-scheduler-amd64                                  v1.10.0
+quay.io/kubernetes-ingress-controller/nginx-ingress-controller   0.12.0
+k8s.gcr.io/etcd-amd64                                            3.1.12
+k8s.gcr.io/kube-addon-manager                                    v8.6
+k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.8
+k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
+k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
+k8s.gcr.io/pause-amd64                                           3.1
+k8s.gcr.io/kubernetes-dashboard-amd64                            v1.8.1
+k8s.gcr.io/kube-addon-manager                                    v6.5
+gcr.io/k8s-minikube/storage-provisioner                          v1.8.0
+gcr.io/k8s-minikube/storage-provisioner                          v1.8.1
+k8s.gcr.io/defaultbackend                                        1.4
+k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.4
+k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.4
+k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.4
+k8s.gcr.io/etcd-amd64                                            3.0.17
+k8s.gcr.io/pause-amd64                                           3.0
+----
 
 
 // =================================================================================================
-// Editing deployments
+// Installing a Helm chart release
 // =================================================================================================
 
-== Editing deployments
+== Installing a Helm chart release
 
-- Maven build
+
+
+```
+helm install --name ol-name --set image.pullPolicy=IfNotPresent --set image.repository=name --set image.tag=1.0-SNAPSHOT --set ingress.enabled=true --set ingress.secureBackends=false --set ingress.rewriteTarget=/api/name --set ingress.path=/name --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty --debug
+```
+
+```
+helm install --name ol-ping --set image.pullPolicy=IfNotPresent --set image.repository=ping --set image.tag=1.0-SNAPSHOT --set ingress.enabled=true --set ingress.secureBackends=false --set ingress.rewriteTarget=/api/ping --set ingress.path=/ping --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty --debug
+```
+
+Let's break down the parameters:
+
+[cols="15, 100", options="header"]
+|===
+| *Argument* | *Description*
+| --name |
+|===
+
+for a complete breakdown, visit https://github.ibm.com/IBMPrivateCloud/charts/tree/master/stable/ibm-open-liberty
+
+// =================================================================================================
+// Scaling
+// =================================================================================================
+
+== Scaling
+
+```
+kubectl scale deployment ol-name-ibm-open-liberty --replicas=3
+```
+
+// =================================================================================================
+// Setting up an Ingress
+// =================================================================================================
+
+== Setting up an Ingress
+
+```
+minikube addons enable ingress
+```
+
+// =================================================================================================
+// Rolling out updates
+// =================================================================================================
+
+== Rolling out updates
+
+```
+kubectl set image deployment/ol-name-ibm-open-liberty ibm-open-liberty=name:1.0-SNAPSHOT --record
+```
+
+=== Automating with Maven
+
 
 To build:
 
@@ -186,56 +288,6 @@ Alternatively, use `kubectl edit ingress <ingress-name>`
 13. Run `minikube ip` to get the id address of minikube
 14. Run `curl -k https://<minikube-ip>/name/name` repeatedly to see different container names displayed.
 15. Run `curl -k https://<minikube-ip>/ping/ping/<name-service-name>` to ping the `name` pods.
-
-== What you'll learn
-// Write about what the user will learn in a meaningful intro paragraph.
-// Follow the intro paragraph with more details of what the user will learn, but still keep it brief compared to the overall guide.
-
-// You'll next add the various sections that are needed for a particular guide.
-
-
-// Add this getting started section to your guide if it is applicable. Use the following include to pull in the git clone instructions from the guides-common repo.
-== Getting started
-include::{common-includes}/gitclone.adoc[]
-
-// This is a subsection of the "Getting started" section above. It should briefly walk the user through
-// how to setup everything in the "finish" directory and try out the finished version of what
-// they will be building.
-//=== Try what you’ll build
-include::{common-includes}/trywhatyoubuild-intro.adoc[]
-
-// Describe what user expects to see after running the complete version of the application.
-
-include::{common-includes}/trywhatyoubuild-end.adoc[]
-
-// Add this section to your guide if it is applicable.
-// Put this section in the appropriate order in your guide.
-== Building and running the application
-
-// Use the following include to pull in the Maven build instructions from the guides-common repo.
-include::{common-includes}/mvnbuild.adoc[]
-
-// In between here, you should state where you application can be found now that its running (ie. what urls)
-
-// Use the following include to pull in the Liberty start/stop server instructions from the guides-common repo.
-include::{common-includes}/mvnpackage.adoc[]
-
-
-== Section title for this section, starting with a gerund like Creating, Building, etc
-// Read the wiki for the general rules of thumb to help you with formatting these next few sections:
-// https://github.com/OpenLiberty/guides-common/wiki/Rules-of-thumb-for-formatting
-
-// Start each additional section title with a meaningful gerund such as Creating, Building, Testing, Configuring, or Administering.
-// Follow the gerund with a meaningful noun phrase. For example: Creating a JAX-RS application
-// Have as many sections and section titles as needed.
-
-// What to add for each section:
-// We'll be writing these sections by following a flow similar to technical blog posts or college textbooks so that the user thinks about the content.
-// Start each section with a meaningful description about what the user is doing in the section.
-// Include code snippets.
-// Avoid making all the documentation a series of steps and tasks, bullets, or numbered lists.
-// Use tick marks around directories, files, values, class names, method names, and so on.
-// Example: `this-is-a-file`, `this/is/a/path`, `thisIsAMethod`.
 
 
 // Include this section if appropriate

@@ -64,7 +64,7 @@
                 <version>3.0</version>
                 <scope>compile</scope>
             </dependency>
-            <dependency>
+<!--             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.12</version>
@@ -75,7 +75,7 @@
                 <artifactId>cxf-rt-rs-extension-providers</artifactId>
                 <version>3.1.11</version>
                 <scope>test</scope>
-            </dependency>
+            </dependency> -->
         </dependencies>
     </dependencyManagement>
 
