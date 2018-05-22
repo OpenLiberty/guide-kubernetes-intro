@@ -382,7 +382,7 @@ kubernetes                 ClusterIP   10.96.0.1        <none>        443/TCP   
 ol-name-ibm-open-liber     NodePort    10.101.49.188    <none>        9080:31249/TCP   2s
 ----
 
-Then access your microservice by `curling` or visiting http://{minikube-kp}:31249/api/name (in this case).
+Then access your microservice by `curling` or visiting http://{minikube-ip}:31249/api/name (in this case).
 
 The disadvantage to this approach is that Kubernetes doesn't have a practical load balancer. In fact,
 traffic is balanced randomly by default. This could prove extremely inconvenient when, by chance, all
@@ -425,17 +425,21 @@ will display a different pod name, one for each of your three running pods. Noti
 how many unique sessions you open to this URL, all your traffic will be balanced perfectly among the
 three pods. This is your NGINX ingress controller load balancing traffic.
 
-Note, that if you attempt to open a new session in a new browser tab, you will end up with the same pod.
+Note, that if you attempt to open a session in a new browser tab, you will end up with the same pod.
 This is due to sticky sessions, meaning that Kubernetes is passing your requests to the same backend
 container each time in order to persistent any data you might have created during your first session.
-Sticky sessions can be disabled 
+Sticky sessions can be configured and disabled from your ingress resource.
 
 
 // =================================================================================================
-// Rolling out updates
+// Editing resources and rolling out deployment updates
 // =================================================================================================
 
-== Rolling out updates
+== Editing resources and rolling out deployment updates
+
+=== via dashboard
+=== via kubectl
+=== via yaml
 
 ```
 mvn versions:set -DnewVersion=1.1-SNAPSHOT
