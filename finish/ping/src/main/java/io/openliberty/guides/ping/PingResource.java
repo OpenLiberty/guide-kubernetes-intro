@@ -53,4 +53,6 @@ public class PingResource {
         return "Bad response from " + host + "\nCheck the console log for more info.";
     }
     
+    // make a private file for checking like junyi
+    
 }

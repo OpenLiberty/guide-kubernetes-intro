@@ -432,6 +432,10 @@ your requests to the same backend container each time in order to persistent any
 have created during your first session. Session persistence can be configured and disabled from your
 Ingress resource.
 
+The Open Liberty helm chart also supports automatic scaling, which you can enable by setting the
+`autoscaling.enabled` parameter to true when installing the chart. See our official IBM chart https://github.ibm.com/IBMPrivateCloud/charts/tree/master/stable/ibm-open-liberty[GitHub repository]
+for more information on this parameter.
+
 
 // =================================================================================================
 // Rolling out Deployment updates
@@ -717,7 +721,8 @@ kubectl edit ingress/ol-name-ibm-open-liberty
 
 === Editing resources using a kubectl
 
-create a new yml then use `kubectl create -f <path-to-yaml>` to update
+If you created a resource using the `kubctl create -f [FILENAME] options` command, then you can edit
+the YAML describing the resource and reapply it using the `kubectl apply -f [FILENAME] options` command.
 
 
 === Editing resources using a ConfigMap
@@ -733,6 +738,8 @@ create a new yml then use `kubectl create -f <path-to-yaml>` to update
 
 Once all your Pods are in the ready state, run `mvn verify` from the `start` directory to verify that
 each of the two microservices function as expected.
+
+mvn clean verify -Pfabric8 -DtestProxyHost=192.168.99.100
 
 
 // Including a listing block with test results here
