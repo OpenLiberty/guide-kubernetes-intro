@@ -598,8 +598,8 @@ the same image version.
 
 == Rolling back Deployments to previous revisions
 
-If you made a Deployment update that has broken something, you can revert the Deployment back to a
-pervious revision by viewing the revision history:
+If you made an unstable Deployment update that resulted in breakage, you can revert the Deployment
+back to a older revision by viewing its revision history:
 
 [source, role="no_copy"]
 ----
@@ -610,15 +610,14 @@ REVISION  CHANGE-CAUSE
 2         kubectl set image deployment/ol-name-ibm-open-liberty ibm-open-liberty=name:1.1-SNAPSHOT --record=true
 ----
 
-To undo the current rollout and revert the Deployment back to its previous version, run the following
-command:
+To undo the current rollout and revert the Deployment back to its previous version, run the following command:
 
 ```
 kubectl rollout undo deployment/ol-name-ibm-open-liberty
 ```
 
-This command will force Kubernetes to terminate any existing Pods managed by the Deployment and create
-new ones from the previous revision.
+Kubernetes will terminate any existing Pods managed by the Deployment and create new ones from the
+previous revision.
 
 If you need to revert back to a specific revision, use the `--to-revision` flag followed by the revision number:
 
@@ -633,22 +632,29 @@ kubectl rollout undo deployment/ol-name-ibm-open-liberty --to-revision=1
 
 == Optional: Editing Kubernetes resources
 
+To make changes to Kubernetes resources, you can either edit that resource's YAML file in a text editor
+or update particular parts of the YAML with the `kubectl` command.
+
 While you don't need to edit any of the Kubernetes resources in this guide, it might be helpful for
-you to know how this is done for any future projects you have in mind.
+you to know how this is done for any future projects that you have in mind.
 
-Editing of resources can be done in a number of ways, this includes: from the Kubernetes dashboard,
-from the `kubectl` command, using a YAML file describing the resource, or using a `ConfigMap`.
+=== Direct editing
 
-Just as an example, you will edit the Ingress belonging to the `ol-name` chart release and change the
-`path` parameter from `/name` to `/myname`.
+Resource YAML files can be directly edited from the Kubernetes dashboard or a text editor of your choice.
 
-=== Editing resources from the Kubernetes dashboard
+To edit from a resource from the Minikube dashboard, run `minikune dashboard` and then use the left
+navigational panel to select which resources to edit.
 
-First open your dashboard by running the `minikube dashboard` command.
+To open and edit a resource in a text editor, run the `kubectl edit (RESOURCE/NAME | -f FILENAME) [options]`,
+specifying the resource type and its name. Once you save your changes, they will be automatically picked
+up and applied to your resource.
 
-Next, from the navigational panel on the left, under `Discovery and Load Balancing`, select `Ingresses`
-and then the `ol-name-ibm-open-liberty` Ingress. Now, from the top bar, click the `Edit` button and
-change the `path` parameter to "/myname":
+If you didn't create resources through charts, but rather implemented and created them yourself by
+using the `kubectl create` command, then you can edit your YAML files directly and then apply
+these changes by running the `kubectl apply -f [FILENAME] options` command.
+
+To familiarize yourself with resource editing, edit the `ol-name-ibm-open-liberty` Ingress  and change
+the `path` parameter from `/name` to `/myname`. Use any editing method you prefer:
 
 [source, YAML]
 ----
@@ -706,40 +712,41 @@ change the `path` parameter to "/myname":
 }
 ----
 
-Click `Update` to save your changes. Then `curl` or visit the https://192.168.99.100/myname/ URL.
+When you're done editing, visit the new Ingress endpoint to verify that your changes have been successfully
+applied to the Ingress.
 
-=== Editing resources using kubectl
 
-While you can edit specific parts of resources, as you have with the `kubectl set` command in the
-previous section, you can also edit entire resources from an editor using the `kubectl edit (RESOURCE/NAME | -f FILENAME) [options]` command.
+=== Indirect editing
 
-Make the same changes as in the previous subsection using `kubectl`:
+Indirect editing of resources can be done by using various `kubectl` commands. If you recall,
+you've already done this when you ran `kubectl set image` to update the image used by your Deployment
+to a newer version. `kubectl set` is convenient, but its limited to a small set of things that you can
+change. Sometimes you might simply need to change parts of the resource that the `kubectl set` command
+doesn't cover. In those cases and as an alternative to the `kubectl set` command, you can use the
+`kubectl patch (-f FILENAME | TYPE NAME) -p PATCH [options]` command to update fields of a resource
+using strategic merging. The `kubectl patch` command works by supplying a piece of config in a form
+of a JSON or a YAML that matches another piece of similar config in the resource and overrides the
+fields that don't match. For example, change the Ingress path from `/name` to `/myname` as in the previous
+section, run the following command:
 
 ```
-kubectl edit ingress/ol-name-ibm-open-liberty
+kubectl patch ingress/ol-name-ibm-open-liberty -p '{"spec": {"rules": [{"http": {"paths": [{"path": "/myname", "backend": {"serviceName": "ol-name-ibm-open-liberty", "servicePort": 9080}}]}}]}}'
 ```
 
-=== Editing resources using a kubectl
-
-If you created a resource using the `kubctl create -f [FILENAME] options` command, then you can edit
-the YAML describing the resource and reapply it using the `kubectl apply -f [FILENAME] options` command.
-
-
-=== Editing resources using a ConfigMap
-
-
+Kubernetes will match your config pattern against the "spec" field defined in the `ol-name-ibm-open-liberty`
+Ingress and override the "path" field.
 
 
 // =================================================================================================
-// Testing microservices running on Kubernetes
+// Testing microservices that are running on Kubernetes
 // =================================================================================================
 
-== Testing microservices running on Kubernetes
+== Testing microservices that are running on Kubernetes
 
 Once all your Pods are in the ready state, run `mvn verify` from the `start` directory to verify that
 each of the two microservices function as expected.
 
-mvn clean verify -Pfabric8 -DtestProxyHost=192.168.99.100
+mvn clean verify -DtestProxyHost=192.168.99.100
 
 
 // Including a listing block with test results here
