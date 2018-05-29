@@ -13,11 +13,14 @@
 package it.io.openliberty.guides.name;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
@@ -32,52 +35,41 @@ import org.junit.Test;
 
 public class NameEndpointTest {
 
-    private static String ingressUrl;
+    private static String clusterUrl;
 
     private Client client;
 
     @BeforeClass
     public static void oneTimeSetup() {
-        String clusterIp = (System.getProperty("cluster.ip") == null) ? "192.168.99.100" : System.getProperty("cluster.ip");
-        String ingressPath = (System.getProperty("name.ingress.path") == null) ? "/name/" : System.getProperty("name.ingress.path");
-        String nodePort = System.getProperty("name.service.port");
-        if (nodePort != null) {
-            ingressUrl = "http://" + clusterIp + ":" + nodePort + "/api/name/";
+        String clusterIp = System.getProperty("cluster.ip");
+        String ingressPath = System.getProperty("name.ingress.path");
+        String nodePort = System.getProperty("name.node.port");
+        if (nodePort.isEmpty() || nodePort == null) {
+            clusterUrl = "https://" + clusterIp + ingressPath + "/";
         } else {
-            ingressUrl = "https://" + clusterIp + "/" + ingressPath + "/";
+            clusterUrl = "http://" + clusterIp + ":" + nodePort + "/api/name/";
         }
     }
-
+    
     @Before
     public void setup() {
+        TrustManager[] tm = new TrustManager[] { new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() { return null; }
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+        }};
+        SSLContext sc = null;
         try {
-            SSLContext sc = SSLContext.getInstance("ssl");
-            sc.init(null, this.getTrustManager(), null);
-            client = ClientBuilder.newBuilder().sslContext(sc).build();
-        } catch (NoSuchAlgorithmException e) {
-            System.err.println("Couldn't build ");
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            System.err.println("Couldn't build ");
+            sc = SSLContext.getInstance("SSL");
+            sc.init(null, tm, null);
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            System.err.println(e.getMessage());
             e.printStackTrace();
         }
-    }
-    
-    private TrustManager[] getTrustManager() {
-        return new TrustManager[] {
-            new X509TrustManager() {
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-    
-                @Override
-                public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
-    
-                @Override
-                public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
-            }
-        };
+        client = ClientBuilder.newBuilder()
+                    .sslContext(sc)
+                    .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
+                    .build();
     }
 
     @After
@@ -86,25 +78,15 @@ public class NameEndpointTest {
     }
     
     @Test
-    public void testResponseOk() {
-        Response r = this.getResponse(ingressUrl);
-        this.assertResponse(ingressUrl, r);
-        System.out.println(r.getHeaders());
+    public void testContainerNameNotNull() {
+        Response r = this.getResponse(clusterUrl);
+        this.assertResponse(clusterUrl, r);
+        String greeting = r.readEntity(String.class);
+        
+        String containerName = greeting.substring(greeting.lastIndexOf(" ") + 1);
+        containerName = (containerName.equals("null")) ? null : containerName;
+        assertNotNull("Container name should not be null but it was. The service is robably not running inside a container", containerName);
     }
-
-//    public void testEmptyInventory() {
-//        Response response = this.getResponse(invUrl + INVENTORY_SYSTEMS);
-//        this.assertResponse(invUrl, response);
-//
-//        JsonObject obj = response.readEntity(JsonObject.class);
-//
-//        int expected = 0;
-//        int actual = obj.getInt("total");
-//        assertEquals("The inventory should be empty on application start but it wasn't", 
-//                     expected, actual);
-//
-//        response.close();
-//    }
 
     /**
      * <p>

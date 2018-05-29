@@ -14,6 +14,15 @@ package it.io.openliberty.guides.ping;
 
 import static org.junit.Assert.assertEquals;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -25,25 +34,43 @@ import org.junit.Test;
 
 public class PingEndpointTest {
 
-    private static String ingressUrl;
+    private static String clusterUrl;
+    private static String nameKubeService;
 
     private Client client;
 
     @BeforeClass
     public static void oneTimeSetup() {
-        String clusterIp = (System.getProperty("cluster.ip") == null) ? "192.168.99.100" : System.getProperty("cluster.ip");
-        String ingressPath = (System.getProperty("ping.ingress.path") == null) ? "/name/" : System.getProperty("ping.ingress.path");
-        String nodePort = System.getProperty("ping.service.port");
-        if (nodePort != null) {
-            ingressUrl = "http://" + clusterIp + ":" + nodePort + "/api/ping/";
+        String clusterIp = System.getProperty("cluster.ip");
+        String ingressPath = System.getProperty("ping.ingress.path");
+        String nodePort = System.getProperty("ping.node.port");
+        nameKubeService = System.getProperty("name.kube.service");
+        if (nodePort.isEmpty() || nodePort == null) {
+            clusterUrl = "https://" + clusterIp + ingressPath + "/";
         } else {
-            ingressUrl = "https://" + clusterIp + "/" + ingressPath + "/";
+            clusterUrl = "http://" + clusterIp + ":" + nodePort + "/api/ping/";
         }
     }
-
+    
     @Before
     public void setup() {
-        client = ClientBuilder.newClient();
+        TrustManager[] tm = new TrustManager[] { new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() { return null; }
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+        }};
+        SSLContext sc = null;
+        try {
+            sc = SSLContext.getInstance("SSL");
+            sc.init(null, tm, null);
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        client = ClientBuilder.newBuilder()
+                    .sslContext(sc)
+                    .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
+                    .build();
     }
 
     @After
@@ -51,26 +78,26 @@ public class PingEndpointTest {
         client.close();
     }
     
-//    @Test
-//    public void testResponseOk() {
-//        Response r = this.getResponse(ingressUrl);
-//        this.assertResponse(ingressUrl, r);
-//        System.out.println(r.getHeaders());
-//    }
-
-//    public void testEmptyInventory() {
-//        Response response = this.getResponse(invUrl + INVENTORY_SYSTEMS);
-//        this.assertResponse(invUrl, response);
-//
-//        JsonObject obj = response.readEntity(JsonObject.class);
-//
-//        int expected = 0;
-//        int actual = obj.getInt("total");
-//        assertEquals("The inventory should be empty on application start but it wasn't", 
-//                     expected, actual);
-//
-//        response.close();
-//    }
+    @Test
+    public void testPingValidService() {
+        Response r = this.getResponse(clusterUrl + nameKubeService);
+        this.assertResponse(clusterUrl, r);
+        
+        String expected = "pong";
+        String actual = r.readEntity(String.class);
+        assertEquals("Should have receieved pong", expected, actual);
+    }
+    
+    @Test
+    public void testPingInvalidService() {
+        String invalidServiceName = "donkey-pong";
+        Response r = this.getResponse(clusterUrl + invalidServiceName);
+        this.assertResponse(clusterUrl, r);
+        
+        String expected = "Bad response from " + invalidServiceName + "\nCheck the console log for more info.";
+        String actual = r.readEntity(String.class);
+        assertEquals("Should have received a bad response from " + invalidServiceName + ", but didn't. Is " + invalidServiceName + " a running Kuberentes service?", expected, actual);
+    }
 
     /**
      * <p>

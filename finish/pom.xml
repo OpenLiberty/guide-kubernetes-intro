@@ -25,6 +25,11 @@
         <version.openliberty-runtime>RELEASE</version.openliberty-runtime>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
+        <!-- Default test properties -->
+        <cluster.ip>192.168.99.100</cluster.ip>
+        <name.ingress.path>/name</name.ingress.path>
+        <name.kube.service>ol-name-ibm-open-liberty</name.kube.service>
+        <ping.ingress.path>/ping</ping.ingress.path>
     </properties>
 
     <dependencyManagement>
@@ -150,11 +155,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version.maven-surefire-plugin}</version>
-<!--                     <configuration>
-                        <systemPropertyVariables>
-                            <cluster.ip>${cluster.ip}</cluster.ip>
-                        </systemPropertyVariables>
-                    </configuration> -->
                     <executions>
                         <execution>
                             <phase>test</phase>
@@ -188,6 +188,7 @@
                                     <cluster.ip>${cluster.ip}</cluster.ip>
                                     <name.ingress.path>${name.ingress.path}</name.ingress.path>
                                     <name.node.port>${name.node.port}</name.node.port>
+                                    <name.kube.service>${name.kube.service}</name.kube.service>
                                     <ping.ingress.path>${ping.ingress.path}</ping.ingress.path>
                                     <ping.node.port>${ping.node.port}</ping.node.port>
                                 </systemPropertyVariables>

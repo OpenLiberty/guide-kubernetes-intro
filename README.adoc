@@ -29,12 +29,10 @@ Explore how to deploy microservices to Kubernetes using Helm charts, setup an In
 == What you'll learn
 
 You will learn how to deploy two microservices to a local Kubernetes cluster using Helm charts. This
-will include building and containerizing the microservices, running the containers inside Kubernetes Pods,
-setting up an ingress to load balance traffic and persists sessions, establishing communicating
-between the microservices, scaling Deployments, and automatically rolling out new updates when the
-microservices are rebuilt.
-
-+ editing resource if decide to cover that
+will include building and containerizing the microservices, running the containers inside Kubernetes
+Pods, setting up an Ingress to load balance traffic and persists sessions, establishing communicating
+between the microservices, scaling Deployments, automatically rolling out new updates when the microservices
+are rebuilt, editing Kubernetes resources, and testing microservices that are deployed to Kubernetes.
 
 The two microservices you will deploy are called `name` and `ping` and are provided for under the
 `start` directory. The `name` microservice simply displays a brief greeting and the name of the
@@ -158,7 +156,10 @@ By doing this, you will be able to interact with Minikube's Docker daemon and bu
 to it from your host machine:
 
 ```
+# From Bash if you're on Linux or MacOS
 eval $(minikube docker-env)
+# From PowerShell if you're on Windows
+minikube docker-env --shell=powershell dev | Invoke-Expression
 ```
 
 When you no longer wish to use Minikube's Docker daemon, run `eval $(minikube docker-env -u)` to
@@ -443,14 +444,14 @@ for more information on this parameter.
 
 == Rolling out Deployment updates
 
-Whenever you make code changes and rebuild your Docker image, you'll need to update your Kubernetes
-Deployment with your new image version for the new code changes to be picked up.
+Whenever you make code changes and rebuild your Docker images, you'll need to update your Kubernetes
+Deployments with your new image versions for the new code changes to be picked up.
 
-Let's make a small change to the `name` microservice and then update the `ol-name-ibm-open-liberty`
+As an example, make a small change to the `name` microservice and then update the `ol-name-ibm-open-liberty`
 Deployment thats already installed in your cluster.
 
-Change the greeting message in `name/src/main/java/io/openliberty/guides/name/NameResource.java` from
-"Hello!" to "Greetings!":
+First, change the greeting message in `name/src/main/java/io/openliberty/guides/name/NameResource.java`
+from "Hello!" to "Greetings!" :
 
 [source, Java]
 ----
@@ -507,8 +508,9 @@ propagate this change automatically to the child projects:
 ...
 ----
 
-Next, navigate to the `name` directory and run the `mvn clean package` command to rebuild the microservice.
-Then run the `docker images` command and verify that a new `name:1.1-SNAPSHOT` image was created:
+Next, navigate to the `name` directory and run the `mvn clean package` command to rebuild the `name`
+microservice. Then run the `docker images` command and verify that a new `name:1.1-SNAPSHOT` image was
+created:
 
 [source, role="no_copy"]
 ----
@@ -521,9 +523,11 @@ name                                                             1.0-SNAPSHOT
 
 To deploy this new image into your cluster, you can either install a new chart release, specifying
 the new image version in the `image.tag` parameter, or you can upgrade the `ol-name-ibm-open-liberty`
-Deployment in the existing `ol-name` release. Installing a new chart release is the same as before,
-with the `helm install` command. To update an existing release, you need to update the image tag in
-the Deployment, this way the Deployment points to your new image version. To do this, run the following command:
+Deployment in the existing `ol-name` release.
+
+Installing a new chart release is done the same as before, using the `helm install` command. To update
+an existing release, you need to update the image tag in the Deployment in order for it to point to
+your new image version. To do this, run the following command:
 
 ```
 kubectl set image deployment/ol-name-ibm-open-liberty ibm-open-liberty=name:1.1-SNAPSHOT --record
@@ -549,11 +553,10 @@ the https://{minikube-ip}/name/ URL and verify that the greeting has changed.
 
 === Alternative: deploying new images without changing project versions
 
-If for any reason you chose not to update the image tag, then you can force a Deployment to pickup
+If for any reason you choose not to update the image tag, then you can force a Deployment to pickup
 the new image by manually deleting all of its Pods. Because Deployments "self-heal", three new Pods
 will be created to replace the ones you've destroyed, and because these Pods are created from scratch,
-they will be built with the new image version. To do this, use the `kubectl delete pods` command. For
-example:
+they will run the new image. To do this, use the `kubectl delete pods` command. For example:
 
 ```
 kubectl delete pods -l app=ol-name-ibm-open-liberty
@@ -564,14 +567,14 @@ When all of the new Pods are in the ready state, `curl` or visit the https://{mi
 === Automating with Maven
 
 To make the rollout of updates easier, we've created a `update-deployment` profile in the POM files
-of each microservice. This profile uses the Maven exec plugin to automatically execute the
+of each microservice. This profile uses the Maven exec plugin to automatically run the
 `kubectl set image` command. This command was configured to use the Maven project artifactId as the
 image name and the project version as the image tag. Feel free to tweak this plugin to your liking.
 
 Using the profile is optional, so you can always build the microservices without updating the deployment.
-Please also note that you must install a chart release first, before using the profile as attempts
-to update the deployment created by the chart. To invoke the profile when rebuilding, use the `-P` flag
-followed by the profile name:
+Please also note that you must install a chart release first before using the profile as there will
+be nothing to update since your Deployment won't be created it. To invoke the profile when rebuilding,
+use the `-P` flag followed by the profile name:
 
 ```
 mvn clean package -P update-deployment
@@ -616,6 +619,7 @@ To undo the current rollout and revert the Deployment back to its previous versi
 kubectl rollout undo deployment/ol-name-ibm-open-liberty
 ```
 
+<explain this example better>
 Kubernetes will terminate any existing Pods managed by the Deployment and create new ones from the
 previous revision.
 
@@ -625,24 +629,23 @@ If you need to revert back to a specific revision, use the `--to-revision` flag 
 kubectl rollout undo deployment/ol-name-ibm-open-liberty --to-revision=1
 ```
 
-
 // =================================================================================================
 // Editing Kubernetes resources
 // =================================================================================================
 
 == Optional: Editing Kubernetes resources
 
-To make changes to Kubernetes resources, you can either edit that resource's YAML file in a text editor
-or update particular parts of the YAML with the `kubectl` command.
-
 While you don't need to edit any of the Kubernetes resources in this guide, it might be helpful for
 you to know how this is done for any future projects that you have in mind.
+
+To make changes to Kubernetes resources, you can either edit that resource's YAML file in a text editor
+or update particular parts of the YAML with the `kubectl` command.
 
 === Direct editing
 
 Resource YAML files can be directly edited from the Kubernetes dashboard or a text editor of your choice.
 
-To edit from a resource from the Minikube dashboard, run `minikune dashboard` and then use the left
+To edit a resource from the Minikube dashboard, run `minikune dashboard` and then use the left
 navigational panel to select which resources to edit.
 
 To open and edit a resource in a text editor, run the `kubectl edit (RESOURCE/NAME | -f FILENAME) [options]`,
@@ -721,13 +724,13 @@ applied to the Ingress.
 Indirect editing of resources can be done by using various `kubectl` commands. If you recall,
 you've already done this when you ran `kubectl set image` to update the image used by your Deployment
 to a newer version. `kubectl set` is convenient, but its limited to a small set of things that you can
-change. Sometimes you might simply need to change parts of the resource that the `kubectl set` command
+change. Sometimes you might need to change parts of the resource that the `kubectl set` command simply
 doesn't cover. In those cases and as an alternative to the `kubectl set` command, you can use the
 `kubectl patch (-f FILENAME | TYPE NAME) -p PATCH [options]` command to update fields of a resource
 using strategic merging. The `kubectl patch` command works by supplying a piece of config in a form
 of a JSON or a YAML that matches another piece of similar config in the resource and overrides the
-fields that don't match. For example, change the Ingress path from `/name` to `/myname` as in the previous
-section, run the following command:
+fields that don't match. For example, to change the Ingress path from `/name` to `/myname` as in the
+previous section, run the following command:
 
 ```
 kubectl patch ingress/ol-name-ibm-open-liberty -p '{"spec": {"rules": [{"http": {"paths": [{"path": "/myname", "backend": {"serviceName": "ol-name-ibm-open-liberty", "servicePort": 9080}}]}}]}}'
@@ -743,24 +746,68 @@ Ingress and override the "path" field.
 
 == Testing microservices that are running on Kubernetes
 
-Once all your Pods are in the ready state, run `mvn verify` from the `start` directory to verify that
-each of the two microservices function as expected.
+A few tests are included for you to test the basic functionality of the microservices. If a test failure
+occurs, then you might have introduced a bug into the code. To run the tests, wait for all the Pods
+to be in the ready state, then run the following command:
 
-mvn clean verify -DtestProxyHost=192.168.99.100
+```
+mvn verify -Ddockerfile.skip=true
+```
 
+The `dockerfile.skip` parameter is set to `true` to skip building a Docker image. If the tests pass,
+you'll see a similar output for each service respectively:
 
-// Including a listing block with test results here
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.name.NameEndpointTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.name.NameEndpointTest
 
-// OPTIONAL: after listing the test results, mention a simple change a user can make/introduce that
-// will cause the tests to fail. Be brief and don't give the users all of the instructions. At this
-// point, they should be comfortable enough to figure it out on their own.
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+----
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.ping.PingEndpointTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.ping.PingEndpointTest
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+----
+
+Alternatively, if you didn't use an Ingress, you can use initialize the `name.node.port` and `ping.node.port`
+properties like so to go through your Kubernetes Services instead:
+
+```
+mvn verify -Dname.node.port=<name-node-port> -Dping.node.port=<ping-node-port> -Ddockerfile.skip=true
+```
+
+The following properties are also available to be configured:
+
+- `cluster.ip` -  IP address of your Minikube cluster, `{minikube-ip}` by default.
+- `name.ingress.path` - Ingress path of the `name` microservice, `/name` by default.
+- `ping.ingress.path` - Ingress path of the `ping` microservice, `/ping` by default.
+- `name.node.port` - Node port of the Kubernetes Service wrapping the `name` Pods.
+- `ping.node.port` - Node port of the Kubernetes Service wrapping the `ping` Pods.
+- `name.kube.service` - Name of the Kubernetes Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
 
 
 == Great work! You're done!
 
 You have just deployed two microservices to Kubernetes using Helm charts, scaled a microservice,
 setup an Ingress, rolled out deployment updates, learned how to edit Kubernetes resources, and
-tested miroservices running on Kubernetes.
+ran integration tests against miroservices that are running in a Kubernetes cluster.
+
+// uncomment this when Istio guide is released
+//Feel free to check out our https://github.com/OpenLiberty/guide-istio[Istio guide], which builds on top of what you learned here.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 include::{common-includes}/finish.adoc[]
