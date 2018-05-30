@@ -3,7 +3,7 @@ before_script:
 - unset _JAVA_OPTIONS
 - cd finish
 script:
-- mvn clean install
+- mvn clean package -Ddockerfile.skip=true
 after_script:
 - build=$(grep "Open Liberty" target/liberty/wlp/usr/servers/defaultServer/logs/console.log
   | cut -d' ' -f5 | cut -d')' -f1 ); release=$( echo "$build" | cut -d'/' -f1); number=$(
