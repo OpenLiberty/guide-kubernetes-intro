@@ -9,19 +9,19 @@
 // Contributors:
 //     IBM Corporation
 //
-:projectid: {kube}
+:projectid: kubernetes
 :page-layout: guide
 :page-duration: 30 minutes
 // :page-releasedate: 2018-03-16
-:page-description: Explore how to deploy microservices to {kube} using Helm charts and manage them with kubectl.
+:page-description: Explore how to deploy microservices to Kubernetes using Helm charts and manage them with kubectl.
 :page-tags: ['microservices', 'Helm', '{kube}', 'Docker', 'containers', 'kubectl', 'Minikube']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
-= Deploying microservices to {kube}
+= Deploying microservices to Kubernetes
 
-Explore how to deploy microservices to {kube} using Helm charts and manage them with kubectl.
+Explore how to deploy microservices to Kubernetes using Helm charts and manage them with kubectl.
 
 :minikube-ip: 192.168.99.100
 :kube: Kubernetes
@@ -236,19 +236,19 @@ REPOSITORY                                                       TAG
 ping                                                             1.0-SNAPSHOT
 name                                                             1.0-SNAPSHOT
 open-liberty                                                     latest
-gcr.io/{kube}-helm/tiller                                    v2.9.0
+gcr.io/kubernetes-helm/tiller                                    v2.9.0
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.0
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.0
 k8s.gcr.io/kube-apiserver-amd64                                  v1.10.0
 k8s.gcr.io/kube-scheduler-amd64                                  v1.10.0
-quay.io/{kube}-ingress-controller/nginx-ingress-controller   0.12.0
+quay.io/kubernetes-ingress-controller/nginx-ingress-controller   0.12.0
 k8s.gcr.io/etcd-amd64                                            3.1.12
 k8s.gcr.io/kube-addon-manager                                    v8.6
 k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.8
 k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
 k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
 k8s.gcr.io/pause-amd64                                           3.1
-k8s.gcr.io/{kube}-dashboard-amd64                            v1.8.1
+k8s.gcr.io/kubernetes-dashboard-amd64                            v1.8.1
 k8s.gcr.io/kube-addon-manager                                    v6.5
 gcr.io/k8s-minikube/storage-provisioner                          v1.8.0
 gcr.io/k8s-minikube/storage-provisioner                          v1.8.1
@@ -522,7 +522,7 @@ propagate this change automatically to the child projects:
 ...
 [INFO] --- versions-maven-plugin:2.5:set (default-cli) @ kube-demo ---
 [INFO] Searching for local aggregator root...
-[INFO] Local aggregation root: /Users/foo/Documents/repos/guides/wip/draft-guide-{kube}/finish
+[INFO] Local aggregation root: /Users/foo/Documents/repos/guides/wip/draft-guide-kubernetes/finish
 [INFO] Processing change of io.openliberty.guides:kube-demo:1.0-SNAPSHOT -> 1.1-SNAPSHOT
 [INFO] Processing io.openliberty.guides:kube-demo
 [INFO]     Updating project io.openliberty.guides:kube-demo
@@ -615,7 +615,7 @@ If new updates were made to a Deployment, you will see a brief message in the Ma
 [source, role="no_copy"]
 ----
 ...
-[INFO] --- exec-maven-plugin:1.6.0:exec (update-{kube}-deployment) @ name ---
+[INFO] --- exec-maven-plugin:1.6.0:exec (update-kubernetes-deployment) @ name ---
 deployment.apps "ol-name-ibm-open-liberty" image updated
 ...
 ----
@@ -709,11 +709,11 @@ the `path` field in the `spec` object from `/name` to `/myname`. Use any editing
       "release": "ol-name"
     },
     "annotations": {
-      "{kube}.io/ingress.class": "nginx",
-      "nginx.ingress.{kube}.io/affinity": "cookie",
-      "nginx.ingress.{kube}.io/rewrite-target": "/api/name",
-      "nginx.ingress.{kube}.io/session-cookie-hash": "sha1",
-      "nginx.ingress.{kube}.io/session-cookie-name": "route"
+      "kubernetes.io/ingress.class": "nginx",
+      "nginx.ingress.kubernetes.io/affinity": "cookie",
+      "nginx.ingress.kubernetes.io/rewrite-target": "/api/name",
+      "nginx.ingress.kubernetes.io/session-cookie-hash": "sha1",
+      "nginx.ingress.kubernetes.io/session-cookie-name": "route"
     }
   },
   "spec": {
