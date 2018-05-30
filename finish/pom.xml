@@ -17,13 +17,19 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Plugins -->
         <version.maven-war-plugin>2.6</version.maven-war-plugin>
-        <version.liberty-maven-plugin>2.2</version.liberty-maven-plugin>
         <version.dockerfile-maven-plugin>1.4.0</version.dockerfile-maven-plugin>
         <version.exec-maven-plugin>1.6.0</version.exec-maven-plugin>
+        <version.maven-surefire-plugin>2.18.1</version.maven-surefire-plugin>
+        <version.maven-failsafe-plugin>2.18.1</version.maven-failsafe-plugin>
         <!-- OpenLiberty runtime -->
         <version.openliberty-runtime>RELEASE</version.openliberty-runtime>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
+        <!-- Default test properties -->
+        <cluster.ip>192.168.99.100</cluster.ip>
+        <name.ingress.path>/name</name.ingress.path>
+        <name.kube.service>ol-name-ibm-open-liberty</name.kube.service>
+        <ping.ingress.path>/ping</ping.ingress.path>
     </properties>
 
     <dependencyManagement>
@@ -64,7 +70,7 @@
                 <version>3.0</version>
                 <scope>compile</scope>
             </dependency>
-<!--             <dependency>
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.12</version>
@@ -75,9 +81,36 @@
                 <artifactId>cxf-rt-rs-extension-providers</artifactId>
                 <version>3.1.11</version>
                 <scope>test</scope>
-            </dependency> -->
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-client</artifactId>
+                <version>3.1.11</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>windowsExtension</id>
+            <activation>
+                <os><family>Windows</family></os>
+            </activation>
+            <properties>
+                <kubectl.extension>.cmd</kubectl.extension>
+            </properties>
+        </profile>
+        <profile>
+            <id>nonWindowsExtension</id>
+            <activation>
+                <os><family>!Windows</family></os>
+            </activation>
+            <properties>
+                <kubectl.extension></kubectl.extension>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <pluginManagement>
@@ -94,7 +127,7 @@
                 <plugin>
                     <groupId>net.wasdev.wlp.maven.plugins</groupId>
                     <artifactId>liberty-maven-plugin</artifactId>
-                    <version>${version.liberty-maven-plugin}</version>
+                    <version>2.3</version>
                     <inherited>false</inherited>
                     <configuration>
                         <skip>true</skip>
@@ -115,6 +148,62 @@
                     <configuration>
                         <repository>${project.artifactId}</repository>
                         <tag>${project.version}</tag>
+                    </configuration>
+                </plugin>
+                <!-- Plugin to run unit tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.maven-surefire-plugin}</version>
+                    <executions>
+                        <execution>
+                            <phase>test</phase>
+                            <id>default-test</id>
+                            <configuration>
+                                <excludes>
+                                    <exclude>**/it/**</exclude>
+                                </excludes>
+                                <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- Plugin to run functional tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${version.maven-failsafe-plugin}</version>
+                    <executions>
+                        <execution>
+                            <phase>integration-test</phase>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                            <configuration>
+                                <includes>
+                                    <include>**/it/**</include>
+                                </includes>
+                                <systemPropertyVariables>
+                                    <cluster.ip>${cluster.ip}</cluster.ip>
+                                    <name.ingress.path>${name.ingress.path}</name.ingress.path>
+                                    <name.node.port>${name.node.port}</name.node.port>
+                                    <name.kube.service>${name.kube.service}</name.kube.service>
+                                    <ping.ingress.path>${ping.ingress.path}</ping.ingress.path>
+                                    <ping.node.port>${ping.node.port}</ping.node.port>
+                                </systemPropertyVariables>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>verify-results</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <summaryFile>${project.build.directory}/test-reports/it/failsafe-summary.xml</summaryFile>
+                        <reportsDirectory>${project.build.directory}/test-reports/it</reportsDirectory>
                     </configuration>
                 </plugin>
             </plugins>

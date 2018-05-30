@@ -1,3 +1,15 @@
+// tag::copyright[]
+/*******************************************************************************
+ * Copyright (c) 2018 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - Initial implementation
+ *******************************************************************************/
+// end::copyright[]
 package io.openliberty.guides.ping;
 
 import java.net.MalformedURLException;
@@ -36,10 +48,9 @@ public class PingResource {
             return "pong";
         } catch (ProcessingException ex) {
             // Checking if UnknownHostException is nested inside and rethrowing if not.
-            Throwable rootEx = ExceptionUtils.getRootCause(ex);
-            if (rootEx != null && rootEx instanceof UnknownHostException) {
+            if (this.isUnknownHostException(ex)) {
                 System.err.println("The specified host is unknown");
-                ex.printStackTrace();
+                ex.printStackTrace(); 
             } else {
                 throw ex;
             }
@@ -51,6 +62,11 @@ public class PingResource {
             ex.printStackTrace();
         }
         return "Bad response from " + host + "\nCheck the console log for more info.";
+    }
+    
+    private boolean isUnknownHostException(ProcessingException ex) {
+        Throwable rootEx = ExceptionUtils.getRootCause(ex);
+        return rootEx != null && rootEx instanceof UnknownHostException;
     }
     
 }
