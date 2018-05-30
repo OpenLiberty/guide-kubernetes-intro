@@ -44,7 +44,9 @@ public class PingEndpointTest {
         String clusterIp = System.getProperty("cluster.ip");
         String ingressPath = System.getProperty("ping.ingress.path");
         String nodePort = System.getProperty("ping.node.port");
+        
         nameKubeService = System.getProperty("name.kube.service");
+        
         if (nodePort.isEmpty() || nodePort == null) {
             clusterUrl = "https://" + clusterIp + ingressPath + "/";
         } else {

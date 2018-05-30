@@ -44,6 +44,7 @@ public class NameEndpointTest {
         String clusterIp = System.getProperty("cluster.ip");
         String ingressPath = System.getProperty("name.ingress.path");
         String nodePort = System.getProperty("name.node.port");
+        
         if (nodePort.isEmpty() || nodePort == null) {
             clusterUrl = "https://" + clusterIp + ingressPath + "/";
         } else {
