@@ -765,6 +765,9 @@ following command:
 kubectl patch ingress/ol-name-ibm-open-liberty -p '{"spec": {"rules": [{"http": {"paths": [{"path": "/myname", "backend": {"serviceName": "ol-name-ibm-open-liberty", "servicePort": 9080}}]}}]}}'
 ```
 
+You can also point to a JSON or a YAML file that contains your config instead of writing it out in
+your command line.
+
 {kube} will match your config pattern against the `spec` object defined in the `ol-name-ibm-open-liberty`
 Ingress and override the `path` field.
 
