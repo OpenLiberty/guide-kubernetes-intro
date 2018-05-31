@@ -183,7 +183,7 @@ to it from your host machine:
 # From Bash if you're on Linux or MacOS
 eval $(minikube docker-env)
 # From PowerShell if you're on Windows
-minikube docker-env --shell=powershell dev | Invoke-Expression
+minikube docker-env | Invoke-Expression
 ```
 
 When you no longer wish to use Minikube's Docker daemon, run the following command to point back to your host:
@@ -192,7 +192,7 @@ When you no longer wish to use Minikube's Docker daemon, run the following comma
 # From Bash if you're on Linux or MacOS
 eval $(minikube docker-env -u)
 # From PowerShell if you're on Windows
-minikube docker-env -u --shell=powershell dev | Invoke-Expression
+minikube docker-env -u | Invoke-Expression
 ```
 
 
