@@ -12,7 +12,7 @@
 :projectid: kubernetes
 :page-layout: guide
 :page-duration: 30 minutes
-// :page-releasedate: 2018-03-16
+:page-releasedate: 2018-05-30
 :page-description: Explore how to deploy microservices to Kubernetes using Helm charts and manage them with kubectl.
 :page-tags: ['microservices', 'Helm', '{kube}', 'Docker', 'containers', 'kubectl', 'Minikube']
 :page-permalink: /guides/{projectid}
