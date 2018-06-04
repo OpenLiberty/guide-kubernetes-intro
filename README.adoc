@@ -33,7 +33,7 @@ You will learn how to deploy two microservices to a local {kube} cluster using H
 will include building and containerizing the microservices, running the containers inside {kube}
 Pods, setting up an Ingress to load balance traffic and persists sessions, establishing communicating
 between Pods, scaling Deployments, automatically rolling out new updates when the microservices are
-rebuilt, editing {kube} resources, and testing microservices that are deployed to {kube}.
+rebuilt, testing microservices that are deployed to {kube}, and editing {kube} resources.
 
 The two microservices you will deploy are called `name` and `ping` and are provided for you under the
 `start` directory. The `name` microservice simply displays a brief greeting and the name of the
@@ -759,7 +759,7 @@ editor or update particular parts of the YAML with the `kubectl` command.
 Resource YAML files can be directly edited from the {kube} dashboard or a text editor of your choice.
 
 To edit a resource from the Minikube dashboard, run the `minikune dashboard` command to open the Minikube
-dashboard, and then use the left navigational panel to select which resources to edit.
+dashboard, then use the left navigational panel to select which resources to edit.
 
 To open and edit a resource in a text editor, run the `kubectl edit (RESOURCE/NAME | -f FILENAME) [options]`
 command, specifying the resource type and its name. Once you save your changes, they will be automatically
@@ -862,8 +862,8 @@ Ingress and override the `path` field.
 == Great work! You're done!
 
 You have just deployed two microservices to {kube} using Helm charts. You then scaled a microservice,
-rolled out deployment updates, learned how to edit {kube} resources, and ran integration tests against
-miroservices that are running in a {kube} cluster.
+rolled out deployment updates, ran integration tests against miroservices that are running in a {kube}
+cluster, and learned how to edit {kube} resources.
 
 // uncomment this when Istio guide is released
 //Feel free to check out our https://github.com/OpenLiberty/guide-istio[Istio guide], which builds on top of what you learned here.
