@@ -304,6 +304,9 @@ kubectl patch ingress/ol-name-ibm-open-liberty -p '{ "metadata": { "annotations"
 kubectl patch ingress/ol-ping-ibm-open-liberty -p '{ "metadata": { "annotations": { "nginx.ingress.kubernetes.io/affinity": "cookie", "nginx.ingress.kubernetes.io/rewrite-target": "/api/ping", "nginx.ingress.kubernetes.io/session-cookie-hash": "sha1", "nginx.ingress.kubernetes.io/session-cookie-name": "route" }}}'
 ```
 
+// On windows:
+// kubectl patch ingress/ol-name-ibm-open-liberty -p "{ \"metadata\": { \"annotations\": { \"nginx.ingress.kubernetes.io/affinity\": \"cookie\", \"nginx.ingress.kubernetes.io/rewrite-target\": \"/api/name\", \"nginx.ingress.kubernetes.io/session-cookie-hash\": \"sha1\", \"nginx.ingress.kubernetes.io/session-cookie-name\": \"route\" }}}"
+
 Both of these chart releases will create three {kube} resource each: a Deployment for managing Pods,
 a Service for defining how Pods are accessed, and an Ingress for defining how external traffic is routed
 to the Service.
@@ -668,6 +671,70 @@ If you need to revert back to a specific revision, use the `--to-revision` flag 
 kubectl rollout undo deployment/ol-name-ibm-open-liberty --to-revision=1
 ```
 
+
+// =================================================================================================
+// Testing microservices that are running on {kube}
+// =================================================================================================
+
+== Testing microservices that are running on {kube}
+
+A few tests are included for you to test the basic functionality of the microservices. If a test failure
+occurs, then you might have introduced a bug into the code. To run the tests, wait for all Pods to be
+in the ready state, then run the `mvn verify` command with the following list of properties:
+
+- `cluster.ip` -  IP address of your Minikube cluster, `{minikube-ip}` by default.
+- `name.ingress.path` - Ingress path of the `name` microservice, `/name` by default.
+- `ping.ingress.path` - Ingress path of the `ping` microservice, `/ping` by default.
+- `name.kube.service` - Name of the {kube} Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
+- `name.node.port` - Node port of the {kube} Service wrapping the `name` Pods. Set this if you didn't
+setup an Ingress.
+- `ping.node.port` - Node port of the {kube} Service wrapping the `ping` Pods. Set this if you didn't
+setup an Ingress.
+
+For example:
+
+```
+mvn verify -Ddockerfile.skip=true
+```
+
+This command will run integration tests with all default properties. The `dockerfile.skip` parameter
+is set to `true` in order to skip building a new Docker image. If the tests pass, you'll see an output
+similar to the following for each service respectively:
+
+Alternatively, if you didn't setup an Ingress, you can use set the `name.node.port` and `ping.node.port`
+properties like so to make requests to your {kube} Services instead:
+
+```
+mvn verify -Dname.node.port=<name-node-port> -Dping.node.port=<ping-node-port> -Ddockerfile.skip=true
+```
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.name.NameEndpointTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.name.NameEndpointTest
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+----
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.ping.PingEndpointTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.ping.PingEndpointTest
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+----
+
+
 // =================================================================================================
 // Editing {kube} resources
 // =================================================================================================
@@ -782,64 +849,8 @@ Ingress and override the `path` field.
 
 
 // =================================================================================================
-// Testing microservices that are running on {kube}
+// finish
 // =================================================================================================
-
-== Testing microservices that are running on {kube}
-
-A few tests are included for you to test the basic functionality of the microservices. If a test failure
-occurs, then you might have introduced a bug into the code. To run the tests, wait for all Pods to be
-in the ready state, then run the following command:
-
-```
-mvn verify -Ddockerfile.skip=true
-```
-
-The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image. If the
-tests pass, you'll see an output similar to the following for each service respectively:
-
-[source, role="no_copy"]
-----
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
-Running it.io.openliberty.guides.name.NameEndpointTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.name.NameEndpointTest
-
-Results :
-
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
-----
-
-[source, role="no_copy"]
-----
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
-Running it.io.openliberty.guides.ping.PingEndpointTest
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.ping.PingEndpointTest
-
-Results :
-
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
-----
-
-Alternatively, if you didn't use an Ingress, you can use initialize the `name.node.port` and `ping.node.port`
-properties like so to make requests to your {kube} Services instead:
-
-```
-mvn verify -Dname.node.port=<name-node-port> -Dping.node.port=<ping-node-port> -Ddockerfile.skip=true
-```
-
-The following properties are also available to be configured:
-
-- `cluster.ip` -  IP address of your Minikube cluster, `{minikube-ip}` by default.
-- `name.ingress.path` - Ingress path of the `name` microservice, `/name` by default.
-- `ping.ingress.path` - Ingress path of the `ping` microservice, `/ping` by default.
-- `name.node.port` - Node port of the {kube} Service wrapping the `name` Pods.
-- `ping.node.port` - Node port of the {kube} Service wrapping the `ping` Pods.
-- `name.kube.service` - Name of the {kube} Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
-
 
 == Great work! You're done!
 
