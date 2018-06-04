@@ -144,6 +144,8 @@ To begin working with your Minikube cluster run the following command from the c
 minikube start
 ```
 
+Note, if you're on Windows, you might need to pass additional flags to <>. More on this <here>.
+
 This command sets up and starts a local {kube} cluster that is ready for deployment out of the box.
 Later, when you no longer need you cluster, you can stop it with `minikube stop` and delete it completely
 with `minikube delete`.
@@ -182,8 +184,8 @@ to it from your host machine:
 ```
 # From Bash if you're on Linux or MacOS
 eval $(minikube docker-env)
-# From PowerShell if you're on Windows
-minikube docker-env | Invoke-Expression
+# From PowerShell or CMD if you're on Windows
+minikube docker-env > tmp.cmd && call tmp.cmd && REM tmp.cmd
 ```
 
 When you no longer wish to use Minikube's Docker daemon, run the following command to point back to your host:
@@ -191,8 +193,8 @@ When you no longer wish to use Minikube's Docker daemon, run the following comma
 ```
 # From Bash if you're on Linux or MacOS
 eval $(minikube docker-env -u)
-# From PowerShell if you're on Windows
-minikube docker-env -u | Invoke-Expression
+# From PowerShell or CMD if you're on Windows
+minikube docker-env -u > tmp.cmd && call tmp.cmd && REM tmp.cmd
 ```
 
 
@@ -682,14 +684,18 @@ A few tests are included for you to test the basic functionality of the microser
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all Pods to be
 in the ready state, then run the `mvn verify` command with the following list of properties:
 
-- `cluster.ip` -  IP address of your Minikube cluster, `{minikube-ip}` by default.
-- `name.ingress.path` - Ingress path of the `name` microservice, `/name` by default.
-- `ping.ingress.path` - Ingress path of the `ping` microservice, `/ping` by default.
-- `name.kube.service` - Name of the {kube} Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
-- `name.node.port` - Node port of the {kube} Service wrapping the `name` Pods. Set this if you didn't
+[cols="15, 100", options="header"]
+|===
+| *Property*        | *Description*
+| cluster.ip        | IP address of your Minikube cluster, `{minikube-ip}` by default.
+| name.ingress.path | Ingress path of the `name` microservice, `/name` by default.
+| ping.ingress.path | Ingress path of the `ping` microservice, `/ping` by default.
+| name.kube.service | Name of the {kube} Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
+| name.node.port    | Node port of the {kube} Service wrapping the `name` Pods. Set this if you didn't
 setup an Ingress.
-- `ping.node.port` - Node port of the {kube} Service wrapping the `ping` Pods. Set this if you didn't
+| ping.node.port    | Node port of the {kube} Service wrapping the `ping` Pods. Set this if you didn't
 setup an Ingress.
+|===
 
 For example:
 
@@ -698,8 +704,7 @@ mvn verify -Ddockerfile.skip=true
 ```
 
 This command will run integration tests with all default properties. The `dockerfile.skip` parameter
-is set to `true` in order to skip building a new Docker image. If the tests pass, you'll see an output
-similar to the following for each service respectively:
+is set to `true` in order to skip building a new Docker image.
 
 Alternatively, if you didn't setup an Ingress, you can use set the `name.node.port` and `ping.node.port`
 properties like so to make requests to your {kube} Services instead:
@@ -707,6 +712,8 @@ properties like so to make requests to your {kube} Services instead:
 ```
 mvn verify -Dname.node.port=<name-node-port> -Dping.node.port=<ping-node-port> -Ddockerfile.skip=true
 ```
+
+If the tests pass, you'll see an output similar to the following for each service respectively:
 
 [source, role="no_copy"]
 ----
@@ -838,11 +845,11 @@ For example, to change the Ingress path from `/name` to `/myname` as in the prev
 following command:
 
 ```
+# From Bash if you're on Linux or MacOS
 kubectl patch ingress/ol-name-ibm-open-liberty -p '{"spec": {"rules": [{"http": {"paths": [{"path": "/myname", "backend": {"serviceName": "ol-name-ibm-open-liberty", "servicePort": 9080}}]}}]}}'
+# From PowerShell or CMD if you're on Windows
+kubectl patch ingress/ol-name-ibm-open-liberty -p "{\"spec\": {\"rules\": [{\"http\": {\"paths\": [{\"path\": \"/myname\", \"backend\": {\"serviceName\": \"ol-name-ibm-open-liberty\", \"servicePort\": 9080}}]}}]}}"
 ```
-
-You can also point to a JSON or a YAML file that contains your config instead of writing it out in
-your command line.
 
 {kube} will match your config pattern against the `spec` object defined in the `ol-name-ibm-open-liberty`
 Ingress and override the `path` field.
