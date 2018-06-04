@@ -707,7 +707,7 @@ This command will run integration tests with all default properties. The `docker
 is set to `true` in order to skip building a new Docker image.
 
 Alternatively, if you didn't setup an Ingress, you can use set the `name.node.port` and `ping.node.port`
-properties like so to make requests to your {kube} Services instead:
+properties like so to make requests through your {kube} Services instead:
 
 ```
 mvn verify -Dname.node.port=<name-node-port> -Dping.node.port=<ping-node-port> -Ddockerfile.skip=true
