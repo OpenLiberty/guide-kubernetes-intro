@@ -144,7 +144,8 @@ To begin working with your Minikube cluster run the following command from the c
 minikube start
 ```
 
-Note, if you're on Windows, you might need to pass additional flags to <>. More on this <here>.
+Note, if you're on Windows and you run into issues starting Minikube in VirtualBox, try using Hyper-V
+instead since Hyper-V is already required to run Docker on Windows.
 
 This command sets up and starts a local {kube} cluster that is ready for deployment out of the box.
 Later, when you no longer need you cluster, you can stop it with `minikube stop` and delete it completely
