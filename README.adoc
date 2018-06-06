@@ -13,7 +13,7 @@
 :page-layout: guide
 :page-duration: 30 minutes
 :page-releasedate: 2018-05-30
-:page-description: Explore how to deploy microservices to Kubernetes using Helm charts and manage them with kubectl.
+:page-description: Explore how to deploy microservices to Kubernetes using Helm charts and manage them with the Kubernetes CLI kubectl.
 :page-tags: ['microservices', 'Helm', '{kube}', 'Docker', 'containers', 'kubectl', 'Minikube']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio']
@@ -21,7 +21,7 @@
 :source-highlighter: prettify
 = Deploying microservices to Kubernetes
 
-Explore how to deploy microservices to Kubernetes using Helm charts and manage them with kubectl.
+Explore how to deploy microservices to Kubernetes using Helm charts and manage them with the Kubernetes CLI kubectl.
 
 :minikube-ip: 192.168.99.100
 :kube: Kubernetes
@@ -29,10 +29,10 @@ Explore how to deploy microservices to Kubernetes using Helm charts and manage t
 
 == What you'll learn
 
-You will learn how to deploy two microservices to a local {kube} cluster using Helm charts. This
+You will learn how to deploy two microservices to a local {kube} cluster using Helm charts ({kube} packages). This
 will include building and containerizing the microservices, running the containers inside {kube}
 Pods, setting up an Ingress to load balance traffic and persists sessions, establishing communicating
-between Pods, scaling Deployments, automatically rolling out new updates when the microservices are
+between Pods, scaling deployments, automatically rolling out new updates when the microservices are
 rebuilt, testing microservices that are deployed to {kube}, and editing {kube} resources.
 
 The two microservices you will deploy are called `name` and `ping` and are provided for you under the
@@ -112,15 +112,18 @@ there is much more underneath the iceberg that is {kube}.
 Before you begin, make sure to have the following tools installed:
 
 - `kubernetes-cli` - a command line interface for {kube} called `kubectl`. This is your primary
-tool for communicating with and managing your {kube} cluster.
+tool for communicating with and managing your {kube} cluster. For installation instructions see
+https://kubernetes.io/docs/tasks/tools/install-kubectl/
 - `kubernetes-helm` - a package manager for {kube} called Helm. Helm allows you to install packages
 or "charts", which are sets of preconfigured {kube} resources. Installing charts is much more
-convenient than creating and configuring the resources yourself.
-- `minikube` - a local, single-node {kube} cluster that runs in a virtual machine.
+convenient than creating and configuring the resources yourself. For installation instructions see
+https://docs.helm.sh/using_helm/#installing-helm
+- `minikube` - a local, single-node {kube} cluster that runs in a virtual machine. For installation
+instructions see https://github.com/kubernetes/minikube
 
 Finally, you will need a containerization software for building containers. {kube} supports a variety
 of container types and while you're not limited to any of them in particular, you should use Docker
-as this is what this guide will focus on.
+as this is what this guide will focus on. For installation instructions see https://docs.docker.com/install/
 
 
 // =================================================================================================
@@ -186,7 +189,7 @@ to it from your host machine:
 # From Bash if you're on Linux or MacOS
 eval $(minikube docker-env)
 # From PowerShell or CMD if you're on Windows
-minikube docker-env > tmp.cmd && call tmp.cmd && REM tmp.cmd
+minikube docker-env > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 
 When you no longer wish to use Minikube's Docker daemon, run the following command to point back to your host:
@@ -195,7 +198,7 @@ When you no longer wish to use Minikube's Docker daemon, run the following comma
 # From Bash if you're on Linux or MacOS
 eval $(minikube docker-env -u)
 # From PowerShell or CMD if you're on Windows
-minikube docker-env -u > tmp.cmd && call tmp.cmd && REM tmp.cmd
+minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 
 
@@ -218,7 +221,9 @@ use the `.war` file produced by the build to build a Docker image. While this is
 approach, we've setup the projects such that you can build your microservices and Docker image simultaneously
 as a part of a single Maven build. This is done using the `dockerfile-maven` plugin, which automatically
 picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
-To build you microservices and Docker image, run the following command:
+To build your microservices and Docker image, you shouldn't need to start Docker locally as you've
+configured the Docker CLI to use Minikube's Docker daemon, so simply navigate to the `start` directory
+and run the following command:
 
 ```
 mvn package
@@ -229,12 +234,16 @@ The `package` goal automatically invokes the `dockerfile-maven:build` goal, whic
 as the POM file.
 
 During the build, you'll see various Docker messages describing what images are being downloaded and
-built. If the build is successful, run `docker images` from the command line to list all local Docker
-images and verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them:
+built. If the build is successful, run the following command to list all local Docker images:
+
+```
+docker images
+```
+
+Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them:
 
 [source, role="no_copy"]
 ----
-$ docker images
 REPOSITORY                                                       TAG
 ping                                                             1.0-SNAPSHOT
 name                                                             1.0-SNAPSHOT
@@ -352,44 +361,29 @@ Next, let's break down the parameters:
 If you need to use additional parameters or if you would like more information on the existing parameters,
 visit the official IBM chart https://github.ibm.com/IBMPrivateCloud/charts/tree/master/stable/ibm-open-liberty[GitHub repository].
 
-Once the charts are installed, run the `kubectl get pods` command to check on the status of your Pods:
+Once the charts are installed, run the following command to check the status of your Pods:
+
+```
+kubectl get pods
+```
+
+You'll see an output similar to the following if all the Pods are healthy and running:
 
 [source, role="no_copy"]
 ----
-$ kubectl get pods
 NAME                                        READY     STATUS    RESTARTS   AGE
 ol-name-ibm-open-liberty-84fcb9475d-mgzjk   1/1       Running   0          55m
 ol-ping-ibm-open-liberty-6cb6ffd7b6-5pp7w   1/1       Running   0          4m
 ----
 
-You can also inspect the Pods in more detail by running the `kubectl describe pods [POD NAME]` command:
+You can also inspect individual Pods in more detail by running the following command:
 
-[source, role="no_copy"]
-----
-$ kubectl describe pods
-Name:           ol-name-ibm-open-liberty-84fcb9475d-mgzjk
-Namespace:      default
-Node:           minikube/10.0.2.15
-Start Time:     Tue, 22 May 2018 11:15:56 -0400
-Labels:         app=ol-name-ibm-open-liberty
-                Pod-template-hash=4097650318
-Annotations:    <none>
-Status:         Running
-IP:             172.17.0.7
-Controlled By:  ReplicaSet/ol-name-ibm-open-liberty-84fcb9475d
-Containers:
-  ibm-open-liberty:
-    Container ID:   docker://fcf2bddf4640931a5c0d378f5d85d1fb1fd3b74982fecbda3267cd17d40576b6
-    Image:          name:1.0-SNAPSHOT
-    Image ID:       docker://sha256:71ff030f9e47db7b4513289e223fcf55e856e8b6f7e5c634e5249c5a05683016
-    Port:           <none>
-    Host Port:      <none>
-    State:          Running
-...
-----
+```
+kubectl describe pods
+```
 
-You can also issue the `get` and `describe` commands on other {kube} resources, so feel free to
-to inspect all other resources created by the chart.
+You can also issue the `kubectl get` and `kubectl describe` commands on other {kube} resources, so feel
+free to to inspect all other resources created by the chart.
 
 Wait for the Pods to be in the ready state, then access them via the Ingress that you created earlier.
 If the `host` field is not specified in an Ingress, it will used your cluster's IP address. To obtain
@@ -415,19 +409,30 @@ request to a Pod, which then sends back a response, which the Service passes bac
 === Alternative: deploying the microservices without an Ingress
 
 You can choose to omit the Ingress entirely and install your charts without it. Ingress is disabled
-by default, so all you need to do is omit all Ingress-related parameters.
+by default, so all you need to do is omit all Ingress-related parameters. For example, to install a
+chart release for the `name` microservice without the Ingress, you would run the following command:
 
-Once your chart is installed, each {kube} Service will chose a random `nodePort` within a predefined
-range to expose. This will be the port number through which you can access the Service encapsulating
-your Pods. To find this port number, run the `kubectl get services` command. The `nodePort` will be the
-port number that the `9080` port maps to. In the following case the `nodePort` is `31249`:
+```
+helm install --name ol-name-noingress --set image.pullPolicy=IfNotPresent --set image.repository=name --set image.tag=1.0-SNAPSHOT --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 ibm-charts/ibm-open-liberty
+```
+
+Once the chart is installed, the {kube} Service choses a random `nodePort` within a predefined
+range to expose. This is the port number through which you can access the Service encapsulating your
+Pods. To find this port number, run the following command:
+
+```
+kubectl get services
+```
+
+The `nodePort` is the port number that the `9080` port maps to. In the following case the `nodePort`
+is `31249`:
 
 [source, role="no_copy"]
 ----
 $ kubectl get services
-NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-kubernetes                   ClusterIP   10.96.0.1        <none>        443/TCP          17h
-ol-name-ibm-open-liberty     NodePort    10.101.49.188    <none>        9080:31249/TCP   2s
+NAME                                   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+kubernetes                             ClusterIP   10.96.0.1        <none>        443/TCP          17h
+ol-name-noingress-ibm-open-liberty     NodePort    10.101.49.188    <none>        9080:31249/TCP   2s
 ----
 
 The `name` microservice can then be accessed by `curling` or visiting the http://{minikube-ip}:31249/api/name URL.
@@ -438,13 +443,13 @@ chance, all traffic is routed to a single Pod, overloading it and causing it to 
 
 
 // =================================================================================================
-// Scaling a Deployment
+// Scaling a deployment
 // ================================================================================================
 
-== Scaling a Deployment
+== Scaling a deployment
 
 To really make use of load balancing and session persistence that comes with your Ingress, you need
-to scale your Deployments. When you scale a Deployment, you replicate its Pods, creating more running
+to scale your deployments. When you scale a Deployment, you replicate its Pods, creating more running
 instances of your applications. Scaling is one of the primary advantages of {kube} as it allows to
 accommodate more traffic, and descale them to free up resources when the traffic decreases.
 
@@ -454,22 +459,10 @@ As an example, scale the `name` Deployment to 3 Pods. This can be done by runnin
 kubectl scale deployment/ol-name-ibm-open-liberty --replicas=3
 ```
 
-Next, run the `kubectl get pods` command and wait until your two new Pods are in the ready state:
-
-[source, role="no_copy"]
-----
-$ kubectl get Pods
-NAME                                        READY     STATUS              RESTARTS   AGE
-ol-name-ibm-open-liberty-84fcb9475d-grvw9   0/1       ContainerCreating   0          1s
-ol-name-ibm-open-liberty-84fcb9475d-hgvg2   1/1       Running             0          44s
-ol-name-ibm-open-liberty-84fcb9475d-rctgp   0/1       ContainerCreating   0          1s
-ol-ping-ibm-open-liberty-6cb6ffd7b6-fhchz   1/1       Running             0          34s
-----
-
-Then `curl` or visit the https://{minikube-ip}/name/ URL. Each unique session that you open to this URL
-will display a different Pod name, one for each of your three running Pods. Notice also that no matter
-how many unique sessions you open, all your traffic will be balanced perfectly among the three Pods.
-This is your Ingress controller's load balancer at work.
+Wait for your two new Pods to be in the ready state, then `curl` or visit the https://{minikube-ip}/name/ URL.
+Each unique session that you open to this URL will display a different Pod name, one for each of your
+three running Pods. Notice also that no matter how many unique sessions you open, all your traffic will
+be balanced perfectly among the three Pods. This is your Ingress controller's load balancer at work.
 
 If you attempted to open multiple session in a simple browser window, you also saw how your Ingress
 controller persists session. In other words, each session opened in a plain browser window will result
@@ -495,8 +488,8 @@ Deployments with the new image versions for the new code changes to be picked up
 As an example, make a small change to the `name` microservice and then update the `ol-name-ibm-open-liberty`
 Deployment thats already installed in your cluster.
 
-First, change the greeting message in `name/src/main/java/io/openliberty/guides/name/NameResource.java`
-file from "Hello!" to "Greetings!" :
+First, navigate to the `start` directory if you haven't yet and change the greeting message in
+`name/src/main/java/io/openliberty/guides/name/NameResource.java` file from "Hello!" to "Greetings!" :
 
 [source, Java]
 ----
@@ -522,8 +515,8 @@ public class NameResource {
 ----
 
 Next, specify a new version for your Maven project. This way, when your microservice rebuilds, a
-Docker image with a new tag will be built alongside it. To change the Maven project version, run the
-following command from the `start` directory:
+Docker image with a new tag will be built alongside it. To change the Maven project version, run
+the following command:
 
 ```
 mvn versions:set -DnewVersion=1.1-SNAPSHOT
@@ -553,9 +546,8 @@ propagate this change automatically to the child projects:
 ...
 ----
 
-Next, navigate to the `name` directory and run the `mvn clean package` command to rebuild the `name`
-microservice. Then run the `docker images` command and verify that a new `name:1.1-SNAPSHOT` image was
-created:
+Next, navigate to the `name` directory withing the `start` directory and run the `mvn clean package`
+command to rebuild the `name` microservice, then verify that a new `name:1.1-SNAPSHOT` image was created:
 
 [source, role="no_copy"]
 ----
@@ -579,11 +571,11 @@ kubectl set image deployment/ol-name-ibm-open-liberty ibm-open-liberty=name:1.1-
 ```
 
 When you change the image tag, {kube} automatically creates new Pods that run this new image. {kube}
-also keeps some of the old Pods alive until enough of the new Pods are running.
+also keeps some of the old Pods alive until enough of the new Pods are running:
 
 [source, role="no_copy"]
 ----
-$ kubectl get Pods
+$ kubectl get pods
 NAME                                        READY     STATUS        RESTARTS   AGE
 ol-name-ibm-open-liberty-84fcb9475d-hgvg2   1/1       Terminating   1          19h
 ol-name-ibm-open-liberty-84fcb9475d-rctgp   1/1       Running       1          19h
@@ -647,11 +639,16 @@ thats already using the same image version.
 == Rolling back Deployments to previous revisions
 
 If you rolled out an unstable Deployment update, then you can revert the Deployment back to a older
-revision by viewing its revision history:
+revision by viewing its revision history. To do this, run the following command:
+
+```
+kubectl rollout history deployment/ol-name-ibm-open-liberty
+```
+
+You see the following revision history for the `ol-name-ibm-open-liberty` Deployment:
 
 [source, role="no_copy"]
 ----
-$ kubectl rollout history deployment/ol-name-ibm-open-liberty
 deployments "ol-name-ibm-open-liberty"
 REVISION  CHANGE-CAUSE
 1         <none>
