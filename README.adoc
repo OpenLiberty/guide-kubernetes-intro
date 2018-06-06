@@ -29,11 +29,11 @@ Explore how to deploy microservices to Kubernetes using Helm charts and manage t
 
 == What you'll learn
 
-You will learn how to deploy two microservices to a local {kube} cluster using Helm charts ({kube} packages). This
-will include building and containerizing the microservices, running the containers inside {kube}
-Pods, setting up an Ingress to load balance traffic and persists sessions, establishing communicating
-between Pods, scaling deployments, automatically rolling out new updates when the microservices are
-rebuilt, testing microservices that are deployed to {kube}, and editing {kube} resources.
+You will learn how to deploy two microservices to a local {kube} cluster using the Kubernetes package
+manager called Helm. Helm allows you to install packages or "charts", which are sets of preconfigured
+{kube} resources. Installing charts is much more convenient than creating and configuring Kubernetes
+resources yourself. You will then manage your deployed microservices using the `kubectl` command line
+interface for {kube}. `kubectl` is your primary tool for communicating with and managing your {kube} cluster
 
 The two microservices you will deploy are called `name` and `ping` and are provided for you under the
 `start` directory. The `name` microservice simply displays a brief greeting and the name of the
@@ -42,9 +42,9 @@ after its been replicated. The `ping` microservice simply "pings" the {kube} Ser
 the Pods running the `name` microservice. This demonstrates how communication can be established between
 Pods inside a cluster.
 
-You will use Minikube as your local {kube} cluster and the Helm package manager for {kube} to
-deploy the two microservices. You will also use NGINX as your Ingress controller, which you will enable
-as an addon in Minikube.
+You will use Minikube as your local {kube} cluster. Minikube is a single-node {kube} cluster that
+runs in a local virtual machine. You will also use NGINX as your Ingress controller, which you will
+enable as an addon in Minikube.
 
 
 // =================================================================================================
@@ -111,12 +111,9 @@ there is much more underneath the iceberg that is {kube}.
 
 Before you begin, make sure to have the following tools installed:
 
-- `kubernetes-cli` - a command line interface for {kube} called `kubectl`. This is your primary
-tool for communicating with and managing your {kube} cluster. For installation instructions see
+- `kubernetes-cli` - a command line interface for {kube} called `kubectl`. For installation instructions see
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
-- `kubernetes-helm` - a package manager for {kube} called Helm. Helm allows you to install packages
-or "charts", which are sets of preconfigured {kube} resources. Installing charts is much more
-convenient than creating and configuring the resources yourself. For installation instructions see
+- `kubernetes-helm` - a package manager for {kube} called Helm. For installation instructions see
 https://docs.helm.sh/using_helm/#installing-helm
 - `minikube` - a local, single-node {kube} cluster that runs in a virtual machine. For installation
 instructions see https://github.com/kubernetes/minikube
