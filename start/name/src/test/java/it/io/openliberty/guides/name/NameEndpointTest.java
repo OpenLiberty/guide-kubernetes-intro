@@ -36,9 +36,10 @@ import org.junit.Test;
 public class NameEndpointTest {
 
     private static String clusterUrl;
+    private static SSLContext sc;
 
     private Client client;
-    private Response r;
+    private Response response;
 
     @BeforeClass
     public static void oneTimeSetup() {
@@ -51,17 +52,13 @@ public class NameEndpointTest {
         } else {
             clusterUrl = "http://" + clusterIp + ":" + nodePort + "/api/name/";
         }
-    }
-    
-    @Before
-    public void setup() {
+        
         // Ignore certificate
         TrustManager[] tm = new TrustManager[] { new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() { return null; }
             public void checkClientTrusted(X509Certificate[] certs, String authType) {}
             public void checkServerTrusted(X509Certificate[] certs, String authType) {}
         }};
-        SSLContext sc = null;
         try {
             sc = SSLContext.getInstance("SSL");
             sc.init(null, tm, null);
@@ -69,8 +66,11 @@ public class NameEndpointTest {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
-        
-        r = null;
+    }
+    
+    @Before
+    public void setup() {
+        response = null;
         client = ClientBuilder.newBuilder()
                     .sslContext(sc)
                     .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
@@ -80,15 +80,15 @@ public class NameEndpointTest {
 
     @After
     public void teardown() {
-        r.close();
+        response.close();
         client.close();
     }
     
     @Test
     public void testContainerNameNotNull() {
-        r = this.getResponse(clusterUrl);
-        this.assertResponse(clusterUrl, r);
-        String greeting = r.readEntity(String.class);
+        response = this.getResponse(clusterUrl);
+        this.assertResponse(clusterUrl, response);
+        String greeting = response.readEntity(String.class);
         
         String containerName = greeting.substring(greeting.lastIndexOf(" ") + 1);
         containerName = (containerName.equals("null")) ? null : containerName;
