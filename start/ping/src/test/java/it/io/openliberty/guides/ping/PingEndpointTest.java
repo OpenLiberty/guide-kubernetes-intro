@@ -38,6 +38,7 @@ public class PingEndpointTest {
     private static String nameKubeService;
 
     private Client client;
+    private Response r;
 
     @BeforeClass
     public static void oneTimeSetup() {
@@ -56,6 +57,7 @@ public class PingEndpointTest {
     
     @Before
     public void setup() {
+        // Ignore certificate
         TrustManager[] tm = new TrustManager[] { new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() { return null; }
             public void checkClientTrusted(X509Certificate[] certs, String authType) {}
@@ -69,6 +71,8 @@ public class PingEndpointTest {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
+        
+        r = null;
         client = ClientBuilder.newBuilder()
                     .sslContext(sc)
                     .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
@@ -77,12 +81,13 @@ public class PingEndpointTest {
 
     @After
     public void teardown() {
+        r.close();
         client.close();
     }
     
     @Test
     public void testPingValidService() {
-        Response r = this.getResponse(clusterUrl + nameKubeService);
+        r = this.getResponse(clusterUrl + nameKubeService);
         this.assertResponse(clusterUrl, r);
         
         String expected = "pong";
@@ -93,7 +98,7 @@ public class PingEndpointTest {
     @Test
     public void testPingInvalidService() {
         String invalidServiceName = "donkey-pong";
-        Response r = this.getResponse(clusterUrl + invalidServiceName);
+        r = this.getResponse(clusterUrl + invalidServiceName);
         this.assertResponse(clusterUrl, r);
         
         String expected = "Bad response from " + invalidServiceName + "\nCheck the console log for more info.";

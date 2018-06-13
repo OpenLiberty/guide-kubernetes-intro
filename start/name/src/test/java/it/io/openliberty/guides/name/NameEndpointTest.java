@@ -38,6 +38,7 @@ public class NameEndpointTest {
     private static String clusterUrl;
 
     private Client client;
+    private Response r;
 
     @BeforeClass
     public static void oneTimeSetup() {
@@ -54,6 +55,7 @@ public class NameEndpointTest {
     
     @Before
     public void setup() {
+        // Ignore certificate
         TrustManager[] tm = new TrustManager[] { new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() { return null; }
             public void checkClientTrusted(X509Certificate[] certs, String authType) {}
@@ -67,20 +69,24 @@ public class NameEndpointTest {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
+        
+        r = null;
         client = ClientBuilder.newBuilder()
                     .sslContext(sc)
                     .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
                     .build();
+        
     }
 
     @After
     public void teardown() {
+        r.close();
         client.close();
     }
     
     @Test
     public void testContainerNameNotNull() {
-        Response r = this.getResponse(clusterUrl);
+        r = this.getResponse(clusterUrl);
         this.assertResponse(clusterUrl, r);
         String greeting = r.readEntity(String.class);
         
