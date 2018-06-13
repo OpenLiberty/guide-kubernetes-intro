@@ -36,8 +36,10 @@ public class PingEndpointTest {
 
     private static String clusterUrl;
     private static String nameKubeService;
+    private static SSLContext sc;
 
     private Client client;
+    private Response response;
 
     @BeforeClass
     public static void oneTimeSetup() {
@@ -52,16 +54,13 @@ public class PingEndpointTest {
         } else {
             clusterUrl = "http://" + clusterIp + ":" + nodePort + "/api/ping/";
         }
-    }
-    
-    @Before
-    public void setup() {
+        
+        // Ignore certificate
         TrustManager[] tm = new TrustManager[] { new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() { return null; }
             public void checkClientTrusted(X509Certificate[] certs, String authType) {}
             public void checkServerTrusted(X509Certificate[] certs, String authType) {}
         }};
-        SSLContext sc = null;
         try {
             sc = SSLContext.getInstance("SSL");
             sc.init(null, tm, null);
@@ -69,6 +68,11 @@ public class PingEndpointTest {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
+    }
+    
+    @Before
+    public void setup() {
+        response = null;
         client = ClientBuilder.newBuilder()
                     .sslContext(sc)
                     .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
@@ -77,27 +81,28 @@ public class PingEndpointTest {
 
     @After
     public void teardown() {
+        response.close();
         client.close();
     }
     
     @Test
     public void testPingValidService() {
-        Response r = this.getResponse(clusterUrl + nameKubeService);
-        this.assertResponse(clusterUrl, r);
+        response = this.getResponse(clusterUrl + nameKubeService);
+        this.assertResponse(clusterUrl, response);
         
         String expected = "pong";
-        String actual = r.readEntity(String.class);
+        String actual = response.readEntity(String.class);
         assertEquals("Should have receieved pong", expected, actual);
     }
     
     @Test
     public void testPingInvalidService() {
         String invalidServiceName = "donkey-pong";
-        Response r = this.getResponse(clusterUrl + invalidServiceName);
-        this.assertResponse(clusterUrl, r);
+        response = this.getResponse(clusterUrl + invalidServiceName);
+        this.assertResponse(clusterUrl, response);
         
         String expected = "Bad response from " + invalidServiceName + "\nCheck the console log for more info.";
-        String actual = r.readEntity(String.class);
+        String actual = response.readEntity(String.class);
         assertEquals("Should have received a bad response from " + invalidServiceName + ", but didn't. Is " + invalidServiceName + " a running Kuberentes service?", expected, actual);
     }
 
