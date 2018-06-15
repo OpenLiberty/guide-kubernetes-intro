@@ -14,7 +14,7 @@
 :page-duration: 30 minutes
 :page-releasedate: 2018-05-30
 :page-description: Explore how to deploy microservices to Kubernetes and manage them with the kubectl Kubernetes CLI.
-:page-tags: ['microservices', 'Helm', '{kube}', 'Docker', 'containers', 'kubectl', 'Minikube']
+:page-tags: ['microservices', 'Helm', 'Kubernetes', 'Docker', 'containers', 'kubectl', 'Minikube']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
@@ -111,11 +111,11 @@ additional functionality.
 
 Before you begin, make sure to have the following tools installed:
 
-- `kubernetes-cli` - a command line interface for {kube} called `kubectl`. For installation instructions, see
+- `kubernetes-cli`, a command line interface for {kube} called `kubectl`. For installation instructions, see
 https://kubernetes.io/docs/tasks/tools/install-kubectl/.
-- `kubernetes-helm` - a package manager for {kube} called Helm. For installation instructions, see
+- `kubernetes-helm`, a package manager for {kube} called Helm. For installation instructions, see
 https://docs.helm.sh/using_helm/#installing-helm.
-- `minikube` - a local, single-node {kube} cluster that runs in a virtual machine. For installation
+- `minikube`, a local single-node {kube} cluster that runs in a virtual machine. For installation
 instructions, see https://github.com/kubernetes/minikube.
 
 Finally, you will need a containerization software for building containers. {kube} supports a variety
