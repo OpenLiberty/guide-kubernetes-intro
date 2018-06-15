@@ -18,5 +18,6 @@ README.html
 # Zip files
 *.zip
 
+# Others
 *.txt
-deployment.yml
+README.long.adoc
