@@ -469,7 +469,7 @@ First, navigate to the `start` directory if you haven't yet and change the greet
 `name/src/main/java/io/openliberty/guides/name/NameResource.java` file from "Hello!" to "Greetings!" :
 
 NameResource.java,lines=16
-[source, Java, linenums, role="codecolumn"]
+[source, Java, linenums, role="code_column"]
 ----
 package io.openliberty.guides.name;
 
@@ -728,7 +728,7 @@ reapply them by running the `kubectl apply -f [FILENAME] options` command.
 To familiarize yourself with resource editing, edit the `ol-name-ibm-open-liberty` Ingress and change
 the `path` field in the `spec` object from `/name` to `/myname`. Use any editing method you prefer:
 
-[source, YAML, linenums, role="codecolumn"]
+[source, YAML, linenums, role="code_column"]
 ----
 {
   "kind": "Ingress",
