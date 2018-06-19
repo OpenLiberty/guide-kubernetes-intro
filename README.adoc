@@ -10,7 +10,7 @@
 //     IBM Corporation
 //
 :projectid: kubernetes
-:page-layout: guide
+:page-layout: guide-multipane
 :page-duration: 30 minutes
 :page-releasedate: 2018-05-30
 :page-description: Explore how to deploy microservices to Kubernetes and manage them with the kubectl Kubernetes CLI.
