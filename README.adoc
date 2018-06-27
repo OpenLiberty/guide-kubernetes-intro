@@ -152,7 +152,7 @@ This command sets up and starts a local {kube} cluster that is ready for deploym
 Later, when you no longer need your cluster, you can stop it with `minikube stop` and delete it completely
 with `minikube delete`.
 
-Next, in order to set-up an Ingress, you'll need to deploy the NGINX Ingress controller, which conveniently
+Next, in order to setup an Ingress, you'll need to deploy the NGINX Ingress controller, which conveniently
 comes as an optional add-on in Minikube. To enable this add-on, run the following command:
 
 [source, role="command"]
@@ -221,7 +221,7 @@ which covers Dockerfiles in depth.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
 use the `.war` file produced by the build to build a Docker image. While this is by no means a wrong
-approach, we've set-up the projects such that you can build your microservices and Docker image simultaneously
+approach, we've setup the projects such that you can build your microservices and Docker image simultaneously
 as a part of a single Maven build. This is done using the `dockerfile-maven` plugin, which automatically
 picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
 To build your microservices and Docker image, you shouldn't need to start Docker locally since you've
