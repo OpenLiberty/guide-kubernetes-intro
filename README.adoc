@@ -111,12 +111,12 @@ additional functionality.
 
 Before you begin, make sure to have the following tools installed:
 
-- `kubernetes-cli`, a command line interface for {kube} called `kubectl`. For installation instructions, see
-https://kubernetes.io/docs/tasks/tools/install-kubectl/.
-- `kubernetes-helm`, a package manager for {kube} called Helm. For installation instructions, see
-https://docs.helm.sh/using_helm/#installing-helm.
-- `minikube`, a local single-node {kube} cluster that runs in a virtual machine. For installation
-instructions, see https://github.com/kubernetes/minikube.
+- `kubernetes-cli` - a command line interface for {kube} called `kubectl`. For installation instructions see
+https://kubernetes.io/docs/tasks/tools/install-kubectl/
+- `kubernetes-helm` - a package manager for {kube} called Helm. For installation instructions see
+https://docs.helm.sh/using_helm/\#installing-helm
+- `minikube` - a local, single-node {kube} cluster that runs in a virtual machine. For installation
+instructions see https://github.com/kubernetes/minikube
 
 Finally, you will need a containerization software for building containers. {kube} supports a variety
 of container types and, while you're not limited to any of them in particular, you should use Docker
@@ -673,6 +673,23 @@ Results :
 
 Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 ----
+
+
+// =================================================================================================
+// Tearing down the chart
+// =================================================================================================
+
+== Tearing down the chart release
+
+When you no longer need your deployed microservices, you can destroy all {kube} resource associated 
+with your chart release by running the `helm del` command:
+
+```
+helm del --purge ol-name
+helm del --purge ol-ping
+```
+
+By deleting your chart release, Helm deletes all {kube} resource created by that chart.
 
 
 // =================================================================================================
