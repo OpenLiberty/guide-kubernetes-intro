@@ -641,6 +641,23 @@ kubectl rollout undo deployment/ol-name-ibm-open-liberty --to-revision=1
 
 
 // =================================================================================================
+// Tearing down the chart
+// =================================================================================================
+
+== Tearing down the chart release
+
+When you no longer need your deployed microservices, you can destroy all {kube} resource associated 
+with your chart release by running the `helm del` command:
+
+```
+helm del --purge ol-name
+helm del --purge ol-ping
+```
+
+By deleting your chart release, Helm deletes all {kube} resource created by that chart.
+
+
+// =================================================================================================
 // Testing microservices that are running on {kube}
 // =================================================================================================
 
