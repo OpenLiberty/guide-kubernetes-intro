@@ -21,6 +21,9 @@
 :source-highlighter: prettify
 = Deploying microservices to Kubernetes
 
+[.hidden]
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+
 Explore how to deploy microservices to Kubernetes and manage them with the kubectl Kubernetes CLI.
 
 :minikube-ip: 192.168.99.100
