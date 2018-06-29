@@ -25,6 +25,7 @@ Explore how to deploy microservices to Kubernetes and manage them with the kubec
 
 :minikube-ip: 192.168.99.100
 :kube: Kubernetes
+:hashtag: #
 
 
 == What you'll learn
@@ -114,7 +115,7 @@ Before you begin, make sure to have the following tools installed:
 - `kubernetes-cli` - a command line interface for {kube} called `kubectl`. For installation instructions see
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
 - `kubernetes-helm` - a package manager for {kube} called Helm. For installation instructions see
-https://docs.helm.sh/using_helm/\#installing-helm
+https://docs.helm.sh/using_helm/{hashtag}installing-helm
 - `minikube` - a local, single-node {kube} cluster that runs in a virtual machine. For installation
 instructions see https://github.com/kubernetes/minikube
 
