@@ -51,8 +51,6 @@ runs in a local virtual machine. You will also use NGINX as your Ingress control
 enable as an add-on in Minikube.
 
 
-
-
 // =================================================================================================
 // What is {kube}
 // =================================================================================================
@@ -282,7 +280,7 @@ k8s.gcr.io/pause-amd64                                           3.0
 If you don't see the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images in Minikube's Docker image
 list or if they were built to your local Docker cache rather than Minikube's, then check the Maven
 build log for any potential errors and make sure that your Docker CLI is configured to use Minikube's
-Docker daemon and not your host's as described in <<Starting and preparing your cluster for Deployment>>.
+Docker daemon and not your host's as described in the previous section.
 
 
 // =================================================================================================
