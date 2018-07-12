@@ -648,14 +648,19 @@ in the ready state, then run the `mvn verify` command with the following list of
 | name.kube.service | Name of the {kube} Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
 |===
 
-For example:
+To run integration tests against a cluster running at the default Minikube IP address:
 
 ```
 mvn verify -Ddockerfile.skip=true
 ```
 
-This command will run integration tests with all default properties. The `dockerfile.skip` parameter
-is set to `true` in order to skip building a new Docker image.
+To run integration tests against a cluster running at the `192.168.99.101` IP address:
+
+```
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.101
+```
+
+The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
 
