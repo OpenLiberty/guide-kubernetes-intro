@@ -1,7 +1,7 @@
 // INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
 // INSTRUCTION: The copyright statement must appear at the top of the file
 //
-// Copyright (c) 2017 IBM Corporation and others.
+// Copyright (c) 2018 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -165,8 +165,21 @@ comes as an optional add-on in Minikube. To enable this add-on, run the followin
 minikube addons enable ingress
 ```
 
-When enabled, the Ingress controller deploys as a Pod in the `kube-system` namespace and configures
-a front-end load balancer to use the rules defined in Ingress resources to route external traffic
+When enabled, Minikube deploys two Pods in the `kube-system` namespaces. The first Pod, called `default-http-backend`, 
+is reponsible for routing invalid requests to a default HTTP backend. The second Pod, called `nginx-ingress-controller`, 
+runs the actual NGINX Ingress controller. Make sure that both of these Pods are in the ready state 
+before you proceed:
+
+[source, role="no_copy"]
+----
+$ kubectl get pods --namespace kube-system
+NAME                                        READY     STATUS    RESTARTS   AGE
+default-http-backend-59868b7dd6-v4qh7       1/1       Running   0          11m
+nginx-ingress-controller-67956bf89d-6sg6r   1/1       Running   0          11m
+----
+ 
+When both Pods are ready, the front-end load balancer is configured to use the rules defined in the 
+`ol-name-ibm-open-liberty` and `ol-ping-ibm-open-liberty` Ingress resources to route external traffic 
 to internal {kube} Services.
 
 Next, install the Helm client and server by running the following command:
@@ -303,26 +316,14 @@ To install a chart release, use the `helm install --name [RELEASE-NAME] [CHART] 
 First, install the Open Liberty chart for the `name` microservice:
 
 ```
-helm install --name ol-name --set image.pullPolicy=IfNotPresent --set image.repository=name --set image.tag=1.0-SNAPSHOT --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 --set ingress.enabled=true --set ingress.secureBackends=false --set ingress.rewriteTarget=/api/name --set ingress.path=/name ibm-charts/ibm-open-liberty
+helm install --name ol-name --set image.pullPolicy=IfNotPresent --set image.repository=name --set image.tag=1.0-SNAPSHOT --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 --set ingress.enabled=true --set ingress.rewriteTarget=/api/name --set ingress.path=/name ibm-charts/ibm-open-liberty
 ```
 
 Then, for the `ping` microservice:
 
 ```
-helm install --name ol-ping --set image.pullPolicy=IfNotPresent --set image.repository=ping --set image.tag=1.0-SNAPSHOT --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 --set ingress.enabled=true --set ingress.secureBackends=false --set ingress.rewriteTarget=/api/ping --set ingress.path=/ping ibm-charts/ibm-open-liberty
+helm install --name ol-ping --set image.pullPolicy=IfNotPresent --set image.repository=ping --set image.tag=1.0-SNAPSHOT --set ssl.enabled=false --set service.port=9080 --set service.targetPort=9080 --set ingress.enabled=true --set ingress.rewriteTarget=/api/ping --set ingress.path=/ping ibm-charts/ibm-open-liberty
 ```
-
-*Temporary instructions:*
-Patch the ingresses by running the following two commands:
-```
-kubectl patch ingress/ol-name-ibm-open-liberty -p '{ "metadata": { "annotations": { "nginx.ingress.kubernetes.io/affinity": "cookie", "nginx.ingress.kubernetes.io/rewrite-target": "/api/name", "nginx.ingress.kubernetes.io/session-cookie-hash": "sha1", "nginx.ingress.kubernetes.io/session-cookie-name": "route" }}}'
-```
-```
-kubectl patch ingress/ol-ping-ibm-open-liberty -p '{ "metadata": { "annotations": { "nginx.ingress.kubernetes.io/affinity": "cookie", "nginx.ingress.kubernetes.io/rewrite-target": "/api/ping", "nginx.ingress.kubernetes.io/session-cookie-hash": "sha1", "nginx.ingress.kubernetes.io/session-cookie-name": "route" }}}'
-```
-
-// On windows:
-// kubectl patch ingress/ol-name-ibm-open-liberty -p "{ \"metadata\": { \"annotations\": { \"nginx.ingress.kubernetes.io/affinity\": \"cookie\", \"nginx.ingress.kubernetes.io/rewrite-target\": \"/api/name\", \"nginx.ingress.kubernetes.io/session-cookie-hash\": \"sha1\", \"nginx.ingress.kubernetes.io/session-cookie-name\": \"route\" }}}"
 
 Both of these chart releases will create three {kube} resources each: a Deployment for managing Pods,
 a Service for defining how Pods are accessed, and an Ingress for defining how external traffic is routed
@@ -356,9 +357,6 @@ Next, let's break down the parameters:
 |             | targetPort     | The port that will be exposed externally by the Pod.
 | ingress     | enable         | Specifies whether to create an Ingress. An Ingress is a collection of rules
                                  that enable inbound requests to reach the internal {kube} Services.
-|             | secureBackends | Tells NGINX which protocol to use to reach the backend services.
-                                 HTTPS if set to `true` and HTTP otherwise. In this case, since your
-                                 microservices are not secured, you're using plain HTTP.
 |             | rewriteTarget  | The endpoint where the traffic will be redirected. In this case, you're
                                  using the endpoints where your microservices are served.
 |             | path           | A path to which the Ingress will map a particular backend service.
@@ -690,20 +688,36 @@ Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 
 
 // =================================================================================================
-// Tearing down the chart
+// Tearing down chart
 // =================================================================================================
 
-== Tearing down the chart release
+== Tearing down chart releases
 
-When you no longer need your deployed microservices, you can destroy all {kube} resource associated 
-with your chart release by running the `helm del` command:
+When you no longer need your deployed microservices, you can delete all {kube} resource associated 
+with your chart releases by running the `helm del` command:
 
 ```
 helm del --purge ol-name
 helm del --purge ol-ping
 ```
 
-By deleting your chart release, Helm deletes all {kube} resource created by that chart.
+By deleting a chart release, Helm deletes all {kube} resource created by that chart.
+
+
+Feel free to also stop your Minikube cluster:
+
+```
+minikube stop
+```
+
+And point the Docker daemon back to your local machine:
+
+```
+# From Bash if you're on Linux or MacOS
+eval $(minikube docker-env -u)
+# From PowerShell or CMD if you're on Windows
+minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
+```
 
 
 // =================================================================================================
