@@ -135,8 +135,8 @@ of container types and, while you're not limited to any of them in particular, y
 as it's what this guide will focus on. For installation instructions, see https://docs.docker.com/install/.
 
 If you chose to use Docker, please note that Docker for Windows uses Window's native Hyper-V installation, 
-which tends to conflict with VirtualBox. As a result, you will might find it easier to run Minikube 
-with Hyper-V rather than VirtualBox if you're on Windows. For more instructions on how to to do this, see 
+which tends to conflict with VirtualBox. As a result, you might find it easier to run Minikube 
+with Hyper-V rather than VirtualBox if you're on Windows. For instructions on how to to do this, see 
 https://medium.com/@JockDaRock/minikube-on-windows-10-with-hyper-v-6ef0f4dc158c
 
 
