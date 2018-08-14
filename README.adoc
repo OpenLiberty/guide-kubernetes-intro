@@ -11,7 +11,7 @@
 //
 :projectid: kubernetes
 :page-layout: guide
-:page-duration: 30 minutes
+:page-duration: 40 minutes
 :page-releasedate: 2018-05-30
 :page-description: Explore how to deploy microservices to Kubernetes and manage your cluster.
 :page-tags: ['microservices', 'Helm', 'Kubernetes', 'Docker', 'containers', 'kubectl', 'Minikube']
@@ -29,26 +29,6 @@ Explore how to deploy microservices to Kubernetes and manage them with the kubec
 :minikube-ip: 192.168.99.100
 :kube: Kubernetes
 :hashtag: #
-
-
-== What you'll learn
-
-You will learn how to deploy two microservices to a local {kube} cluster using the Kubernetes package
-manager called Helm. Helm allows you to install packages or charts, which are sets of preconfigured
-{kube} resources. Installing charts is much more convenient than creating and configuring Kubernetes
-resources yourself. You will then manage your deployed microservices using the `kubectl` command line
-interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your
-{kube} cluster.
-
-The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply 
-displays a brief greeting and the name of the
-container that it runs in, making it easy to distinguish it from its other replicas. The `ping` microservice
-simply pings the {kube} Service that encapsulates the Pods running the `name` microservice, demonstrating
-how communication can be established between Pods inside a cluster.
-
-You will use Minikube as your local {kube} cluster. Minikube is a single-node {kube} cluster that
-runs in a local virtual machine. You will also use NGINX as your Ingress controller, which you will
-enable as an add-on in Minikube.
 
 
 // =================================================================================================
@@ -74,8 +54,8 @@ environments. It handles scheduling, deployment, as well as mass deletion and cr
 It provides update rollout capabilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
 While you could destroy and then recreate these containers, you could also issue a short one-line
-command and have {kube} do all that updating for you. Of course this is just a simple example. There
-is much more underneath the iceberg that is {kube}.
+command and have {kube} do all that updating for you. Of course this is just a simple example, the 
+iceberg that is {kube} has a lot more to offer.
 
 // {kube} provides much other functionality
 // that simply makes your development, testing, and production environments much more stable, much more
@@ -111,6 +91,30 @@ To learn about the various Kubernetes resources that you can configure, see the 
 
 
 // =================================================================================================
+// Introduction
+// =================================================================================================
+
+== What you'll learn
+
+You will learn how to deploy two microservices to a local {kube} cluster using the Kubernetes package
+manager called Helm. Helm allows you to install packages or charts, which are sets of preconfigured
+{kube} resources. Installing charts is much more convenient than creating and configuring Kubernetes
+resources yourself. You will then manage your deployed microservices using the `kubectl` command line
+interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your
+{kube} cluster.
+
+The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply 
+displays a brief greeting and the name of the
+container that it runs in, making it easy to distinguish it from its other replicas. The `ping` microservice
+simply pings the {kube} Service that encapsulates the Pods running the `name` microservice, demonstrating
+how communication can be established between Pods inside a cluster.
+
+You will use Minikube as your local {kube} cluster. Minikube is a single-node {kube} cluster that
+runs in a local virtual machine. You will also use NGINX as your Ingress controller, which you will
+enable as an add-on in Minikube.
+
+
+// =================================================================================================
 // Prerequisites
 // =================================================================================================
 
@@ -123,11 +127,17 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl/
 - `kubernetes-helm` - a package manager for {kube} called Helm. For installation instructions see
 https://docs.helm.sh/using_helm/{hashtag}installing-helm
 - `minikube` - a local, single-node {kube} cluster that runs in a virtual machine. For installation
-instructions see https://github.com/kubernetes/minikube
+instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section 
+as different operating systems require different prerequisites to get Minikube running.
 
 Finally, you will need a containerization software for building containers. {kube} supports a variety
-of container types and, while you're not limited to any of them in particular, you should use Docker
+of container types and while you're not limited to any of them in particular, you should use Docker
 as it's what this guide will focus on. For installation instructions, see https://docs.docker.com/install/.
+
+If you chose to use Docker, please note that Docker for Windows uses Window's native Hyper-V installation, 
+which tends to conflict with VirtualBox. As a result, you might find it easier to run Minikube 
+with Hyper-V rather than VirtualBox if you're on Windows. For instructions on how to to do this, see 
+https://medium.com/@JockDaRock/minikube-on-windows-10-with-hyper-v-6ef0f4dc158c
 
 
 // =================================================================================================
@@ -148,17 +158,17 @@ include::{common-includes}/gitclone.adoc[]
 To begin working with your Minikube cluster run the following command from the command line:
 
 ```
+# minikube with virtualbox
 minikube start
+# minikune with hyper-v
+minikube start --vm-driver hyperv --hyperv-virtual-switch "Primary Virtual Switch"
 ```
-
-If you're on Windows and you run into issues starting Minikube in VirtualBox, try using Hyper-V
-instead since Hyper-V is already required to run Docker on Windows.
 
 This command sets up and starts a local {kube} cluster that is ready for deployment out of the box.
 Later, when you no longer need your cluster, you can stop it with `minikube stop` and delete it completely
 with `minikube delete`.
 
-Next, in order to set-up an Ingress, you'll need to deploy the NGINX Ingress controller, which conveniently
+Next, in order to setup an Ingress, you'll need to deploy the NGINX Ingress controller, which conveniently
 comes as an optional add-on in Minikube. To enable this add-on, run the following command:
 
 ```
@@ -236,7 +246,7 @@ which covers Dockerfiles in depth.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
 use the `.war` file produced by the build to build a Docker image. While this is by no means a wrong
-approach, we've set-up the projects such that you can build your microservices and Docker image simultaneously
+approach, we've setup the projects such that you can build your microservices and Docker image simultaneously
 as a part of a single Maven build. This is done using the `dockerfile-maven` plugin, which automatically
 picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
 To build your microservices and Docker image, you shouldn't need to start Docker locally since you've
