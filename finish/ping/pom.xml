@@ -19,11 +19,13 @@
            <groupId>io.openliberty.features</groupId>
            <artifactId>jaxrs-2.1</artifactId>
            <type>esa</type>
+           <scope>provided</scope>
        </dependency>
        <dependency>
            <groupId>io.openliberty.features</groupId>
            <artifactId>cdi-2.0</artifactId>
            <type>esa</type>
+           <scope>provided</scope>
        </dependency>
        <dependency>
            <groupId>org.eclipse.microprofile.rest.client</groupId>
@@ -33,6 +35,7 @@
            <groupId>io.openliberty.features</groupId>
            <artifactId>mpConfig-1.2</artifactId>
            <type>esa</type>
+           <scope>provided</scope>
        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

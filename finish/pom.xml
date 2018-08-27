@@ -34,31 +34,17 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>io.openliberty.features</groupId>
-                <artifactId>jaxrs-2.1</artifactId>
-                <type>esa</type>
-                <version>RELEASE</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.openliberty.features</groupId>
-                <artifactId>cdi-2.0</artifactId>
-                <type>esa</type>
-                <version>RELEASE</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
+           <dependency>
+               <groupId>io.openliberty.features</groupId>
+               <artifactId>features-bom</artifactId>
+               <version>RELEASE</version>
+               <type>pom</type>
+               <scope>import</scope>
+           </dependency>
+           <dependency>
                 <groupId>org.eclipse.microprofile.rest.client</groupId>
                 <artifactId>microprofile-rest-client-api</artifactId>
                 <version>1.0.1</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.openliberty.features</groupId>
-                <artifactId>mpConfig-1.2</artifactId>
-                <type>esa</type>
-                <version>RELEASE</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
