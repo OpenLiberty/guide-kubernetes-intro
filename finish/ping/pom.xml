@@ -15,26 +15,25 @@
     <packaging>war</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.microprofile.rest.client</groupId>
-            <artifactId>microprofile-rest-client-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.microprofile.config</groupId>
-            <artifactId>microprofile-config-api</artifactId>
-        </dependency>
+       <dependency>
+           <groupId>io.openliberty.features</groupId>
+           <artifactId>jaxrs-2.1</artifactId>
+           <type>esa</type>
+       </dependency>
+       <dependency>
+           <groupId>io.openliberty.features</groupId>
+           <artifactId>cdi-2.0</artifactId>
+           <type>esa</type>
+       </dependency>
+       <dependency>
+           <groupId>org.eclipse.microprofile.rest.client</groupId>
+           <artifactId>microprofile-rest-client-api</artifactId>
+       </dependency>
+       <dependency>
+           <groupId>io.openliberty.features</groupId>
+           <artifactId>mpConfig-1.2</artifactId>
+           <type>esa</type>
+       </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
