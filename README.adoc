@@ -160,7 +160,7 @@ To begin working with your Minikube cluster run the following command from the c
 ```
 # minikube with virtualbox
 minikube start
-# minikune with hyper-v
+# minikube with hyper-v
 minikube start --vm-driver hyperv --hyperv-virtual-switch "Primary Virtual Switch"
 ```
 
@@ -746,7 +746,7 @@ editor or update particular parts of the YAML with the `kubectl` command.
 
 Resource YAML files can be directly edited from the {kube} dashboard or a text editor of your choice.
 
-To edit a resource from the Minikube dashboard, run the `minikune dashboard` command to open the Minikube
+To edit a resource from the Minikube dashboard, run the `minikube dashboard` command to open the Minikube
 dashboard, then use the left navigational panel to select which resources to edit.
 
 To open and edit a resource in a text editor, run the `kubectl edit (RESOURCE/NAME | -f FILENAME) [options]`
