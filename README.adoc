@@ -95,7 +95,7 @@ To learn about the various Kubernetes resources that you can configure, see the 
 
 == What you'll learn
 
-You will learn how to deploy two microservices in Open Liberty Docker containres to a local {kube} cluster using the Kubernetes package
+You will learn how to deploy two microservices in Open Liberty Docker containers to a local {kube} cluster using the Kubernetes package
 manager called Helm. Helm allows you to install packages or charts, which are sets of preconfigured
 {kube} resources. Installing charts is much more convenient than creating and configuring Kubernetes
 resources yourself. You will then manage your deployed microservices using the `kubectl` command line
@@ -108,7 +108,7 @@ container that it runs in, making it easy to distinguish it from its other repli
 simply pings the {kube} Service that encapsulates the Pods running the `name` microservice, demonstrating
 how communication can be established between Pods inside a cluster.
 
-You will use a local single-node {kube} cluster and employing NGINX as your Ingress controller.
+You will use a local single-node {kube} cluster and employ NGINX as your Ingress controller.
 
 
 // =================================================================================================
@@ -122,8 +122,8 @@ Before you begin, make sure to have the following tools installed:
  - A containerization software for building containers. {kube} supports a variety
 of container types and while you're not limited to any of them in particular, you should use `Docker`
 as it's what this guide will focus on. For installation instructions, see https://docs.docker.com/install/.
-- `kubernetes` - the {kube} cluster. If you have a Docker installation that provides a local {kube} cluster then just use that. For example, in https://docs.docker.com/docker-for-windows/[Docker for Windows] a local {kube} environment is enabled through https://docs.docker.com/docker-for-windows/#kubernetes[settings]. Otherwise you can use `Minikube` as a single-node {kube} cluster that runs locally in a virtual machine. For Minikube installation instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section as different operating systems require different prerequisites to get Minikube running. 
-- `kubectl` - a command line client interface for {kube}. If you have a Docker installation that provides kubectl, such as https://docs.docker.com/docker-for-windows/[Docker for Windows] then just use that. Otherwise install the client as described at https://kubernetes.io/docs/tasks/tools/install-kubectl/
+- `kubernetes` - the {kube} orchestration platform. If you have a Docker installation that provides the {kube} environment then just use this. For example, in https://docs.docker.com/docker-for-windows/[Docker for Windows] a local {kube} environment is pre-installed and enabled through https://docs.docker.com/docker-for-windows/#kubernetes[Docker for Windows settings]. Otherwise you can use `Minikube` as a single-node {kube} cluster that runs locally in a virtual machine. For Minikube installation instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section as different operating systems require different prerequisites to get Minikube running. 
+- `kubectl` - a command line client interface for {kube}. If you have a Docker installation that provides kubectl, such as https://docs.docker.com/docker-for-windows/[Docker for Windows] then just use this. Otherwise install the client as described at https://kubernetes.io/docs/tasks/tools/install-kubectl/
 - `helm` - a package manager for {kube}. For installation instructions see
 https://docs.helm.sh/using_helm/{hashtag}installing-helm
 
@@ -189,7 +189,7 @@ When both Pods are ready, the front-end load balancer is configured to use the r
 `ol-name-ibm-open-liberty` and `ol-ping-ibm-open-liberty` Ingress resources to route external traffic 
 to internal {kube} Services.
 
-Next, install the Helm client and server by running the following command:
+Next, initialize the Helm client and server by running the following command:
 
 ```
 helm init
@@ -266,7 +266,7 @@ built. If the build is successful, run the following command to list all local D
 docker images
 ```
 
-Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them:
+Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them, for example:
 
 [source, role="no_copy"]
 ----
@@ -399,7 +399,7 @@ Wait for the Pods to be in the ready state, then access them from the Ingress th
 ```
 kubectl get ingress
 ```
-The default Ingress hostname for minikube is {minikube-id}.  
+The default Ingress hostname for minikube is {minikube-ip}.  
 The default Ingress hostname for Docker for Windows is `localhost`.
 Then `curl -k` or visit the following URLs to access your microservices, substituting the Ingress hostname for [ingress-ip]:
 
@@ -647,7 +647,7 @@ in the ready state, then run the `mvn verify` command. The default properties de
 [cols="15, 100", options="header"]
 |===
 | *Property*        | *Description*
-| cluster.ip        | IP address of your Igress, `{minikube-ip}` by default.
+| cluster.ip        | IP address of your Igress, `{minikube-ip}` by default, which is appropriate when using Minikube.
 | name.ingress.path | Ingress path of the `name` microservice, `/name` by default.
 | ping.ingress.path | Ingress path of the `ping` microservice, `/ping` by default.
 | name.kube.service | Name of the {kube} Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
@@ -659,13 +659,13 @@ To run integration tests against a cluster running at the default Minikube IP ad
 mvn verify -Ddockerfile.skip=true
 ```
 
-To run integration tests against a cluster running at the `192.168.99.101` IP address:
+To run integration tests against a cluster running with an Ingress IP address of `192.168.99.101`:
 
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.101
 ```
 
-To run integration tests against a cluster running at `localhost`:
+To run integration tests against a cluster running with an Ingress IP address of `localhost`:
 
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
