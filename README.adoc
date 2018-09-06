@@ -180,6 +180,10 @@ before you proceed:
 [source, role="no_copy"]
 ----
 $ kubectl get pods --all-namespaces
+----
+
+You’ll see an output that includes the two pods and the namespace they were created under, similar to the following:
+----
 NAMESPACE       NAME                                         READY     STATUS    RESTARTS   AGE
 ingress-nginx   default-http-backend-7c5bc89cc9-z5l29        1/1       Running   0          11m
 ingress-nginx   nginx-ingress-controller-cf9ff8c96-mf94d     1/1       Running   0          11m
@@ -718,7 +722,7 @@ helm del --purge ol-ping
 By deleting a chart release, Helm deletes all {kube} resource created by that chart.
 
 
-Finally, if you are using minikube, you can perform the following two steps to return your environment to a clean state:
+Finally, if you are using minikube, you can perform the following two steps to return your environment to a clean state. 
 Firstly, stop your Minikube cluster:
 
 ```
