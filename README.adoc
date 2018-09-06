@@ -182,7 +182,7 @@ before you proceed:
 $ kubectl get pods --all-namespaces
 ----
 
-You’ll see an output that includes the two pods and the namespace they were created under, similar to the following:
+You'll see an output that includes the two pods and the namespace they were created under, similar to the following:
 ----
 NAMESPACE       NAME                                         READY     STATUS    RESTARTS   AGE
 ingress-nginx   default-http-backend-7c5bc89cc9-z5l29        1/1       Running   0          11m
