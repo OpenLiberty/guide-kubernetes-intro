@@ -29,6 +29,9 @@ Explore how to deploy microservices in Open Liberty Docker containers to Kuberne
 :minikube-ip: 192.168.99.100
 :kube: Kubernetes
 :hashtag: #
+:win: WINDOWS
+:mac: MAC
+:linux: LINUX
 
 
 // =================================================================================================
@@ -54,7 +57,7 @@ environments. It handles scheduling, deployment, as well as mass deletion and cr
 It provides update rollout capabilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
 While you could destroy and then recreate these containers, you could also issue a short one-line
-command and have {kube} do all that updating for you. Of course this is just a simple example, the 
+command and have {kube} do all that updating for you. Of course this is just a simple example, the
 iceberg that is {kube} has a lot more to offer.
 
 // {kube} provides much other functionality
@@ -83,7 +86,7 @@ A `Pod` or a group of replicated `Pods` are abstracted through {kube} objects ca
 that define a set of rules by which the `Pods` can be accessed. In a basic scenario, a {kube}
 `Service` will expose a node port that can be used together with the cluster IP address to access
 the `Pods` encapsulated by the `Service`. In this guide, however, you will set up an `Ingress`, which
-is a {kube} object that contains a set of rules for mapping external requests to the `Services` inside 
+is a {kube} object that contains a set of rules for mapping external requests to the `Services` inside
 a cluster, over protocols such as HTTP, as well as provides load-balancing and other functionality. An `Ingress` requires an Ingress Controller to process requests accordingly.
 
 To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/.
@@ -102,7 +105,7 @@ resources yourself. You will then manage your deployed microservices using the `
 interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your
 {kube} cluster.
 
-The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply 
+The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply
 displays a brief greeting and the name of the
 container that it runs in, making it easy to distinguish it from its other replicas. The `ping` microservice
 simply pings the {kube} Service that encapsulates the Pods running the `name` microservice, demonstrating
@@ -122,10 +125,14 @@ Before you begin, make sure to have the following tools installed:
  - A containerization software for building containers. {kube} supports a variety
 of container types and while you're not limited to any of them in particular, you should use `Docker`
 as it's what this guide will focus on. For installation instructions, see https://docs.docker.com/install/.
-- `kubernetes` - the {kube} orchestration platform. If you have a Docker installation that provides the {kube} environment then just use this. For example, in https://docs.docker.com/docker-for-windows/[Docker for Windows] a local {kube} environment is pre-installed and enabled through https://docs.docker.com/docker-for-windows/#kubernetes[Docker for Windows settings]. Otherwise you can use `Minikube` as a single-node {kube} cluster that runs locally in a virtual machine. For Minikube installation instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section as different operating systems require different prerequisites to get Minikube running. 
+- `kubernetes` - the {kube} orchestration platform. If you have a Docker installation that provides the {kube} environment then just use this. For example, in https://docs.docker.com/docker-for-windows/[Docker for Windows] a local {kube} environment is pre-installed and enabled through https://docs.docker.com/docker-for-windows/#kubernetes[Docker for Windows settings]. Otherwise you can use `Minikube` as a single-node {kube} cluster that runs locally in a virtual machine. For Minikube installation instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section as different operating systems require different prerequisites to get Minikube running.
 - `kubectl` - a command line client interface for {kube}. If you have a Docker installation that provides kubectl, such as https://docs.docker.com/docker-for-windows/[Docker for Windows] then just use this. Otherwise install the client as described at https://kubernetes.io/docs/tasks/tools/install-kubectl/
 - `helm` - a package manager for {kube}. For installation instructions see
 https://docs.helm.sh/using_helm/{hashtag}installing-helm
+
+Docker Desktop is a convenient way fo running both Docker and {kube} on your machine, it is available and recommended on *{win}* and *{mac}*. Minikube runs a {kube} cluster inside of a virtual machine, the default hypervisor is Virtual Box but it can be configured based on your preferences.
+You will use Minikube on *{linux}*.
+
 
 // =================================================================================================
 // Getting Started
@@ -142,7 +149,16 @@ include::{common-includes}/gitclone.adoc[]
 
 == Starting and preparing your cluster for deployment
 
-Start up your {kube} cluster. If you are using Docker for Windows just start your Docker environment. If you are using Minikube then run the following command from the command line:
+Start up your {kube} cluster.
+
+****
+[system]#*{win} | {mac}*#
+
+Start your Docker Desktop environment.
+
+[system]#*{linux}*#
+
+Run the following command from a command line:
 
 ```
 minikube start
@@ -150,31 +166,30 @@ minikube start
 
 Later, when you no longer need your cluster, you can stop it with `minikube stop` and delete it completely
 with `minikube delete`.
+****
 
-For any environment, validate that you have a healthy kubernetes environment by running the following command:
+Next, validate that you have a healthy kubernetes environment by running the following command from the command line:
 ```
 kubectl get nodes
 ```
 
-This should return a `Ready` status for the master node. 
+This should return a `Ready` status for the master node.
 
 Next, in order to setup an Ingress, you'll need to deploy the NGINX Ingress controller.
-If you are using Minikube this can be done through simply enabling an optional add-on in Minikube. To enable this add-on, run the following command:
 
-```
-minikube addons enable ingress
-```
+****
+[system]#*{win} | {mac}*#
 
-If you are not using Minikube then follow the platform-specific instructions at https://kubernetes.github.io/ingress-nginx/deploy/ . The Docker for Mac instructions are equally appropriate for Docker for Windows, where you should run the following two commands:
+Run the following two commands:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
-``` 
- 
-This results in the deployment of two pods. The first Pod, called `default-http-backend`, 
-is reponsible for routing invalid requests to a default HTTP backend. The second Pod, called `nginx-ingress-controller`, 
-runs the actual NGINX Ingress controller. Make sure that both of these Pods are in the ready state 
+```
+
+This results in the deployment of two pods. The first Pod, called `default-http-backend`,
+is reponsible for routing invalid requests to a default HTTP backend. The second Pod, called `nginx-ingress-controller`,
+runs the actual NGINX Ingress controller. Make sure that both of these Pods are in the ready state
 before you proceed:
 
 [source, role="no_copy"]
@@ -188,9 +203,18 @@ NAMESPACE       NAME                                         READY     STATUS   
 ingress-nginx   default-http-backend-7c5bc89cc9-z5l29        1/1       Running   0          11m
 ingress-nginx   nginx-ingress-controller-cf9ff8c96-mf94d     1/1       Running   0          11m
 ----
- 
-When both Pods are ready, the front-end load balancer is configured to use the rules defined in the 
-`ol-name-ibm-open-liberty` and `ol-ping-ibm-open-liberty` Ingress resources to route external traffic 
+
+[system]#*{linux}*#
+
+Simply enable an optional add-on in Minikube by running the following command:
+
+```
+minikube addons enable ingress
+```
+****
+
+After deploying the Ingress Controller, the front-end load balancer is configured to use the rules defined in the
+`ol-name-ibm-open-liberty` and `ol-ping-ibm-open-liberty` Ingress resources to route external traffic
 to internal {kube} Services.
 
 Next, initialize the Helm client and server by running the following command:
@@ -209,27 +233,24 @@ Open Liberty chart that you will use to deploy your two microservices:
 helm repo add ibm-charts https://raw.githubusercontent.com/IBM/charts/master/repo/stable/
 ```
 
-A final step is required only if you are using Minikube. In this case, run the following command to configure the Docker CLI to use Minikube's Docker daemon.
+****
+[system]#*{linux}*#
+
+Run the following command to configure the Docker CLI to use Minikube's Docker daemon.
 By running this command, you will be able to interact with Minikube's Docker daemon and build new
 images directly to it from your host machine:
 
 ```
-# From Bash if you're on Linux or MacOS
 eval $(minikube docker-env)
-# From PowerShell or CMD if you're on Windows
-minikube docker-env > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 
 When you no longer want to use Minikube's Docker daemon, run the following command to point back to your host:
 
 ```
-# From Bash if you're on Linux or MacOS
 eval $(minikube docker-env -u)
-# From PowerShell or CMD if you're on Windows
-minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
+****
 
-This is not required if Kubernetes is provided as part of your Docker installation (such as Docker for Windows), where the Kubernetes server uses the local Docker daemon.  
 
 // =================================================================================================
 // Building and containerizing the microservices
@@ -251,7 +272,7 @@ use the `.war` file produced by the build to build a Docker image. While this is
 approach, we've setup the projects such that you can build your microservices and Docker image simultaneously
 as a part of a single Maven build. This is done using the `dockerfile-maven` plugin, which automatically
 picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
-If you are using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build. 
+If you are using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build.
 
 Navigate to the `start` directory and run the following command:
 
@@ -303,7 +324,8 @@ k8s.gcr.io/pause-amd64                                           3.0
 ----
 
 If you don't see the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images, then check the Maven
-build log for any potential errors. In addiiton, if you are using Minikube, make sure that your Docker CLI is configured to use Minikube's Docker daemon and not your host's as described in the previous section.
+build log for any potential errors.
+In addition, if you are using Minikube, make sure that your Docker CLI is configured to use Minikube's Docker daemon and not your host's as described in the previous section.
 
 
 // =================================================================================================
@@ -337,7 +359,7 @@ helm install --name ol-ping --set image.pullPolicy=IfNotPresent --set image.repo
 
 Both of these chart releases will create three {kube} resources each: a Deployment for managing Pods,
 a Service for defining how Pods are accessed, and an Ingress for defining how external traffic is routed
-to the Service. All resources are prefixed with `ol-name-ibm-open-liberty` and `ol-ping-ibm-open-liberty` 
+to the Service. All resources are prefixed with `ol-name-ibm-open-liberty` and `ol-ping-ibm-open-liberty`
 respectively.
 
 Each command is long and has a lot of flags, so let's break them down:
@@ -399,12 +421,21 @@ kubectl describe pods
 You can also issue the `kubectl get` and `kubectl describe` commands on other {kube} resources, so feel
 free to inspect all other resources created by the chart.
 
-Wait for the Pods to be in the ready state, then access them from the Ingress that you created earlier. You can get the Ingress hostname and port by running 
+Wait for the Pods to be in the ready state, then access them from the Ingress that you created earlier. You can get the Ingress hostname and port by running
 ```
 kubectl get ingress
 ```
-The default Ingress hostname for minikube is {minikube-ip}.  
-The default Ingress hostname for Docker for Windows is `localhost`.
+
+****
+[system]#*{win} | {mac}*#
+
+The default Ingress hostname for Docker Desktop is `localhost`.
+
+[system]#*{linux}*#
+
+The default Ingress hostname for minikube is {minikube-ip}.
+****
+
 Then `curl -k` or visit the following URLs to access your microservices, substituting the Ingress hostname for [ingress-ip]:
 
 - https://[ingress-ip]/name/
@@ -453,8 +484,8 @@ the first session. Session persistence is provided by your Ingress controller an
 and disabled from your Ingress resource.
 
 The Open Liberty helm chart also supports automatic scaling that you can enable by setting the
-`autoscaling.enabled` parameter to `true` when installing the chart. See the official 
-https://github.com/IBM/charts/tree/master/stable/ibm-open-liberty[IBM Helm chart repository] 
+`autoscaling.enabled` parameter to `true` when installing the chart. See the official
+https://github.com/IBM/charts/tree/master/stable/ibm-open-liberty[IBM Helm chart repository]
 for more information on this parameter.
 
 
@@ -711,7 +742,7 @@ Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 
 == Tearing down chart releases
 
-When you no longer need your deployed microservices, you can delete all {kube} resource associated 
+When you no longer need your deployed microservices, you can delete all {kube} resource associated
 with your chart releases by running the `helm del` command:
 
 ```
@@ -721,8 +752,19 @@ helm del --purge ol-ping
 
 By deleting a chart release, Helm deletes all {kube} resource created by that chart.
 
+****
+[system]#*{win} | {mac}*#
 
-Finally, if you are using minikube, you can perform the following two steps to return your environment to a clean state. 
+Delete the resources created when you deployed the Nginx Ingress Controller.
+
+```
+kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
+```
+
+[system]#*{linux}*#
+
+Perform the following two steps to return your environment to a clean state.
 Firstly, stop your Minikube cluster:
 
 ```
@@ -732,18 +774,16 @@ minikube stop
 Secondly, point the Docker daemon back to your local machine:
 
 ```
-# From Bash if you're on Linux or MacOS
 eval $(minikube docker-env -u)
-# From PowerShell or CMD if you're on Windows
-minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
+****
 
 
 // =================================================================================================
 // Editing {kube} resources
 // =================================================================================================
 
-== Optional: Editing {kube} resources
+== Optional: Editing {kube} resources using Minikube
 
 While you don't need to edit any of the {kube} resources in this guide, it might be helpful for
 you to know how editing is done for any future projects that you have in mind.
