@@ -29,6 +29,9 @@ Explore how to deploy microservices in Open Liberty Docker containers to Kuberne
 :minikube-ip: 192.168.99.100
 :kube: Kubernetes
 :hashtag: #
+:win: WINDOWS
+:mac: MAC
+:linux: LINUX
 
 
 // =================================================================================================
@@ -127,12 +130,6 @@ as it's what this guide will focus on. For installation instructions, see https:
 - `helm` - a package manager for {kube}. For installation instructions see
 https://docs.helm.sh/using_helm/{hashtag}installing-helm
 
-
-:win: [Windows]
-:mac: [macOS]
-:linux: [Linux]
-:all: [All Platforms]
-
 Docker Desktop is a convenient way fo running both Docker and {kube} on your machine, it is available and recommended on *{win}* and *{mac}*. Minikube runs a {kube} cluster inside of a virtual machine, the default hypervisor is Virtual Box but it can be configured based on your preferences.
 You will use Minikube on *{linux}*.
 
@@ -154,17 +151,14 @@ include::{common-includes}/gitclone.adoc[]
 
 Start up your {kube} cluster.
 
-*{win} {mac}*
-____
 ****
-If you are using Docker for Windows or Mac, just start your Docker environment.
-****
-____
+[system]#*{win} | {mac}*#
 
-*{linux}*
-____
-****
-If you are using Minikube then run the following command from the command line:
+Start your Docker Desktop environment.
+
+[system]#*{linux}*#
+
+Run the following command from a command line:
 
 ```
 minikube start
@@ -173,9 +167,8 @@ minikube start
 Later, when you no longer need your cluster, you can stop it with `minikube stop` and delete it completely
 with `minikube delete`.
 ****
-____
 
-For any environment, validate that you have a healthy kubernetes environment by running the following command:
+Next, validate that you have a healthy kubernetes environment by running the following command from the command line:
 ```
 kubectl get nodes
 ```
@@ -184,28 +177,15 @@ This should return a `Ready` status for the master node.
 
 Next, in order to setup an Ingress, you'll need to deploy the NGINX Ingress controller.
 
-*{win} {mac}*
-____
 ****
-If you are not using Minikube then follow the platform-specific instructions at https://kubernetes.github.io/ingress-nginx/deploy/ . The Docker for Mac instructions are equally appropriate for Docker for Windows, where you should run the following two commands:
+[system]#*{win} | {mac}*#
+
+Run the following two commands:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
 ```
-****
-____
-
-*{linux}*
-____
-****
-If you are using Minikube this can be done through simply enabling an optional add-on in Minikube. To enable this add-on, run the following command:
-
-```
-minikube addons enable ingress
-```
-****
-____
 
 This results in the deployment of two pods. The first Pod, called `default-http-backend`,
 is reponsible for routing invalid requests to a default HTTP backend. The second Pod, called `nginx-ingress-controller`,
@@ -224,7 +204,16 @@ ingress-nginx   default-http-backend-7c5bc89cc9-z5l29        1/1       Running  
 ingress-nginx   nginx-ingress-controller-cf9ff8c96-mf94d     1/1       Running   0          11m
 ----
 
-When both Pods are ready, the front-end load balancer is configured to use the rules defined in the
+[system]#*{linux}*#
+
+Simply enable an optional add-on in Minikube by running the following command:
+
+```
+minikube addons enable ingress
+```
+****
+
+After deploying the Ingress Controller, the front-end load balancer is configured to use the rules defined in the
 `ol-name-ibm-open-liberty` and `ol-ping-ibm-open-liberty` Ingress resources to route external traffic
 to internal {kube} Services.
 
@@ -244,10 +233,10 @@ Open Liberty chart that you will use to deploy your two microservices:
 helm repo add ibm-charts https://raw.githubusercontent.com/IBM/charts/master/repo/stable/
 ```
 
-*{linux}*
-____
 ****
-A final step is required only if you are using Minikube. In this case, run the following command to configure the Docker CLI to use Minikube's Docker daemon.
+[system]#*{linux}*#
+
+Run the following command to configure the Docker CLI to use Minikube's Docker daemon.
 By running this command, you will be able to interact with Minikube's Docker daemon and build new
 images directly to it from your host machine:
 
@@ -267,9 +256,7 @@ eval $(minikube docker-env -u)
 minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 ****
-____
 
-This is not required if Kubernetes is provided as part of your Docker installation (such as Docker for Windows or Mac), where the Kubernetes server uses the local Docker daemon.
 
 // =================================================================================================
 // Building and containerizing the microservices
@@ -445,19 +432,15 @@ Wait for the Pods to be in the ready state, then access them from the Ingress th
 kubectl get ingress
 ```
 
-*{win} {mac}*
-____
 ****
-The default Ingress hostname for Docker for Windows is `localhost`.
-****
-____
+[system]#*{win} | {mac}*#
 
-*{linux}*
-____
-****
+The default Ingress hostname for Docker Desktop is `localhost`.
+
+[system]#*{linux}*#
+
 The default Ingress hostname for minikube is {minikube-ip}.
 ****
-____
 
 Then `curl -k` or visit the following URLs to access your microservices, substituting the Ingress hostname for [ingress-ip]:
 
@@ -775,10 +758,10 @@ helm del --purge ol-ping
 
 By deleting a chart release, Helm deletes all {kube} resource created by that chart.
 
-*{linux}*
-____
 ****
-Finally, if you are using minikube, you can perform the following two steps to return your environment to a clean state.
+[system]#*{linux}*#
+
+You can perform the following two steps to return your environment to a clean state.
 Firstly, stop your Minikube cluster:
 
 ```
@@ -794,7 +777,6 @@ eval $(minikube docker-env -u)
 minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 ****
-____
 
 
 // =================================================================================================
