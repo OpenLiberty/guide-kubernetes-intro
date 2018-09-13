@@ -241,19 +241,13 @@ By running this command, you will be able to interact with Minikube's Docker dae
 images directly to it from your host machine:
 
 ```
-# From Bash if you're on Linux or MacOS
 eval $(minikube docker-env)
-# From PowerShell or CMD if you're on Windows
-minikube docker-env > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 
 When you no longer want to use Minikube's Docker daemon, run the following command to point back to your host:
 
 ```
-# From Bash if you're on Linux or MacOS
 eval $(minikube docker-env -u)
-# From PowerShell or CMD if you're on Windows
-minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 ****
 
@@ -759,9 +753,18 @@ helm del --purge ol-ping
 By deleting a chart release, Helm deletes all {kube} resource created by that chart.
 
 ****
+[system]#*{win} | {mac}*#
+
+Delete the resources created when you deployed the Nginx Ingress Controller.
+
+```
+kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
+```
+
 [system]#*{linux}*#
 
-You can perform the following two steps to return your environment to a clean state.
+Perform the following two steps to return your environment to a clean state.
 Firstly, stop your Minikube cluster:
 
 ```
@@ -771,10 +774,7 @@ minikube stop
 Secondly, point the Docker daemon back to your local machine:
 
 ```
-# From Bash if you're on Linux or MacOS
 eval $(minikube docker-env -u)
-# From PowerShell or CMD if you're on Windows
-minikube docker-env -u > tmp.cmd && call tmp.cmd && DEL tmp.cmd
 ```
 ****
 
