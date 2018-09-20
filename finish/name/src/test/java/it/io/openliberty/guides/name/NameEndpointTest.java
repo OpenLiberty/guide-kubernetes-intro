@@ -36,7 +36,6 @@ import org.junit.Test;
 public class NameEndpointTest {
 
     private static String clusterUrl;
-    private static SSLContext sc;
 
     private Client client;
     private Response response;
@@ -44,38 +43,16 @@ public class NameEndpointTest {
     @BeforeClass
     public static void oneTimeSetup() {
         String clusterIp = System.getProperty("cluster.ip");
-        String ingressPath = System.getProperty("name.ingress.path");
         String nodePort = System.getProperty("name.node.port");
-        
-        if (nodePort.isEmpty() || nodePort == null) {
-            clusterUrl = "https://" + clusterIp + ingressPath + "/";
-        } else {
-            clusterUrl = "http://" + clusterIp + ":" + nodePort + "/api/name/";
-        }
-        
-        // Ignore certificate
-        TrustManager[] tm = new TrustManager[] { new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() { return null; }
-            public void checkClientTrusted(X509Certificate[] certs, String authType) {}
-            public void checkServerTrusted(X509Certificate[] certs, String authType) {}
-        }};
-        try {
-            sc = SSLContext.getInstance("SSL");
-            sc.init(null, tm, null);
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
-        }
+        clusterUrl = "http://" + clusterIp + ":" + nodePort + "/api/name/";
     }
     
     @Before
     public void setup() {
         response = null;
         client = ClientBuilder.newBuilder()
-                    .sslContext(sc)
                     .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
                     .build();
-        
     }
 
     @After
