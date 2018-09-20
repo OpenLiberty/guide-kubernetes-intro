@@ -52,7 +52,7 @@ Managing containers on their own can be challenging. While a few containers used
 a small team might not pose a problem, a large number of containers, all running various applications,
 all sharing databases, all communicating with each other, and all needing to be run and monitored
 every day of the week will give even a large team of experienced developers a headache. {kube} is a
-developer's primary tool in containerized
+a primary tool for development in containerized
 environments. It handles scheduling, deployment, as well as mass deletion and creation of containers.
 It provides update rollout capabilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
@@ -84,7 +84,7 @@ In this guide, you will work with `Deployments`.
 
 A `Pod` or a group of replicated `Pods` are abstracted through {kube} objects called `Services`
 that define a set of rules by which the `Pods` can be accessed. In a basic scenario, a {kube}
-`Service` will expose a node port that can be used together with the cluster IP address to access
+`Service` exposes a node port that can be used together with the cluster IP address to access
 the `Pods` encapsulated by the `Service`. In this guide, however, you will set up an `Ingress`, which
 is a {kube} object that contains a set of rules for mapping external requests to the `Services` inside
 a cluster, over protocols such as HTTP, as well as provides load-balancing and other functionality. An `Ingress` requires an Ingress Controller to process requests accordingly.
@@ -122,17 +122,25 @@ You will use a local single-node {kube} cluster and employ NGINX as your Ingress
 
 Before you begin, make sure to have the following tools installed:
 
- - A containerization software for building containers. {kube} supports a variety
-of container types and while you're not limited to any of them in particular, you should use `Docker`
-as it's what this guide will focus on. For installation instructions, see https://docs.docker.com/install/.
-- `kubernetes` - the {kube} orchestration platform. If you have a Docker installation that provides the {kube} environment then just use this. For example, in https://docs.docker.com/docker-for-windows/[Docker for Windows] a local {kube} environment is pre-installed and enabled through https://docs.docker.com/docker-for-windows/#kubernetes[Docker for Windows settings]. Otherwise you can use `Minikube` as a single-node {kube} cluster that runs locally in a virtual machine. For Minikube installation instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section as different operating systems require different prerequisites to get Minikube running.
-- `kubectl` - a command line client interface for {kube}. If you have a Docker installation that provides kubectl, such as https://docs.docker.com/docker-for-windows/[Docker for Windows] then just use this. Otherwise install the client as described at https://kubernetes.io/docs/tasks/tools/install-kubectl/
-- `helm` - a package manager for {kube}. For installation instructions see
+First, you will need a containerization software for building containers. {kube} supports a variety
+of container types. You will use `Docker` in this guide. For installation instructions, see https://docs.docker.com/install/.
+
+****
+[system]#*{win} | {mac}*#
+
+You will use the Docker Desktop, where a local {kube} environment is pre-installed and enabled. Make sure you have the `Docker` version with the Docker Desktop support.
+
+- Setup Docker for Windows as described at https://docs.docker.com/docker-for-windows/#kubernetes.
+- Setup Docker for Mac as described at https://docs.docker.com/docker-for-mac/#kubernetes.
+
+[system]#*{linux}*#
+
+You will use `Minikube` as a single-node {kube} cluster that runs locally in a virtual machine.
+For Minikube installation instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section as different operating systems require different prerequisites to get Minikube running.
+****
+
+Lastly, you will also need to install the `helm`, which is a package manager for {kube}. For installation instructions see
 https://docs.helm.sh/using_helm/{hashtag}installing-helm
-
-Docker Desktop is a convenient way fo running both Docker and {kube} on your machine, it is available and recommended on *{win}* and *{mac}*. Minikube runs a {kube} cluster inside of a virtual machine, the default hypervisor is Virtual Box but it can be configured based on your preferences.
-You will use Minikube on *{linux}*.
-
 
 // =================================================================================================
 // Getting Started
@@ -192,12 +200,12 @@ is reponsible for routing invalid requests to a default HTTP backend. The second
 runs the actual NGINX Ingress controller. Make sure that both of these Pods are in the ready state
 before you proceed:
 
-[source, role="no_copy"]
-----
-$ kubectl get pods --all-namespaces
-----
+```
+kubectl get pods --all-namespaces
+```
 
 You'll see an output that includes the two pods and the namespace they were created under, similar to the following:
+[source, role="no_copy"]
 ----
 NAMESPACE       NAME                                         READY     STATUS    RESTARTS   AGE
 ingress-nginx   default-http-backend-7c5bc89cc9-z5l29        1/1       Running   0          11m
@@ -234,6 +242,10 @@ helm repo add ibm-charts https://raw.githubusercontent.com/IBM/charts/master/rep
 ```
 
 ****
+[system]#*{win} | {mac}*#
+
+You do not need to do any other step.
+
 [system]#*{linux}*#
 
 Run the following command to configure the Docker CLI to use Minikube's Docker daemon.
@@ -293,6 +305,31 @@ docker images
 
 Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them, for example:
 
+****
+[system]#*{win} | {mac}*#
+
+[source, role="no_copy"]
+----
+REPOSITORY                                                       TAG
+ping                                                             1.0-SNAPSHOT
+name                                                             1.0-SNAPSHOT
+open-liberty                                                     latest
+quay.io/kubernetes-ingress-controller/nginx-ingress-controller   0.19.0
+k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
+k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
+k8s.gcr.io/kube-controller-manager-amd64                         v1.10.3
+k8s.gcr.io/kube-apiserver-amd64                                  v1.10.3
+gcr.io/kubernetes-helm/tiller                                    v2.9.1
+k8s.gcr.io/etcd-amd64                                            3.1.12
+k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.8
+k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
+k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
+k8s.gcr.io/pause-amd64                                           3.1
+gcr.io/google_containers/defaultbackend                          1.4
+----
+
+[system]#*{linux}*#
+
 [source, role="no_copy"]
 ----
 REPOSITORY                                                       TAG
@@ -322,6 +359,7 @@ k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.4
 k8s.gcr.io/etcd-amd64                                            3.0.17
 k8s.gcr.io/pause-amd64                                           3.0
 ----
+****
 
 If you don't see the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
@@ -441,9 +479,9 @@ Then `curl -k` or visit the following URLs to access your microservices, substit
 - https://[ingress-ip]/name/
 - https://[ingress-ip]/ping/ol-name-ibm-open-liberty
 
-The first URL will return a brief greeting followed by the name of the Pod that the `name` microservice
-runs in. The second URL will return `pong` if it received a good response from the `ol-name-ibm-open-liberty`
-{kube} Service. Visiting https://[ingress-ip]/ping/{kube-service} in general will return either
+The first URL returns a brief greeting followed by the name of the Pod that the `name` microservice
+runs in. The second URL returns `pong` if it received a good response from the `ol-name-ibm-open-liberty`
+{kube} Service. Visiting https://[ingress-ip]/ping/{kube-service} in general returns either
 a good or a bad response depending on whether `kube-service` is a valid {kube} Service that can be accessed.
 
 There is a lot going when you send a request, so let's break it down. When you issue a request to either
@@ -614,7 +652,7 @@ version to a new version and then run a Maven build, specifying the profile name
 mvn clean package -P update-deployment
 ```
 
-If new updates were made to a Deployment, you will see a brief message in the Maven build log, like so:
+If new updates were made to a Deployment, you can see a brief message in the Maven build log, like so:
 
 [source, role="no_copy"]
 ----
@@ -624,7 +662,7 @@ deployment.apps "ol-name-ibm-open-liberty" image updated
 ...
 ----
 
-If no updates were made to a Deployment, then no special messages will show. If you did make code changes,
+If no updates were made to a Deployment, then no special messages are displayed. If you did make code changes,
 yet the deployment didn't update, then make sure that you updated your image tag since {kube} will not
 update a deployment that's already using the same image version.
 
@@ -634,6 +672,8 @@ update a deployment that's already using the same image version.
 // =================================================================================================
 
 == Rolling back Deployments to previous revisions
+
+Remain in the `name` directory.
 
 If you rolled out an unstable Deployment update, then you can revert the Deployment back to a older
 revision by viewing its revision history. To do this, run the following command:
@@ -688,23 +728,32 @@ in the ready state, then run the `mvn verify` command. The default properties de
 | name.kube.service | Name of the {kube} Service wrapping the `name` Pods, `ol-name-ibm-open-liberty` by default.
 |===
 
-To run integration tests against a cluster running at the default Minikube IP address:
+Navigate back to the `start` directory.
+
+****
+[system]#*{win} | {mac}*#
+
+Run the integration tests against a cluster running with an Ingress IP address of `localhost`:
+
+```
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
+```
+
+[system]#*{linux}*#
+
+Run the integration tests against a cluster running at the default Minikube IP address:
 
 ```
 mvn verify -Ddockerfile.skip=true
 ```
 
-To run integration tests against a cluster running with an Ingress IP address of `192.168.99.101`:
+You can also run the integration tests with an Ingress IP address of `192.168.99.101`:
 
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.101
 ```
+****
 
-To run integration tests against a cluster running with an Ingress IP address of `localhost`:
-
-```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
-```
 The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
@@ -777,118 +826,6 @@ Secondly, point the Docker daemon back to your local machine:
 eval $(minikube docker-env -u)
 ```
 ****
-
-
-// =================================================================================================
-// Editing {kube} resources
-// =================================================================================================
-
-== Optional: Editing {kube} resources using Minikube
-
-While you don't need to edit any of the {kube} resources in this guide, it might be helpful for
-you to know how editing is done for any future projects that you have in mind.
-
-To make changes to a {kube} resource, you can either edit that resource's whole YAML file in a text
-editor or update particular parts of the YAML with the `kubectl` command.
-
-=== Direct editing
-
-Resource YAML files can be directly edited from the {kube} dashboard or a text editor of your choice.
-
-To use the {kube} dashboard to edit a resources you first need to install and start the dashboard. If you are using minikube then simply run the `minikube dashboard` command to open the dashboard. Otherwise install the {kube} dashboard as described at https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/ . Once you have accessed the dashboard in a browser, use the left navigational panel to select which resources to edit.
-
-To open and edit a resource in a text editor, run the `kubectl edit (RESOURCE/NAME | -f FILENAME) [options]`
-command, specifying the resource type and its name. When you save your changes, they will be automatically
-picked up and applied to your resource.
-
-If you didn't create resources through charts, but rather implemented and created them yourself from
-YAML files by using the `kubectl create` command, then you can edit these YAMLs directly and then
-reapply them by running the `kubectl apply -f [FILENAME] options` command.
-
-To familiarize yourself with resource editing, edit the `ol-name-ibm-open-liberty` Ingress and change
-the `path` field in the `spec` object from `/name` to `/myname`. Use any editing method you prefer:
-
-[source, YAML]
-----
-{
-  "kind": "Ingress",
-  "apiVersion": "extensions/v1beta1",
-  "metadata": {
-    "name": "ol-name-ibm-open-liberty",
-    "namespace": "default",
-    "selfLink": "/apis/extensions/v1beta1/namespaces/default/ingresses/ol-name-ibm-open-liberty",
-    "uid": "18353cff-5fc5-11e8-af4d-08002784f87f",
-    "resourceVersion": "64202",
-    "generation": 1,
-    "creationTimestamp": "2018-05-25T02:41:15Z",
-    "labels": {
-      "app": "ol-name-ibm-open-liberty",
-      "chart": "ibm-open-liberty-1.2.0",
-      "heritage": "Tiller",
-      "release": "ol-name"
-    },
-    "annotations": {
-      "kubernetes.io/ingress.class": "nginx",
-      "nginx.ingress.kubernetes.io/affinity": "cookie",
-      "nginx.ingress.kubernetes.io/rewrite-target": "/api/name",
-      "nginx.ingress.kubernetes.io/session-cookie-hash": "sha1",
-      "nginx.ingress.kubernetes.io/session-cookie-name": "route"
-    }
-  },
-  "spec": {
-    "rules": [
-      {
-        "http": {
-          "paths": [
-            {
-              "path": "/myname",
-              "backend": {
-                "serviceName": "ol-name-ibm-open-liberty",
-                "servicePort": 9080
-              }
-            }
-          ]
-        }
-      }
-    ]
-  },
-  "status": {
-    "loadBalancer": {
-      "ingress": [
-        {
-          "ip": "10.0.2.15"
-        }
-      ]
-    }
-  }
-}
-----
-
-When you're done editing, visit the new Ingress endpoint to verify that your changes have been applied.
-
-
-=== Indirect editing
-
-Indirect editing of resources can be done by using various `kubectl` commands. If you recall,
-you've already done this when you ran `kubectl set image` to update the image used by your Deployment
-to a newer version. `kubectl set` is convenient, but it's limited to a small set of fields that you can
-change. Sometimes you might need to change parts of a resource that the `kubectl set` command simply
-doesn't cover. In those cases and as an alternative to the `kubectl set` command, you can use the
-`kubectl patch (-f FILENAME | TYPE NAME) -p PATCH [options]` command to make updates using strategic
-merging. The `kubectl patch` command works by supplying a piece of config in a form of a JSON or a YAML
-that matches another piece of similar config in the resource and overrides the fields that don't match.
-For example, to change the Ingress path from `/name` to `/myname` as in the previous section, run the
-following command:
-
-```
-# From Bash if you're on Linux or MacOS
-kubectl patch ingress/ol-name-ibm-open-liberty -p '{"spec": {"rules": [{"http": {"paths": [{"path": "/myname", "backend": {"serviceName": "ol-name-ibm-open-liberty", "servicePort": 9080}}]}}]}}'
-# From PowerShell or CMD if you're on Windows
-kubectl patch ingress/ol-name-ibm-open-liberty -p "{\"spec\": {\"rules\": [{\"http\": {\"paths\": [{\"path\": \"/myname\", \"backend\": {\"serviceName\": \"ol-name-ibm-open-liberty\", \"servicePort\": 9080}}]}}]}}"
-```
-
-{kube} will match your config pattern against the `spec` object defined in the `ol-name-ibm-open-liberty`
-Ingress and override the `path` field.
 
 
 // =================================================================================================
