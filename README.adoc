@@ -124,7 +124,6 @@ Before you begin, make sure to have the following tools installed:
 
 First, you will need a containerization software for building containers. {kube} supports a variety
 of container types. You will use `Docker` in this guide. For installation instructions, see https://docs.docker.com/install/.
-After the installation, you need to login to Docker with a Docker ID.
 
 ****
 [system]#*{win} | {mac}*#
