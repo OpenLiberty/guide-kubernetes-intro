@@ -27,9 +27,9 @@
         <https.port>9443</https.port>
         <!-- Default test properties -->
         <cluster.ip>192.168.99.100</cluster.ip>
-        <name.ingress.path>/name</name.ingress.path>
-        <name.kube.service>ol-name-ibm-open-liberty</name.kube.service>
-        <ping.ingress.path>/ping</ping.ingress.path>
+        <name.kube.service>name-service</name.kube.service>
+        <name.node.port>31000</name.node.port>
+        <ping.node.port>32000</ping.node.port>
     </properties>
 
     <dependencyManagement>
