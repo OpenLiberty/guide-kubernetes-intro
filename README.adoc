@@ -106,8 +106,8 @@ interface for {kube}. The `kubectl` CLI is your primary tool for communicating w
 The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply
 displays a brief greeting and the name of the
 container that it runs in, making it easy to distinguish it from its other replicas. The `ping` microservice
-simply pings the {kube} Service that encapsulates the Pods running the `name` microservice, demonstrating
-how communication can be established between Pods inside a cluster.
+simply pings the {kube} Service that encapsulates the `Pods` running the `name` microservice, demonstrating
+how communication can be established between `Pods` inside a cluster.
 
 You will use a local single-node {kube} cluster.
 
@@ -130,6 +130,7 @@ You will use the Docker Desktop, where a local {kube} environment is pre-install
 
 - Setup Docker for Windows as described at https://docs.docker.com/docker-for-windows/#kubernetes.
 - Setup Docker for Mac as described at https://docs.docker.com/docker-for-mac/#kubernetes.
+- After following one of the sets of instructions, ensure that {kube} (not Swarm) is selected as the orchestrator.
 
 [system]#*{linux}*#
 
@@ -234,7 +235,7 @@ The `package` goal automatically invokes the `dockerfile-maven:build` goal, whic
 as the POM file.
 
 During the build, you'll see various Docker messages describing what images are being downloaded and
-built. If the build is successful, run the following command to list all local Docker images:
+built. When the build finishes, run the following command to list all local Docker images:
 
 ```
 docker images
@@ -251,7 +252,6 @@ REPOSITORY                                                       TAG
 ping                                                             1.0-SNAPSHOT
 name                                                             1.0-SNAPSHOT
 open-liberty                                                     latest
-quay.io/kubernetes-ingress-controller/nginx-ingress-controller   0.19.0
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
 k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.3
@@ -318,21 +318,21 @@ To deploy the `name` and `ping` applications, first create the `kubernetes.yaml`
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} Deployment is a resources responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is simply the name and tag of the docker image that you want to use for this container. Finally, the container port is whatever port that your container exposes for purposes of accessing your application. For the services the main thing to understand is that they expose your deployments, the deployment to expose is specified by the use of labels -- in this case the `app` label. You will also notice that the service has a type of `NodePort`. This means that you will be able to access these services in your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but this can also be randomized if the `nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} Deployment is a resource responsible for controlling the creation and management of `Pods`. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is simply the name and tag of the docker image that you want to use for this container. Finally, the container port is whatever port that your container exposes for purposes of accessing your application. For the services the main thing to understand is that they expose your deployments, the deployment to expose is specified by the use of labels -- in this case the `app` label. You will also notice that the service has a type of `NodePort`. This means that you will be able to access these services in your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but this can also be randomized if the `nodePort` field is not used.
 
-Run the following commands to deploy the resources as define in kubernetes.yaml:
+Run the following commands to deploy the resources as defined in kubernetes.yaml:
 
 ```
 kubectl apply -f kubernetes.yaml
 ```
 
-When the apps are deployed, run the following command to check the status of your Pods:
+When the apps are deployed, run the following command to check the status of your `Pods`:
 
 ```
 kubectl get pods
 ```
 
-You'll see an output similar to the following if all the Pods are healthy and running:
+You'll see an output similar to the following if all the `Pods` are healthy and running:
 
 [source, role="no_copy"]
 ----
@@ -341,7 +341,7 @@ name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          15s
 ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
-You can also inspect individual Pods in more detail by running the following command:
+You can also inspect individual `Pods` in more detail by running the following command:
 
 ```
 kubectl describe pods
@@ -367,7 +367,7 @@ Then `curl` or visit the following URLs to access your microservices, substituti
 - {name-api}
 - {ping-api}/name-service
 
-The first URL returns a brief greeting followed by the name of the Pod that the `name` microservice
+The first URL returns a brief greeting followed by the name of the `Pod` that the `name` microservice
 runs in. The second URL returns `pong` if it received a good response from the `name-service`
 {kube} Service. Visiting `{ping-api}/[kube-service]` in general returns either
 a good or a bad response depending on whether `kube-service` is a valid {kube} Service that can be accessed.
@@ -378,15 +378,15 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 
 == Scaling a deployment
 
-To make use of load balancing, you need to scale your deployments. When you scale a Deployment, you replicate its Pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because it allows to accommodate more traffic, and descale them to free up resources when the traffic decreases.
+To make use of load balancing, you need to scale your deployments. When you scale a Deployment, you replicate its `Pods`, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
 
-As an example, scale the `name` Deployment to 3 Pods by running the following command:
+As an example, scale the `name` Deployment to 3 `Pods` by running the following command:
 
 ```
 kubectl scale deployment/name-deployment --replicas=3
 ```
 
-Wait for your two new Pods to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three pods running all serving the `name` application.
+Wait for your two new `Pods` to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three `Pods` running all serving the `name` application.
 
 // =================================================================================================
 // Testing microservices that are running on {kube}
@@ -395,14 +395,14 @@ Wait for your two new Pods to be in the ready state, then `curl` or visit the `{
 == Testing microservices that are running on {kube}
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
-occurs, then you might have introduced a bug into the code. To run the tests, wait for all Pods to be
-in the ready state, then run the `mvn verify` command. The default properties defined in the `pom.xml` are:
+occurs, then you might have introduced a bug into the code. To run the tests, wait for all `Pods` to be
+in the ready state before proceeding further into this section. The default properties defined in the `pom.xml` are:
 
 [cols="15, 100", options="header"]
 |===
 | *Property*        | *Description*
 | cluster.ip        | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
-| name.kube.service | Name of the {kube} Service wrapping the `name` Pods, `name-service` by default.
+| name.kube.service | Name of the {kube} Service wrapping the `name` `Pods`, `name-service` by default.
 | name.node.port    | The NodePort of the {kube} Service `name-service`, 31000 by default.
 | ping.node.port    | The NodePort of the {kube} Service `ping-service`, 32000 by default.
 |===
@@ -511,7 +511,7 @@ eval $(minikube docker-env -u)
 
 == Great work! You're done!
 
-You have just deployed two microservices to {kube}. You then scaled a microservice, ran integration tests against miroservices that are running in a {kube}
+You have just deployed two microservices to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube}
 cluster.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
