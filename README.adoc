@@ -396,7 +396,7 @@ Wait for your two new `Pods` to be in the ready state, then `curl` or visit the 
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all `Pods` to be
-in the ready state before proceeding further into this section. The default properties defined in the `pom.xml` are:
+in the ready state before proceeding further. The default properties defined in the `pom.xml` are:
 
 [cols="15, 100", options="header"]
 |===
