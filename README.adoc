@@ -388,6 +388,18 @@ kubectl scale deployment/name-deployment --replicas=3
 
 Wait for your two new `Pods` to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three `Pods` running all serving the `name` application.
 
+== Redeploy microservices
+
+When you are building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources.
+
+```
+mvn package
+kubectl delete -f kubernetes.yaml
+kubectl apply -f kubernetes.yaml
+```
+
+This is not how you would want to update your applications when running in production, but in a development environment this is fine. If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image and {kube} will automate the creation of a new container and decomissioning of the old one once the new container is ready.
+
 // =================================================================================================
 // Testing microservices that are running on {kube}
 // =================================================================================================
