@@ -71,23 +71,22 @@ iceberg that is {kube} has a lot more to offer.
 
 Deploying an application to Kubernetes simply means deploying an application to a Kubernetes cluster.
 
-A typical {kube} cluster is a collection of physical or virtual machines called `nodes` that run
-containerized applications. A cluster is made up of one master `node` that manages the cluster, and
-multiple worker `nodes` that run the actual application instances inside {kube} objects called `Pods`.
+A typical {kube} cluster is a collection of physical or virtual machines called nodes that run
+containerized applications. A cluster is made up of one master node that manages the cluster, and
+multiple worker nodes that run the actual application instances inside {kube} objects called pods.
 
-A `Pod` is a basic building block in a {kube} cluster. It represents a single running process that
-encapsulates a container or in some scenarios multiple closely coupled containers. `Pods` can be
+A pod is a basic building block in a {kube} cluster. It represents a single running process that
+encapsulates a container or in some scenarios multiple closely coupled containers. Pods can be
 replicated to scale applications and handle more traffic. From the perspective of a cluster, a set
-of replicated `Pods` is still one application instance, although it might be made up of dozens of
-instances of itself. A single `Pod` or a group of replicated `Pods` are managed by {kube} objects
-called `Controllers`. A `Controller` handles replication, self-healing, rollout of updates, and general
-management of `Pods`. Some examples of `Controllers` include `Deployments`, `StatefulSets`, and `DaemonSets`.
-In this guide, you will work with `Deployments`.
+of replicated pods is still one application instance, although it might be made up of dozens of
+instances of itself. A single pod or a group of replicated pods are managed by {kube} objects
+called controllers. A controller handles replication, self-healing, rollout of updates, and general
+management of pods. One example of a controller which you will use in in this guide is a deployment.
 
-A `Pod` or a group of replicated `Pods` are abstracted through {kube} objects called `Services`
-that define a set of rules by which the `Pods` can be accessed. In a basic scenario, a {kube}
-`Service` exposes a node port that can be used together with the cluster IP address to access
-the `Pods` encapsulated by the `Service`.
+A pod or a group of replicated pods are abstracted through {kube} objects called services
+that define a set of rules by which the pods can be accessed. In a basic scenario, a {kube}
+service exposes a node port that can be used together with the cluster IP address to access
+the pods encapsulated by the service.
 
 To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/.
 
@@ -106,8 +105,8 @@ interface for {kube}. The `kubectl` CLI is your primary tool for communicating w
 The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply
 displays a brief greeting and the name of the
 container that it runs in, making it easy to distinguish it from its other replicas. The `ping` microservice
-simply pings the {kube} Service that encapsulates the `Pods` running the `name` microservice, demonstrating
-how communication can be established between `Pods` inside a cluster.
+simply pings the {kube} Service that encapsulates the pods running the `name` microservice, demonstrating
+how communication can be established between pods inside a cluster.
 
 You will use a local single-node {kube} cluster.
 
@@ -219,7 +218,7 @@ which covers Dockerfiles in depth.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
 use the `.war` file produced by the build to build a Docker image. While this is by no means a wrong
-approach, we've setup the projects such that you can build your microservices and Docker image simultaneously
+approach, we've setup the projects such that this process is automated
 as a part of a single Maven build. This is done using the `dockerfile-maven` plugin, which automatically
 picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
 If you are using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build.
@@ -318,7 +317,7 @@ To deploy the `name` and `ping` applications, first create the `kubernetes.yaml`
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} Deployment is a resource responsible for controlling the creation and management of `Pods`. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is simply the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services the key point to understand is that they expose your deployments, which is specified by the use of labels -- in this case the `app` label. You will also notice that the service has a type of `NodePort`. This means that you will be able to access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but this can also be randomized if the `nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} Deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is simply the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services the key point to understand is that they expose your deployments, which is specified by the use of labels -- in this case the `app` label. You will also notice that the service has a type of `NodePort`. This means that you will be able to access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but this can also be randomized if the `nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 
@@ -326,13 +325,13 @@ Run the following commands to deploy the resources as defined in kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
 
-When the apps are deployed, run the following command to check the status of your `Pods`:
+When the apps are deployed, run the following command to check the status of your pods:
 
 ```
 kubectl get pods
 ```
 
-You'll see an output similar to the following if all the `Pods` are healthy and running:
+You'll see an output similar to the following if all the pods are healthy and running:
 
 [source, role="no_copy"]
 ----
@@ -341,7 +340,7 @@ name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          15s
 ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
-You can also inspect individual `Pods` in more detail by running the following command:
+You can also inspect individual pods in more detail by running the following command:
 
 ```
 kubectl describe pods
@@ -367,7 +366,7 @@ Then `curl` or visit the following URLs to access your microservices, substituti
 - {name-api}
 - {ping-api}/name-service
 
-The first URL returns a brief greeting followed by the name of the `Pod` that the `name` microservice
+The first URL returns a brief greeting followed by the name of the pod that the `name` microservice
 runs in. The second URL returns `pong` if it received a good response from the `name-service`
 {kube} Service. Visiting `{ping-api}/[kube-service]` in general returns either
 a good or a bad response depending on whether `kube-service` is a valid {kube} Service that can be accessed.
@@ -378,15 +377,15 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 
 == Scaling a deployment
 
-To make use of load balancing, you need to scale your deployments. When you scale a Deployment, you replicate its `Pods`, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
+To make use of load balancing, you need to scale your deployments. When you scale a Deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
 
-As an example, scale the `name` Deployment to 3 `Pods` by running the following command:
+As an example, scale the `name` Deployment to 3 pods by running the following command:
 
 ```
 kubectl scale deployment/name-deployment --replicas=3
 ```
 
-Wait for your two new `Pods` to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three `Pods` running all serving the `name` application.
+Wait for your two new pods to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three pods running all serving the `name` application.
 
 == Redeploy microservices
 
@@ -407,14 +406,14 @@ This is not how you would want to update your applications when running in produ
 == Testing microservices that are running on {kube}
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
-occurs, then you might have introduced a bug into the code. To run the tests, wait for all `Pods` to be
+occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
 in the ready state before proceeding further. The default properties defined in the `pom.xml` are:
 
 [cols="15, 100", options="header"]
 |===
 | *Property*        | *Description*
 | cluster.ip        | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
-| name.kube.service | Name of the {kube} Service wrapping the `name` `Pods`, `name-service` by default.
+| name.kube.service | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
 | name.node.port    | The NodePort of the {kube} Service `name-service`, 31000 by default.
 | ping.node.port    | The NodePort of the {kube} Service `ping-service`, 32000 by default.
 |===
