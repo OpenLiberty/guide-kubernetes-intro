@@ -283,11 +283,11 @@ free to inspect all other resources.
 Next you will make requests to your services.
 
 ****
-[system]#*{win} | {mac}*#
+[system]#*{win} | {mac}* -- _Docker Desktop_#
 
 The default hostname for Docker Desktop is `localhost`.
 
-[system]#*{linux}*#
+[system]#*{linux}* -- _Minikube_#
 
 The default hostname for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
 ****
@@ -352,7 +352,7 @@ in the ready state before proceeding further. The default properties defined in 
 Navigate back to the `start` directory.
 
 ****
-[system]#*{win} | {mac}*#
+[system]#*{win} | {mac}* -- _Docker Desktop_#
 
 Run the integration tests against a cluster running with a hostname of `localhost`:
 
@@ -360,7 +360,7 @@ Run the integration tests against a cluster running with a hostname of `localhos
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
 ```
 
-[system]#*{linux}*#
+[system]#*{linux}* -- _Minikube_#
 
 Run the integration tests against a cluster running at the default Minikube IP address:
 
@@ -419,11 +419,11 @@ kubectl delete -f kubernetes.yaml
 ```
 
 ****
-[system]#*{win} | {mac}*#
+[system]#*{win} | {mac}* -- _Docker Desktop_#
 
 Nothing more needs to be done for Docker Desktop.
 
-[system]#*{linux}*#
+[system]#*{linux}* -- _Minikube_#
 
 Perform the following two steps to return your environment to a clean state.
 
