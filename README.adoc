@@ -88,7 +88,7 @@ that define a set of rules by which the pods can be accessed. In a basic scenari
 service exposes a node port that can be used together with the cluster IP address to access
 the pods encapsulated by the service.
 
-To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/.
+To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation].
 
 
 // =================================================================================================
@@ -115,27 +115,7 @@ You will use a local single-node {kube} cluster.
 // Prerequisites
 // =================================================================================================
 
-== Prerequisites
-
-Before you begin, make sure to have the following tools installed:
-
-First, you will need a containerization software for building containers. {kube} supports a variety
-of container types. You will use `Docker` in this guide. For installation instructions, see https://docs.docker.com/install/.
-
-****
-[system]#*{win} | {mac}*#
-
-You will use the Docker Desktop, where a local {kube} environment is pre-installed and enabled. Make sure you have the `Docker` version with the Docker Desktop support.
-
-- Setup Docker for Windows as described at https://docs.docker.com/docker-for-windows/#kubernetes.
-- Setup Docker for Mac as described at https://docs.docker.com/docker-for-mac/#kubernetes.
-- After following one of the sets of instructions, ensure that {kube} (not Swarm) is selected as the orchestrator.
-
-[system]#*{linux}*#
-
-You will use `Minikube` as a single-node {kube} cluster that runs locally in a virtual machine.
-For Minikube installation instructions see https://github.com/kubernetes/minikube. Make sure to read the "Requirements" section as different operating systems require different prerequisites to get Minikube running.
-****
+include::{common-includes}/kube-prereq.adoc[]
 
 // =================================================================================================
 // Getting Started
@@ -150,56 +130,7 @@ include::{common-includes}/gitclone.adoc[]
 // Staring and preparing your cluster for deployment
 // =================================================================================================
 
-== Starting and preparing your cluster for deployment
-
-Start up your {kube} cluster.
-
-****
-[system]#*{win} | {mac}*#
-
-Start your Docker Desktop environment.
-
-[system]#*{linux}*#
-
-Run the following command from a command line:
-
-```
-minikube start
-```
-
-Later, when you no longer need your cluster, you can stop it with `minikube stop` and delete it completely
-with `minikube delete`.
-****
-
-Next, validate that you have a healthy kubernetes environment by running the following command from the command line:
-```
-kubectl get nodes
-```
-
-This should return a `Ready` status for the master node.
-
-****
-[system]#*{win} | {mac}*#
-
-You do not need to do any other step.
-
-[system]#*{linux}*#
-
-Run the following command to configure the Docker CLI to use Minikube's Docker daemon.
-By running this command, you will be able to interact with Minikube's Docker daemon and build new
-images directly to it from your host machine:
-
-```
-eval $(minikube docker-env)
-```
-
-When you no longer want to use Minikube's Docker daemon, run the following command to point back to your host:
-
-```
-eval $(minikube docker-env -u)
-```
-****
-
+include::{common-includes}/kube-start.adoc[]
 
 // =================================================================================================
 // Building and containerizing the microservices
