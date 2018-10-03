@@ -24,7 +24,7 @@
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
 
-Explore how to deploy microservices in Open Liberty Docker containers to Kubernetes and manage them with the kubectl Kubernetes CLI.
+Deploy microservices in Open Liberty Docker containers to Kubernetes and manage them with the Kubernetes CLI, kubectl.
 
 :minikube-ip: 192.168.99.100
 :kube: Kubernetes
@@ -59,8 +59,8 @@ environments. It handles scheduling, deployment, as well as mass deletion and cr
 It provides update rollout capabilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
 While you could destroy and then recreate these containers, you could also issue a short one-line
-command and have {kube} do all that updating for you. Of course this is just a simple example, the
-iceberg that is {kube} has a lot more to offer.
+command and have {kube} do all that updating for you. Of course this is just a simple example.
+{kube} has a lot more to offer.
 
 // {kube} provides much other functionality
 // that simply makes your development, testing, and production environments much more stable, much more
@@ -97,7 +97,7 @@ To learn about the various Kubernetes resources that you can configure, see the 
 
 == What you'll learn
 
-You will learn how to deploy two microservices in Open Liberty Docker containers to a local {kube} cluster.
+You will learn how to deploy two microservices in Open Liberty containers to a local {kube} cluster.
 You will then manage your deployed microservices using the `kubectl` command line
 interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your
 {kube} cluster.
@@ -237,9 +237,9 @@ In addition, if you are using Minikube, make sure that your Docker CLI is config
 
 == Deploying the applications
 
-Now that your Docker images are built, deploy them using a kubernetes resource definition.
+Now that your Docker images are built, deploy them using a Kubernetes resource definition.
 
-A kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you wish to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
+A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you wish to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
 To deploy the `name` and `ping` applications, first create the `kubernetes.yaml` file in the `start` directory:
 
@@ -248,7 +248,7 @@ To deploy the `name` and `ping` applications, first create the `kubernetes.yaml`
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} Deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is simply the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services the key point to understand is that they expose your deployments, which is specified by the use of labels -- in this case the `app` label. You will also notice that the service has a type of `NodePort`. This means that you will be able to access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but this can also be randomized if the `nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is simply the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services the key point to understand is that they expose your deployments, which is specified by the use of labels -- in this case the `app` label. You will also notice that the service has a type of `NodePort`. This means that you will be able to access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but this can also be randomized if the `nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 
@@ -308,7 +308,7 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 
 == Scaling a deployment
 
-To make use of load balancing, you need to scale your deployments. When you scale a Deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
+To make use of load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
 
 As an example, scale the `name` Deployment to 3 pods by running the following command:
 
