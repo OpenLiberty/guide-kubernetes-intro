@@ -58,7 +58,7 @@ a primary tool for development in containerized
 environments. It handles scheduling, deployment, as well as mass deletion and creation of containers.
 It provides update rollout abilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
-While you could destroy and then re-create these containers, you can also execute a short one-line
+While you could destroy and then re-create these containers, you can also run a short one-line
 command to have {kube} make all those updates for you. Of course this is just a simple example.
 {kube} has a lot more to offer.
 
