@@ -60,7 +60,7 @@ It provides update rollout capabilities on a large scale that would otherwise pr
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
 While you could destroy and then recreate these containers, you could also issue a short one-line
 command and have {kube} do all that updating for you. Of course this is just a simple example.
-{kube}, has a lot more to offer.
+{kube} has a lot more to offer.
 
 // {kube} provides much other functionality
 // that simply makes your development, testing, and production environments much more stable, much more
