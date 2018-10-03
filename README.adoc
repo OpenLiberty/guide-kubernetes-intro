@@ -46,20 +46,20 @@ Deploy microservices in Open Liberty Docker containers to Kubernetes and manage 
 managing, and scaling containerized applications.
 
 Over the years, {kube} has become a major tool in containerized environments as containers are being
-more and more utilized for all steps of a continuous delivery pipeline.
+further leveraged for all steps of a continuous delivery pipeline.
 
 === Why use {kube}?
 
-Managing containers on their own can be challenging. While a few containers used for development by
-a small team might not pose a problem, a large number of containers, all running various applications,
-all sharing databases, all communicating with each other, and all needing to be run and monitored
-every day of the week will give even a large team of experienced developers a headache. {kube} is a
+Managing individual containers can be challenging. While a few containers used for development by
+a small team might not pose a problem. Hundreds of containers, all running various applications,
+all sharing databases, all communicating with each other, and all run and monitored
+daily will give even a large team of experienced developers a headache. {kube} is
 a primary tool for development in containerized
 environments. It handles scheduling, deployment, as well as mass deletion and creation of containers.
-It provides update rollout capabilities on a large scale that would otherwise prove extremely tedious
+It provides update rollout abilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
-While you could destroy and then recreate these containers, you could also issue a short one-line
-command and have {kube} do all that updating for you. Of course this is just a simple example.
+While you could destroy and then re-create these containers, you can also execute a short one-line
+command to have {kube} make all those updates for you. Of course this is just a simple example.
 {kube} has a lot more to offer.
 
 // {kube} provides much other functionality
@@ -69,19 +69,19 @@ command and have {kube} do all that updating for you. Of course this is just a s
 
 === Architecture
 
-Deploying an application to Kubernetes simply means deploying an application to a Kubernetes cluster.
+Deploying an application to Kubernetes means deploying an application to a Kubernetes cluster.
 
 A typical {kube} cluster is a collection of physical or virtual machines called nodes that run
 containerized applications. A cluster is made up of one master node that manages the cluster, and
-multiple worker nodes that run the actual application instances inside {kube} objects called pods.
+many worker nodes that run the actual application instances inside {kube} objects called pods.
 
 A pod is a basic building block in a {kube} cluster. It represents a single running process that
-encapsulates a container or in some scenarios multiple closely coupled containers. Pods can be
+encapsulates a container or in some scenarios many closely coupled containers. Pods can be
 replicated to scale applications and handle more traffic. From the perspective of a cluster, a set
 of replicated pods is still one application instance, although it might be made up of dozens of
 instances of itself. A single pod or a group of replicated pods are managed by {kube} objects
 called controllers. A controller handles replication, self-healing, rollout of updates, and general
-management of pods. One example of a controller which you will use in in this guide is a deployment.
+management of pods. One example of a controller that you will use in this guide is a deployment.
 
 A pod or a group of replicated pods are abstracted through {kube} objects called services
 that define a set of rules by which the pods can be accessed. In a basic scenario, a {kube}
@@ -105,7 +105,7 @@ interface for {kube}. The `kubectl` CLI is your primary tool for communicating w
 The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply
 displays a brief greeting and the name of the
 container that it runs in, making it easy to distinguish it from its other replicas. The `ping` microservice
-simply pings the {kube} Service that encapsulates the pods running the `name` microservice, demonstrating
+simply pings the {kube} Service that encapsulates the pods running the `name` microservice. This demonstrates
 how communication can be established between pods inside a cluster.
 
 You will use a local single-node {kube} cluster.
@@ -141,18 +141,18 @@ include::{common-includes}/kube-start.adoc[]
 The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
 
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven
-project that's made up of the `name` and `ping` microservices, each residing in their own directories,
+project that's made up of the `name` and `ping` microservices. Each microservice resides in its own directory,
 `start/name` and `start/ping`. Each of these directories also contains a Dockerfile, which is necessary
 for building Docker images. If you're unfamiliar with Dockerfiles, check out the
 https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices] guide,
 which covers Dockerfiles in depth.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
-use the `.war` file produced by the build to build a Docker image. While this is by no means a wrong
+use the `.war` file produced by the build to build a Docker image. While it is by no means a wrong
 approach, we've setup the projects such that this process is automated
-as a part of a single Maven build. This is done using the `dockerfile-maven` plugin, which automatically
+as a part of a single Maven build. This is done by using the `dockerfile-maven` plug-in, which automatically
 picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
-If you are using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build.
+If you're using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build.
 
 Navigate to the `start` directory and run the following command:
 
@@ -228,7 +228,7 @@ k8s.gcr.io/pause-amd64                                           3.0
 
 If you don't see the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
-In addition, if you are using Minikube, make sure that your Docker CLI is configured to use Minikube's Docker daemon and not your host's as described in the previous section.
+In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon and not your host's as described in the previous section.
 
 
 // =================================================================================================
@@ -239,7 +239,7 @@ In addition, if you are using Minikube, make sure that your Docker CLI is config
 
 Now that your Docker images are built, deploy them using a Kubernetes resource definition.
 
-A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you wish to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
+A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you want to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
 To deploy the `name` and `ping` applications, first create the `kubernetes.yaml` file in the `start` directory:
 
@@ -248,7 +248,7 @@ To deploy the `name` and `ping` applications, first create the `kubernetes.yaml`
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is simply the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services the key point to understand is that they expose your deployments, which is specified by the use of labels -- in this case the `app` label. You will also notice that the service has a type of `NodePort`. This means that you will be able to access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but this can also be randomized if the `nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services, the key point to understand is that they expose your deployments. The binding between deployments and services is specified by the use of labels -- in this case the `app` label. You will also notice the service has a type of `NodePort`. This means you can access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but it can also be randomized if the `nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 
@@ -308,7 +308,7 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 
 == Scaling a deployment
 
-To make use of load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
+To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
 
 As an example, scale the `name` Deployment to 3 pods by running the following command:
 
@@ -328,7 +328,7 @@ kubectl delete -f kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
 
-This is not how you would want to update your applications when running in production, but in a development environment this is fine. If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image and {kube} will automate the creation of a new container and decomissioning of the old one once the new container is ready.
+This is not how you would want to update your applications when running in production, but in a development environment this is fine. If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image. Then, {kube} will automate the creation of a new container and decommissioning of the old one once the new container is ready.
 
 // =================================================================================================
 // Testing microservices that are running on {kube}
