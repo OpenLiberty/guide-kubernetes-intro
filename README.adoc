@@ -232,10 +232,10 @@ In addition, if you are using Minikube, make sure your Docker CLI is configured 
 
 
 // =================================================================================================
-// Deploying the applications
+// Deploying the microservices
 // =================================================================================================
 
-== Deploying the applications
+== Deploying the microservices
 
 Now that your Docker images are built, deploy them using a Kubernetes resource definition.
 
@@ -308,7 +308,7 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 
 == Scaling a deployment
 
-To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your Deployments to free up resources when the traffic decreases.
+To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
 As an example, scale the `name` Deployment to 3 pods by running the following command:
 
