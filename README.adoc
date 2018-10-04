@@ -50,11 +50,9 @@ further leveraged for all steps of a continuous delivery pipeline.
 
 === Why use {kube}?
 
-Managing individual containers can be challenging. While a few containers used for development by
-a small team might not pose a problem. Hundreds of containers, all running various applications,
-all sharing databases, all communicating with each other, and all run and monitored
-daily will give even a large team of experienced developers a headache. {kube} is
-a primary tool for development in containerized
+Managing individual containers can be challenging.  A few containers used for development by a small team might not pose a problem,
+but managing hundreds of containers can give even a large team of experienced developers a headache. {kube} is a primary
+tool for development in containerized
 environments. It handles scheduling, deployment, as well as mass deletion and creation of containers.
 It provides update rollout abilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
@@ -368,7 +366,7 @@ Run the integration tests against a cluster running at the default Minikube IP a
 mvn verify -Ddockerfile.skip=true
 ```
 
-You can also run the integration tests with an IP address of `192.168.99.101`:
+You can also run the integration tests with an IP address of `192.168.99.100`:
 
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.101
