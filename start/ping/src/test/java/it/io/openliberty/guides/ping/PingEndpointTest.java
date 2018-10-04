@@ -46,7 +46,11 @@ public class PingEndpointTest {
     public void setup() {
         response = null;
         client = ClientBuilder.newBuilder()
-                    .hostnameVerifier(new HostnameVerifier() { public boolean verify(String hostname, SSLSession session) { return true; } })
+                    .hostnameVerifier(new HostnameVerifier() {
+                        public boolean verify(String hostname, SSLSession session) {
+                            return true;
+                        }
+                    })
                     .build();
     }
 
@@ -74,7 +78,14 @@ public class PingEndpointTest {
         
         String expected = "Bad response from " + invalidServiceName + "\nCheck the console log for more info.";
         String actual = response.readEntity(String.class);
-        assertEquals("Should have received a bad response from " + invalidServiceName + ", but didn't. Is " + invalidServiceName + " a running Kuberentes service?", expected, actual);
+        assertEquals(
+            "Should have received a bad response from "
+            + invalidServiceName
+            + ", but didn't. Is "
+            + invalidServiceName
+            + " a running Kuberentes service?",
+            expected,
+            actual);
     }
 
     /**
