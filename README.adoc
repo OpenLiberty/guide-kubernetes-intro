@@ -369,7 +369,7 @@ mvn verify -Ddockerfile.skip=true
 You can also run the integration tests with an IP address of `192.168.99.100`:
 
 ```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.101
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.100
 ```
 ****
 
