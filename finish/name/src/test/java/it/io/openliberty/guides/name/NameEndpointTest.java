@@ -15,8 +15,6 @@ package it.io.openliberty.guides.name;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.security.KeyManagementException;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 import javax.ws.rs.client.Client;
