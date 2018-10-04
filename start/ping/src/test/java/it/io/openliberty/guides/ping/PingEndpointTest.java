@@ -14,8 +14,6 @@ package it.io.openliberty.guides.ping;
 
 import static org.junit.Assert.assertEquals;
 
-import java.security.KeyManagementException;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 import javax.ws.rs.client.Client;
