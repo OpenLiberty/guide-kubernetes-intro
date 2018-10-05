@@ -66,7 +66,7 @@ public class PingEndpointTest {
         this.assertResponse(clusterUrl, response);
         
         String expected = "pong";
-        String actual = response.readEntity(String.class);
+        String actual = response.readEntity(String.class).trim();
         assertEquals("Should have receieved pong", expected, actual);
     }
     
