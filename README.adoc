@@ -9,10 +9,10 @@
 // Contributors:
 //     IBM Corporation
 //
-:projectid: kubernetes
+:projectid: kubernetes-intro
 :page-layout: guide
 :page-duration: 25 minutes
-:page-releasedate: 2018-05-30
+:page-releasedate: 2018-10-05
 :page-description: Explore how to deploy microservices to Kubernetes and manage your cluster.
 :page-tags: ['microservices', 'Kubernetes', 'Docker', 'containers', 'kubectl', 'Minikube']
 :page-permalink: /guides/{projectid}
