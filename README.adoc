@@ -9,7 +9,7 @@
 // Contributors:
 //     IBM Corporation
 //
-:projectid: kubernetes
+:projectid: kubernetes-intro
 :page-layout: guide
 :page-duration: 25 minutes
 :page-releasedate: 2018-05-30
