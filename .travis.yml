@@ -13,24 +13,24 @@ before_script:
 - wget https://github.com/kubernetes/minikube/releases/download/v0.29.0/minikube-linux-amd64 -O minikube
 - chmod +x minikube
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
-- sudo minikube start --vm-driver=none --bootstrapper=localkube
+- sudo minikube start --vm-driver=none --bootstrapper=kubeadm
 script:
 - mvn package
 - kubectl apply -f kubernetes.yaml
 - sleep 10
 - mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
-notifications:
-  slack:
-    template:
-    - 'Build: <%{build_url}| %{build_number}> | Commit (<%{compare_url}|%{commit}>):
-      %{commit_message}'
-    - 'Repo@Branch: %{repository_slug}@%{branch}'
-    - 'Author: %{author}'
-    - 'Summary: %{result} in %{duration}'
-    rooms:
-      secure: e6hb1sp1y+ZLkwgK7cR++FLrRyM++mB1R+4VM3CI/qYbdN0A+n5swNzSSfb4FUP/n6i/3cbAN+lhJa5+9goUNg6pacjht42gCSchUkW+FPUS+LbKR2MKCBVBBbOrMa+5ZL3/0Yl+/xVzfLRFJVUc8TGMpEvKwnoPkiJhz+uGYDHLKKnRT6zsaSsJzDDCuQihBgKvF8lKooYZHUczglBTN8bqWDhoA7ZFxOf1kf8TBdE3P+BzcbOb+f22uO20sqAPcLkDbNFrJ3NjgZf+w3tZmIH4YNOje4dsWzXSagHelXO8+VGwuH0AIHglIJfp0LpD03ZMU+3dblVgtcDv/56URtPIOQ2pjUjheGtxX2khzP52WIvQtmaYZnEr/mSOY4WRc60z9Kw2GMiGEnD42CjYmbbH4cbXeacgTCPaxMKytdpydIkYFEG5O5sEli4/+tUMjRS1+s23dIqrmmrO53GSbO0RJAVZZqXIaOuqP3BVKksWiq7wN5ZH3jvlvz3/1SuOLOWndMfZx/YE6BCmzfKRGkXHkdMXbdw/wQTwvLDQkztgMkTaZlt47nI7yssZIs9QEvJB0yCcMxweF4dVbkHA+6z/Txam0ETVcZ39gRd2SPHOCgyRKlm7mNpkqY72w08MR8ozEdgF4RzG9MLBHbpPn/QtRzHvdEz5zRBhUa2jiHc=
-    on_success: never
-    on_failure: always
+# notifications:
+#   slack:
+#     template:
+#     - 'Build: <%{build_url}| %{build_number}> | Commit (<%{compare_url}|%{commit}>):
+#       %{commit_message}'
+#     - 'Repo@Branch: %{repository_slug}@%{branch}'
+#     - 'Author: %{author}'
+#     - 'Summary: %{result} in %{duration}'
+#     rooms:
+#       secure: e6hb1sp1y+ZLkwgK7cR++FLrRyM++mB1R+4VM3CI/qYbdN0A+n5swNzSSfb4FUP/n6i/3cbAN+lhJa5+9goUNg6pacjht42gCSchUkW+FPUS+LbKR2MKCBVBBbOrMa+5ZL3/0Yl+/xVzfLRFJVUc8TGMpEvKwnoPkiJhz+uGYDHLKKnRT6zsaSsJzDDCuQihBgKvF8lKooYZHUczglBTN8bqWDhoA7ZFxOf1kf8TBdE3P+BzcbOb+f22uO20sqAPcLkDbNFrJ3NjgZf+w3tZmIH4YNOje4dsWzXSagHelXO8+VGwuH0AIHglIJfp0LpD03ZMU+3dblVgtcDv/56URtPIOQ2pjUjheGtxX2khzP52WIvQtmaYZnEr/mSOY4WRc60z9Kw2GMiGEnD42CjYmbbH4cbXeacgTCPaxMKytdpydIkYFEG5O5sEli4/+tUMjRS1+s23dIqrmmrO53GSbO0RJAVZZqXIaOuqP3BVKksWiq7wN5ZH3jvlvz3/1SuOLOWndMfZx/YE6BCmzfKRGkXHkdMXbdw/wQTwvLDQkztgMkTaZlt47nI7yssZIs9QEvJB0yCcMxweF4dVbkHA+6z/Txam0ETVcZ39gRd2SPHOCgyRKlm7mNpkqY72w08MR8ozEdgF4RzG9MLBHbpPn/QtRzHvdEz5zRBhUa2jiHc=
+#     on_success: never
+#     on_failure: always
 branches:
   only:
   - master
