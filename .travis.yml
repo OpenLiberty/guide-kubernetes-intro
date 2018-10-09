@@ -2,6 +2,8 @@ sudo: required
 language: java
 services:
 - docker
+env:
+- CHANGE_MINIKUBE_NONE_USER=true
 before_script:
 - unset _JAVA_OPTIONS
 - cd finish
@@ -16,7 +18,7 @@ script:
 - mvn package
 - kubectl apply -f kubernetes.yaml
 - sleep 10
-- mvn verify -Dcluster.ip=`minikube ip`
+- mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 notifications:
   slack:
     template:
