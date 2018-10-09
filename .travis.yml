@@ -14,7 +14,6 @@ before_script:
 - chmod +x minikube
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
 - sudo minikube start --vm-driver=none --bootstrapper=localkube
-- sudo groupadd docker
 - sudo usermod -aG docker $USER
 script:
 - mvn package
