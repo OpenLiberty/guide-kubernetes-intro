@@ -7,6 +7,7 @@ env:
 before_script:
 - unset _JAVA_OPTIONS
 - cd finish
+- sudo mount --make-rshared /
 - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 - chmod +x kubectl
 - sudo ln -s $(pwd)/kubectl /usr/local/bin/kubectl
@@ -22,7 +23,7 @@ script:
 - echo `minikube ip`
 - curl http://`minikube ip`:31000/api/name
 - curl http://`minikube ip`:32000/api/ping/name-service
-- mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip` -Dname.kube.service=$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)
+- mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 - kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)
 - kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep ping)
 - kubectl delete -f kubernetes.yaml
