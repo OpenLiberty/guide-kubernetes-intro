@@ -26,9 +26,6 @@ script:
 - mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 - kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)
 - kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep ping)
-- kubectl delete -f kubernetes.yaml
-- sudo minikube stop
-- sudo minikube delete
 notifications:
   slack:
     template:
