@@ -22,7 +22,7 @@ script:
 - echo `minikube ip`
 - curl http://`minikube ip`:31000/api/name
 - curl http://`minikube ip`:32000/api/ping/name-service
-- mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
+- mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip` -Dname.kube.service=$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)
 - kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)
 - kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep ping)
 - kubectl delete -f kubernetes.yaml
