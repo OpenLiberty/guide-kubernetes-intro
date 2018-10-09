@@ -14,13 +14,14 @@ before_script:
 - chmod +x minikube
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
 - sudo minikube start --vm-driver=none --bootstrapper=localkube
-- sudo usermod -aG docker $USER
 script:
 - mvn package
 - kubectl apply -f kubernetes.yaml
 - sleep 10
 - kubectl get pods
 - echo `minikube ip`
+- curl http://`minikube ip`:31000/api/name
+- curl http://`minikube ip`:32000/api/ping/name-service
 - mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 # notifications:
 #   slack:
