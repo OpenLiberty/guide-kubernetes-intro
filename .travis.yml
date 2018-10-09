@@ -13,7 +13,7 @@ before_script:
 - wget https://github.com/kubernetes/minikube/releases/download/v0.29.0/minikube-linux-amd64 -O minikube
 - chmod +x minikube
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
-- sudo minikube start --vm-driver=none --kubernetes-version=v1.7.0
+- sudo minikube start --vm-driver=none --bootstrapper=localkube
 script:
 - mvn package
 - kubectl apply -f kubernetes.yaml
