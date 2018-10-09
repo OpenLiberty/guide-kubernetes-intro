@@ -15,9 +15,11 @@ before_script:
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
 - sudo minikube start --vm-driver=none --bootstrapper=localkube
 script:
-- mvn package
+- sudo mvn package
 - kubectl apply -f kubernetes.yaml
 - sleep 10
+- kubectl get pods
+- echo `minikube ip`
 - mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 # notifications:
 #   slack:
