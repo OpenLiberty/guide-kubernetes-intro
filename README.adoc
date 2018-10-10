@@ -332,7 +332,7 @@ Wait for your two new pods to be in the ready state, then `curl` or visit the `{
 
 == Redeploy microservices
 
-When you are building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one name pod after you redeploy since you're deleting all of the existing pods.
+When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one name pod after you redeploy since you're deleting all of the existing pods.
 
 ```
 mvn package
