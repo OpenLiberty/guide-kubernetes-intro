@@ -189,7 +189,6 @@ k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.8
 k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
 k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
 k8s.gcr.io/pause-amd64                                           3.1
-gcr.io/google_containers/defaultbackend                          1.4
 ----
 
 [system]#*{linux}*#
@@ -314,11 +313,26 @@ As an example, scale the `name` Deployment to 3 pods by running the following co
 kubectl scale deployment/name-deployment --replicas=3
 ```
 
-Wait for your two new pods to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three pods running all serving the `name` application.
+Use the following command to verify that two new pods have been created.
+
+```
+kubectl get pods
+```
+
+[source, role="no_copy"]
+----
+NAME                               READY     STATUS    RESTARTS   AGE
+name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          1m
+name-deployment-6bd97d9bf6-jf9rs   1/1       Running   0          25s
+name-deployment-6bd97d9bf6-x4zth   1/1       Running   0          25s
+ping-deployment-645767664f-nbtd9   1/1       Running   0          1m
+----
+
+Wait for your two new pods to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three pods running all serving the `name` application. Similarly, to descale your deployments you can use the same scale command with fewer replicas.
 
 == Redeploy microservices
 
-When you are building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources.
+When you are building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one name pod after you redeploy since you're deleting all of the existing pods.
 
 ```
 mvn package
