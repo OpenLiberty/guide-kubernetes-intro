@@ -19,6 +19,8 @@
 :page-related-guides: ['docker', 'istio']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
+:page-seo-title: Kubernetes tutorial
+:page-seo-description: How to deploy microservices to Kubernetes and manage your cluster
 = Deploying microservices to Kubernetes
 
 [.hidden]
