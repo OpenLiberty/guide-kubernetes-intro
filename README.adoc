@@ -432,34 +432,8 @@ When you no longer need your deployed microservices, you can delete all {kube} r
 kubectl delete -f kubernetes.yaml
 ```
 
-****
-[system]#*{win} | {mac}*#
 
-Nothing more needs to be done for Docker Desktop.
-
-[system]#*{linux}*#
-
-Perform the following two steps to return your environment to a clean state.
-
-Firstly, point the Docker daemon back to your local machine:
-
-```
-eval $(minikube docker-env -u)
-```
-
-Then, stop your Minikube cluster:
-
-```
-minikube stop
-```
-
-Finally, delete your cluster:
-
-```
-minikube delete
-```
-
-****
+include::{common-includes}/kube-minikube-teardown.adoc[]
 
 
 // =================================================================================================
