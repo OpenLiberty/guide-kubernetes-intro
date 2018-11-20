@@ -10,7 +10,7 @@
 //     IBM Corporation
 //
 :projectid: kubernetes-intro
-:page-layout: guide
+:page-layout: guide-multipane
 :page-duration: 25 minutes
 :page-releasedate: 2018-10-05
 :page-description: Explore how to deploy microservices to Kubernetes and manage your cluster.
@@ -240,9 +240,13 @@ Now that your Docker images are built, deploy them using a Kubernetes resource d
 
 A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you want to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
-To deploy the `name` and `ping` applications, first create the `kubernetes.yaml` file in the `start` directory:
+[role="code_command hotspot=1-69", subs="quotes"]
+----
+To deploy the `name` and `ping` applications, first create the `kubernetes.yaml` file in the `start` directory.
+----
 
-[source, yaml]
+kubernetes.yaml
+[source, yaml, linenums, role="code_column"]
 ----
 include::finish/kubernetes.yaml[tags=**;]
 ----
