@@ -120,7 +120,7 @@ include::{common-includes}/kube-prereq.adoc[]
 // =================================================================================================
 // Getting Started
 // =================================================================================================
-
+[role='command']
 include::{common-includes}/gitclone.adoc[]
 
 // no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
@@ -129,7 +129,7 @@ include::{common-includes}/gitclone.adoc[]
 // =================================================================================================
 // Staring and preparing your cluster for deployment
 // =================================================================================================
-
+[role='command']
 include::{common-includes}/kube-start.adoc[]
 
 // =================================================================================================
@@ -155,7 +155,7 @@ picks up the Dockerfile located in the same directory as its POM file and builds
 If you're using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build.
 
 Navigate to the `start` directory and run the following command:
-
+[role='command']
 ```
 mvn package
 ```
@@ -166,7 +166,7 @@ as the POM file.
 
 During the build, you'll see various Docker messages describing what images are being downloaded and
 built. When the build finishes, run the following command to list all local Docker images:
-
+[role='command']
 ```
 docker images
 ```
@@ -251,16 +251,16 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services, the key point to understand is that they expose your deployments. The binding between deployments and services is specified by the use of labels -- in this case the `app` label. You will also notice the service has a type of `NodePort`. This means you can access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but it can also be randomized if the `nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=4-5]`label`, [hotspot=17-18]`image`, and [hotspot=19-20]`containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services, the key point to understand is that they expose your deployments. The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=5-6]`app` label. You will also notice the service has a type of `NodePort`. This means you can access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but it can also be randomized if the `nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
-
+[role='command']
 ```
 kubectl apply -f kubernetes.yaml
 ```
 
 When the apps are deployed, run the following command to check the status of your pods:
-
+[role='command']
 ```
 kubectl get pods
 ```
@@ -275,7 +275,7 @@ ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
 You can also inspect individual pods in more detail by running the following command:
-
+[role='command']
 ```
 kubectl describe pods
 ```
@@ -314,13 +314,13 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
 As an example, scale the `name` Deployment to 3 pods by running the following command:
-
+[role='command']
 ```
 kubectl scale deployment/name-deployment --replicas=3
 ```
 
 Use the following command to verify that two new pods have been created.
-
+[role='command']
 ```
 kubectl get pods
 ```
@@ -339,7 +339,7 @@ Wait for your two new pods to be in the ready state, then `curl` or visit the `{
 == Redeploy microservices
 
 When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one name pod after you redeploy since you're deleting all of the existing pods.
-
+[role='command']
 ```
 mvn package
 kubectl delete -f kubernetes.yaml
@@ -373,7 +373,7 @@ Navigate back to the `start` directory.
 [system]#*{win} | {mac}*#
 
 Run the integration tests against a cluster running with a hostname of `localhost`:
-
+[role='command']
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
 ```
@@ -381,13 +381,13 @@ mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
 [system]#*{linux}*#
 
 Run the integration tests against a cluster running at the default Minikube IP address:
-
+[role='command']
 ```
 mvn verify -Ddockerfile.skip=true
 ```
 
 You can also run the integration tests with an IP address of `192.168.99.100`:
-
+[role='command']
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.100
 ```
@@ -431,7 +431,7 @@ Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 == Tearing down the environment
 
 When you no longer need your deployed microservices, you can delete all {kube} resources by running the `kubectl delete` command:
-
+[role='command']
 ```
 kubectl delete -f kubernetes.yaml
 ```
@@ -446,19 +446,19 @@ Nothing more needs to be done for Docker Desktop.
 Perform the following two steps to return your environment to a clean state.
 
 Firstly, point the Docker daemon back to your local machine:
-
+[role='command']
 ```
 eval $(minikube docker-env -u)
 ```
 
 Then, stop your Minikube cluster:
-
+[role='command']
 ```
 minikube stop
 ```
 
 Finally, delete your cluster:
-
+[role='command']
 ```
 minikube delete
 ```
