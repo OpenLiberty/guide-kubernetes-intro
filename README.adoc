@@ -242,7 +242,8 @@ A Kubernetes resource definition is a yaml file that contains a description of a
 
 [role="code_command hotspot=1-69", subs="quotes"]
 ----
-To deploy the `name` and `ping` applications, first create the `kubernetes.yaml` file in the `start` directory.
+To deploy the `name` and `ping` applications, create the file.
+`start/kubernetes.yaml`
 ----
 
 kubernetes.yaml
