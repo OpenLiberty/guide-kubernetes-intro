@@ -15,7 +15,7 @@ before_script:
 - chmod +x minikube
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
 - sudo minikube start --vm-driver=none --bootstrapper=localkube
-script:
+after_script:
 - mvn -q package
 - kubectl apply -f kubernetes.yaml
 - sleep 120
