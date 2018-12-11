@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mvn -q package
 kubectl apply -f kubernetes.yaml
 sleep 120
