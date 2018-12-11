@@ -16,8 +16,7 @@ before_script:
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
 - sudo minikube start --vm-driver=none --bootstrapper=localkube
 - chmod +x ../kubernetes-test-script.sh
-script:
-- ../kubernetes-test-script.sh
+script: ../kubernetes-test-script.sh
 notifications:
   slack:
     template:
