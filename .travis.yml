@@ -15,8 +15,8 @@ before_script:
 - chmod +x minikube
 - sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
 - sudo minikube start --vm-driver=none --bootstrapper=localkube
-- chmod +x ../test.sh
-script: ../test.sh
+- chmod +x ..scripts/travisTest.sh
+script: ..scripts/travisTest.sh
 notifications:
   slack:
     template:
