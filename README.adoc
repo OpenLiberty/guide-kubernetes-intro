@@ -14,7 +14,7 @@
 :page-duration: 25 minutes
 :page-releasedate: 2018-10-05
 :page-description: Explore how to deploy microservices to Kubernetes and manage your cluster.
-:page-tags: ['microservices', 'Kubernetes', 'Docker', 'containers', 'kubectl', 'Minikube']
+:page-tags: ['Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
@@ -242,7 +242,7 @@ A Kubernetes resource definition is a yaml file that contains a description of a
 
 [role="code_command hotspot=1-69", subs="quotes"]
 ----
-To deploy the `name` and `ping` applications, create the `kubernetes` file.
+Create the Kubernetes configuration file.
 `start/kubernetes.yaml`
 ----
 
@@ -252,7 +252,7 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5]`label`, [hotspot=18]`image`, and [hotspot=20]`containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services, the key point to understand is that they expose your deployments. The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6]`app` label. You will also notice the service has a type of [hotspot=48]`NodePort`. This means you can access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=55]`nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5]`label`, [hotspot=18]`image`, and [hotspot=20]`containerPort` fields. The [hotspot=5]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20]`containerPort` is the port that your container exposes for purposes of accessing your application. For the services, the key point to understand is that they expose your deployments. The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6]`app` label. You will also notice the service has a type of [hotspot=48]`NodePort`. This means you can access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=55]`nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 [role='command']
@@ -298,8 +298,8 @@ The default hostname for minikube is {minikube-ip}. Otherwise it can be found us
 
 Then `curl` or visit the following URLs to access your microservices, substituting the appropriate hostname:
 
-- {name-api}
-- {ping-api}/name-service
+- `{name-api}``
+- `{ping-api}/name-service`
 
 The first URL returns a brief greeting followed by the name of the pod that the `name` microservice
 runs in. The second URL returns `pong` if it received a good response from the `name-service`
@@ -355,17 +355,25 @@ This is not how you would want to update your applications when running in produ
 
 == Testing microservices that are running on {kube}
 
+
+
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
-in the ready state before proceeding further. The default properties defined in the `pom.xml` are:
+in the ready state before proceeding further. The default properties defined in the [hotspot=1-201]`pom.xml` are:
+
+pom.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/pom.xml [tags=**;]
+----
 
 [cols="15, 100", options="header"]
 |===
-| *Property*        | *Description*
-| cluster.ip        | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
-| name.kube.service | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
-| name.node.port    | The NodePort of the {kube} Service `name-service`, 31000 by default.
-| ping.node.port    | The NodePort of the {kube} Service `ping-service`, 32000 by default.
+| *Property*                        | *Description*
+| [hotspot=29]cluster.ip            | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
+| [hotspot=30]name.kube.service     | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
+| [hotspot=31]name.node.port        | The NodePort of the {kube} Service `name-service`, 31000 by default.
+| [hotspot=32]ping.node.port        | The NodePort of the {kube} Service `ping-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
@@ -387,7 +395,7 @@ Run the integration tests against a cluster running at the default Minikube IP a
 mvn verify -Ddockerfile.skip=true
 ```
 
-You can also run the integration tests with an IP address of `192.168.99.100`:
+You can also run the integration tests with an IP address of [hotspot=29]`192.168.99.100`:
 [role='command']
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.100
@@ -473,8 +481,7 @@ minikube delete
 
 == Great work! You're done!
 
-You have just deployed two microservices to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube}
-cluster.
+You have just deployed two microservices to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 include::{common-includes}/finish.adoc[]

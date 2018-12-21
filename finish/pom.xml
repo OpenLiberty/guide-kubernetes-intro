@@ -5,6 +5,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>net.wasdev.wlp.maven.parent</groupId>
+        <artifactId>liberty-maven-app-parent</artifactId>
+        <version>RELEASE</version>
+    </parent>
+
     <groupId>io.openliberty.guides</groupId>
     <artifactId>kube-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -137,7 +143,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${version.maven-surefire-plugin}</version>
+                    <version>3.0.0-M1</version>
                     <executions>
                         <execution>
                             <phase>test</phase>
@@ -155,7 +161,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${version.maven-failsafe-plugin}</version>
+                    <version>3.0.0-M1</version>
                     <executions>
                         <execution>
                             <phase>integration-test</phase>
