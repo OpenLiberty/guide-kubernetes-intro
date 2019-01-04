@@ -358,7 +358,7 @@ This is not how you would want to update your applications when running in produ
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/pom.xml [tags=**]
+include::finish/pom.xml[tags=**]
 ----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
