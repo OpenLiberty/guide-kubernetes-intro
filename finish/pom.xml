@@ -151,7 +151,9 @@
                                 <excludes>
                                     <exclude>**/it/**</exclude>
                                 </excludes>
-                                <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
+                                <reportsDirectory>
+                                    ${project.build.directory}/test-reports/unit
+                                </reportsDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -174,10 +176,18 @@
                                 </includes>
                                 <systemPropertyVariables>
                                     <cluster.ip>${cluster.ip}</cluster.ip>
-                                    <name.ingress.path>${name.ingress.path}</name.ingress.path>
-                                    <name.node.port>${name.node.port}</name.node.port>
-                                    <name.kube.service>${name.kube.service}</name.kube.service>
-                                    <ping.ingress.path>${ping.ingress.path}</ping.ingress.path>
+                                    <name.ingress.path>
+                                        ${name.ingress.path}
+                                    </name.ingress.path>
+                                    <name.node.port>
+                                        ${name.node.port}
+                                    </name.node.port>
+                                    <name.kube.service>
+                                        ${name.kube.service}
+                                    </name.kube.service>
+                                    <ping.ingress.path>
+                                        ${ping.ingress.path}
+                                    </ping.ingress.path>
                                     <ping.node.port>${ping.node.port}</ping.node.port>
                                 </systemPropertyVariables>
                             </configuration>
@@ -190,8 +200,12 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <summaryFile>${project.build.directory}/test-reports/it/failsafe-summary.xml</summaryFile>
-                        <reportsDirectory>${project.build.directory}/test-reports/it</reportsDirectory>
+                        <summaryFile>
+                            ${project.build.directory}/test-reports/it/failsafe-summary.xml
+                        </summaryFile>
+                        <reportsDirectory>
+                            ${project.build.directory}/test-reports/it
+                        </reportsDirectory>
                     </configuration>
                 </plugin>
             </plugins>
