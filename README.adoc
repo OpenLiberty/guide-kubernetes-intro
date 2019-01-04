@@ -21,6 +21,7 @@
 :source-highlighter: prettify
 :page-seo-title: Kubernetes tutorial
 :page-seo-description: How to deploy microservices to Kubernetes and manage your cluster
+:guide-author: Open Liberty
 = Deploying microservices to Kubernetes
 
 [.hidden]
@@ -354,18 +355,15 @@ This is not how you would want to update your applications when running in produ
 // =================================================================================================
 
 == Testing microservices that are running on {kube}
-
-
+pom.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/pom.xml [tags=**]
+----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
 in the ready state before proceeding further. The default properties defined in the [hotspot=1-201]`pom.xml` are:
-
-pom.xml
-[source, xml, linenums, role='code_column']
-----
-include::finish/pom.xml [tags=**;]
-----
 
 [cols="15, 100", options="header"]
 |===
