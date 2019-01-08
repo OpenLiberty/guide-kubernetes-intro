@@ -244,7 +244,7 @@ A Kubernetes resource definition is a yaml file that contains a description of a
 [role="code_command hotspot=1-69", subs="quotes"]
 ----
 Create the Kubernetes configuration file.
-`start/kubernetes.yaml`
+`kubernetes.yaml`
 ----
 
 kubernetes.yaml
@@ -299,7 +299,7 @@ The default hostname for minikube is {minikube-ip}. Otherwise it can be found us
 
 Then `curl` or visit the following URLs to access your microservices, substituting the appropriate hostname:
 
-- `{name-api}``
+- `{name-api}`
 - `{ping-api}/name-service`
 
 The first URL returns a brief greeting followed by the name of the pod that the `name` microservice
@@ -368,10 +368,10 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=29]cluster.ip            | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
-| [hotspot=30]name.kube.service     | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
-| [hotspot=31]name.node.port        | The NodePort of the {kube} Service `name-service`, 31000 by default.
-| [hotspot=32]ping.node.port        | The NodePort of the {kube} Service `ping-service`, 32000 by default.
+| [hotspot=35]`cluster.ip`            | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
+| [hotspot=36]`name.kube.service`     | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
+| [hotspot=37]`name.node.port`        | The NodePort of the {kube} Service `name-service`, 31000 by default.
+| [hotspot=38]`ping.node.port`        | The NodePort of the {kube} Service `ping-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
@@ -393,7 +393,7 @@ Run the integration tests against a cluster running at the default Minikube IP a
 mvn verify -Ddockerfile.skip=true
 ```
 
-You can also run the integration tests with an IP address of [hotspot=29]`192.168.99.100`:
+You can also run the integration tests with an IP address of [hotspot=35]`192.168.99.100`:
 [role='command']
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.100
@@ -479,7 +479,7 @@ minikube delete
 
 == Great work! You're done!
 
-You have just deployed two microservices to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
+You have just deployed two microservices to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster in Open Liberty.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 include::{common-includes}/finish.adoc[]
