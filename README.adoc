@@ -115,7 +115,7 @@ You will use a local single-node {kube} cluster.
 // =================================================================================================
 // Prerequisites
 // =================================================================================================
-
+[role='command']
 include::{common-includes}/kube-prereq.adoc[]
 
 // =================================================================================================
@@ -243,7 +243,7 @@ A Kubernetes resource definition is a yaml file that contains a description of a
 
 [role="code_command hotspot=1-69", subs="quotes"]
 ----
-Create the Kubernetes configuration file.
+#Create the Kubernetes configuration file.#
 `kubernetes.yaml`
 ----
 
