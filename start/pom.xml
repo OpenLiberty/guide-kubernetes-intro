@@ -116,9 +116,13 @@
                 <plugin>
                     <groupId>net.wasdev.wlp.maven.plugins</groupId>
                     <artifactId>liberty-maven-plugin</artifactId>
-                    <inherited>false</inherited>
                     <configuration>
-                        <skip>true</skip>
+                        <assemblyArtifact>
+                            <groupId>io.openliberty</groupId>
+                            <artifactId>openliberty-runtime</artifactId>
+                            <version>RELEASE</version>
+                            <type>zip</type>
+                        </assemblyArtifact>
                     </configuration>
                 </plugin>
                 <plugin>
