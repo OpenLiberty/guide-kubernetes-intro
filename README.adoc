@@ -241,7 +241,7 @@ Now that your Docker images are built, deploy them using a Kubernetes resource d
 
 A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you want to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
-[role="code_command hotspot=1-69", subs="quotes"]
+[role="code_command hotspot", subs="quotes"]
 ----
 #Create the Kubernetes configuration file.#
 `kubernetes.yaml`
