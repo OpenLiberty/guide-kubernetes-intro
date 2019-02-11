@@ -368,7 +368,7 @@ include::finish/pom.xml[tags=**]
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
-in the ready state before proceeding further. The default properties defined in the [hotspot=1-201]`pom.xml` are:
+in the ready state before proceeding further. The default properties defined in the [hotspot]`pom.xml` are:
 
 [cols="15, 100", options="header"]
 |===
