@@ -89,7 +89,7 @@ that define a set of rules by which the pods can be accessed. In a basic scenari
 service exposes a node port that can be used together with the cluster IP address to access
 the pods encapsulated by the service.
 
-To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation].
+To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
 
 
 // =================================================================================================
@@ -145,7 +145,7 @@ The starting Java project, which you can find in the `start` directory, is a mul
 project that's made up of the `name` and `ping` microservices. Each microservice resides in its own directory,
 `start/name` and `start/ping`. Each of these directories also contains a Dockerfile, which is necessary
 for building Docker images. If you're unfamiliar with Dockerfiles, check out the
-https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices] guide,
+https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices^] guide,
 which covers Dockerfiles in depth.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
