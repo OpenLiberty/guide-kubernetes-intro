@@ -458,7 +458,7 @@ include::{common-includes}/kube-minikube-teardown.adoc[]
 
 == Great work! You're done!
 
-You have just deployed two microservices to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster in Open Liberty.
+You have just deployed two microservices running in Open Liberty to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 
