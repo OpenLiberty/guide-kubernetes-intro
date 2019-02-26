@@ -462,4 +462,4 @@ You have just deployed two microservices running in Open Liberty to {kube}. You 
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 
-include::https://raw.githubusercontent.com/OpenLiberty/guides-common/multipane/attribution.adoc[subs="attributes"]
+include::{common-includes}/attribution.adoc[subs="attributes"]
