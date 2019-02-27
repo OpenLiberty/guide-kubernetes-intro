@@ -114,14 +114,7 @@
             <plugin>
                 <groupId>net.wasdev.wlp.maven.plugins</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <version>2.3</version>
                 <configuration>
-                    <assemblyArtifact>
-                        <groupId>io.openliberty</groupId>
-                        <artifactId>openliberty-runtime</artifactId>
-                        <version>${version.openliberty-runtime}</version>
-                        <type>zip</type>
-                    </assemblyArtifact>
                     <configFile>src/main/liberty/config/server.xml</configFile>
                     <include>usr</include>
                     <bootstrapProperties>
@@ -131,18 +124,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>create-default-server</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>create-server</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>install-app</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>install-apps</goal>
-                        </goals>
+                        <id>install-apps</id>
                         <configuration>
                             <appsDirectory>apps</appsDirectory>
                             <stripVersion>true</stripVersion>
@@ -152,10 +134,6 @@
                     </execution>
                     <execution>
                         <id>package-server</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>package-server</goal>
-                        </goals>
                         <configuration>
                             <packageFile>${project.build.directory}/defaultServer.zip</packageFile>
                         </configuration>

@@ -5,6 +5,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>net.wasdev.wlp.maven.parent</groupId>
+        <artifactId>liberty-maven-app-parent</artifactId>
+        <version>RELEASE</version>
+    </parent>
+
     <groupId>io.openliberty.guides</groupId>
     <artifactId>kube-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -48,12 +54,6 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.0</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.12</version>
@@ -62,14 +62,20 @@
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-rs-extension-providers</artifactId>
-                <version>3.1.11</version>
+                <version>3.2.6</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-rs-client</artifactId>
-                <version>3.1.11</version>
+                <version>3.2.6</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.0</version>
+                <scope>compile</scope>
             </dependency>
             <!-- Support for JDK 9 and above -->
             <dependency>
@@ -131,10 +137,13 @@
                 <plugin>
                     <groupId>net.wasdev.wlp.maven.plugins</groupId>
                     <artifactId>liberty-maven-plugin</artifactId>
-                    <version>2.3</version>
-                    <inherited>false</inherited>
                     <configuration>
-                        <skip>true</skip>
+                        <assemblyArtifact>
+                            <groupId>io.openliberty</groupId>
+                            <artifactId>openliberty-runtime</artifactId>
+                            <version>RELEASE</version>
+                            <type>zip</type>
+                        </assemblyArtifact>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -158,7 +167,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${version.maven-surefire-plugin}</version>
+                    <version>3.0.0-M1</version>
                     <executions>
                         <execution>
                             <phase>test</phase>
@@ -167,7 +176,9 @@
                                 <excludes>
                                     <exclude>**/it/**</exclude>
                                 </excludes>
-                                <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
+                                <reportsDirectory>
+                                    ${project.build.directory}/test-reports/unit
+                                </reportsDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -176,7 +187,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${version.maven-failsafe-plugin}</version>
+                    <version>3.0.0-M1</version>
                     <executions>
                         <execution>
                             <phase>integration-test</phase>
@@ -190,10 +201,18 @@
                                 </includes>
                                 <systemPropertyVariables>
                                     <cluster.ip>${cluster.ip}</cluster.ip>
-                                    <name.ingress.path>${name.ingress.path}</name.ingress.path>
-                                    <name.node.port>${name.node.port}</name.node.port>
-                                    <name.kube.service>${name.kube.service}</name.kube.service>
-                                    <ping.ingress.path>${ping.ingress.path}</ping.ingress.path>
+                                    <name.ingress.path>
+                                        ${name.ingress.path}
+                                    </name.ingress.path>
+                                    <name.node.port>
+                                        ${name.node.port}
+                                    </name.node.port>
+                                    <name.kube.service>
+                                        ${name.kube.service}
+                                    </name.kube.service>
+                                    <ping.ingress.path>
+                                        ${ping.ingress.path}
+                                    </ping.ingress.path>
                                     <ping.node.port>${ping.node.port}</ping.node.port>
                                 </systemPropertyVariables>
                             </configuration>
@@ -206,8 +225,12 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <summaryFile>${project.build.directory}/test-reports/it/failsafe-summary.xml</summaryFile>
-                        <reportsDirectory>${project.build.directory}/test-reports/it</reportsDirectory>
+                        <summaryFile>
+                            ${project.build.directory}/test-reports/it/failsafe-summary.xml
+                        </summaryFile>
+                        <reportsDirectory>
+                            ${project.build.directory}/test-reports/it
+                        </reportsDirectory>
                     </configuration>
                 </plugin>
             </plugins>

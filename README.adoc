@@ -1,7 +1,7 @@
 // INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
 // INSTRUCTION: The copyright statement must appear at the top of the file
 //
-// Copyright (c) 2018 IBM Corporation and others.
+// Copyright (c) 2018, 2019 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -10,17 +10,18 @@
 //     IBM Corporation
 //
 :projectid: kubernetes-intro
-:page-layout: guide
+:page-layout: guide-multipane
 :page-duration: 25 minutes
 :page-releasedate: 2018-10-05
 :page-description: Explore how to deploy microservices to Kubernetes and manage your cluster.
-:page-tags: ['microservices', 'Kubernetes', 'Docker', 'containers', 'kubectl', 'Minikube']
+:page-tags: ['Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
 :source-highlighter: prettify
 :page-seo-title: Kubernetes tutorial
 :page-seo-description: How to deploy microservices to Kubernetes and manage your cluster
+:guide-author: Open Liberty
 = Deploying microservices to Kubernetes
 
 [.hidden]
@@ -88,7 +89,7 @@ that define a set of rules by which the pods can be accessed. In a basic scenari
 service exposes a node port that can be used together with the cluster IP address to access
 the pods encapsulated by the service.
 
-To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation].
+To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
 
 
 // =================================================================================================
@@ -114,13 +115,13 @@ You will use a local single-node {kube} cluster.
 // =================================================================================================
 // Prerequisites
 // =================================================================================================
-
+[role='command']
 include::{common-includes}/kube-prereq.adoc[]
 
 // =================================================================================================
 // Getting Started
 // =================================================================================================
-
+[role='command']
 include::{common-includes}/gitclone.adoc[]
 
 // no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
@@ -129,7 +130,7 @@ include::{common-includes}/gitclone.adoc[]
 // =================================================================================================
 // Staring and preparing your cluster for deployment
 // =================================================================================================
-
+[role='command']
 include::{common-includes}/kube-start.adoc[]
 
 // =================================================================================================
@@ -144,7 +145,7 @@ The starting Java project, which you can find in the `start` directory, is a mul
 project that's made up of the `name` and `ping` microservices. Each microservice resides in its own directory,
 `start/name` and `start/ping`. Each of these directories also contains a Dockerfile, which is necessary
 for building Docker images. If you're unfamiliar with Dockerfiles, check out the
-https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices] guide,
+https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices^] guide,
 which covers Dockerfiles in depth.
 
 If you're familiar with Maven and Docker, you might be tempted to run a Maven build first and then
@@ -155,7 +156,7 @@ picks up the Dockerfile located in the same directory as its POM file and builds
 If you're using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build.
 
 Navigate to the `start` directory and run the following command:
-
+[role='command']
 ```
 mvn package
 ```
@@ -166,7 +167,7 @@ as the POM file.
 
 During the build, you'll see various Docker messages describing what images are being downloaded and
 built. When the build finishes, run the following command to list all local Docker images:
-
+[role='command']
 ```
 docker images
 ```
@@ -240,23 +241,33 @@ Now that your Docker images are built, deploy them using a Kubernetes resource d
 
 A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you want to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
-To deploy the `name` and `ping` applications, first create the `kubernetes.yaml` file in the `start` directory:
+[role="code_command hotspot", subs="quotes"]
+----
+#Create the Kubernetes configuration file.#
+`kubernetes.yaml`
+----
 
-[source, yaml]
+kubernetes.yaml
+[source, yaml, linenums, role="code_column"]
 ----
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the `label`, `image`, and `containerPort` fields. The `label` is a way for a {kube} service to reference specific deployments. The `image` is the name and tag of the docker image that you want to use for this container. Finally, the `containerPort` is the port that your container exposes for purposes of accessing your application. For the services, the key point to understand is that they expose your deployments. The binding between deployments and services is specified by the use of labels -- in this case the `app` label. You will also notice the service has a type of `NodePort`. This means you can access these services from outside of your cluster via a specific port. In this case, the ports will be `31000` and `32000`, but it can also be randomized if the `nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application. 
+For the services, the key point to understand is that they expose your deployments. 
+The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` label. 
+You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`. 
+This means you can access these services from outside of your cluster via a specific port. 
+In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=55 hotspot=69]`nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
-
+[role='command']
 ```
 kubectl apply -f kubernetes.yaml
 ```
 
 When the apps are deployed, run the following command to check the status of your pods:
-
+[role='command']
 ```
 kubectl get pods
 ```
@@ -271,7 +282,7 @@ ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
 You can also inspect individual pods in more detail by running the following command:
-
+[role='command']
 ```
 kubectl describe pods
 ```
@@ -293,8 +304,8 @@ The default hostname for minikube is {minikube-ip}. Otherwise it can be found us
 
 Then `curl` or visit the following URLs to access your microservices, substituting the appropriate hostname:
 
-- {name-api}
-- {ping-api}/name-service
+- `{name-api}`
+- `{ping-api}/name-service`
 
 The first URL returns a brief greeting followed by the name of the pod that the `name` microservice
 runs in. The second URL returns `pong` if it received a good response from the `name-service`
@@ -310,13 +321,13 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
 As an example, scale the `name` Deployment to 3 pods by running the following command:
-
+[role='command']
 ```
 kubectl scale deployment/name-deployment --replicas=3
 ```
 
 Use the following command to verify that two new pods have been created.
-
+[role='command']
 ```
 kubectl get pods
 ```
@@ -335,7 +346,7 @@ Wait for your two new pods to be in the ready state, then `curl` or visit the `{
 == Redeploy microservices
 
 When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one name pod after you redeploy since you're deleting all of the existing pods.
-
+[role='command']
 ```
 mvn package
 kubectl delete -f kubernetes.yaml
@@ -349,18 +360,23 @@ This is not how you would want to update your applications when running in produ
 // =================================================================================================
 
 == Testing microservices that are running on {kube}
+pom.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/pom.xml[tags=**]
+----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
 occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
-in the ready state before proceeding further. The default properties defined in the `pom.xml` are:
+in the ready state before proceeding further. The default properties defined in the [hotspot]`pom.xml` are:
 
 [cols="15, 100", options="header"]
 |===
-| *Property*        | *Description*
-| cluster.ip        | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
-| name.kube.service | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
-| name.node.port    | The NodePort of the {kube} Service `name-service`, 31000 by default.
-| ping.node.port    | The NodePort of the {kube} Service `ping-service`, 32000 by default.
+| *Property*                        | *Description*
+| [hotspot=35]`cluster.ip`            | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
+| [hotspot=36]`name.kube.service`     | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
+| [hotspot=37]`name.node.port`        | The NodePort of the {kube} Service `name-service`, 31000 by default.
+| [hotspot=38]`ping.node.port`        | The NodePort of the {kube} Service `ping-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
@@ -369,7 +385,7 @@ Navigate back to the `start` directory.
 [system]#*{win} | {mac}*#
 
 Run the integration tests against a cluster running with a hostname of `localhost`:
-
+[role='command']
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
 ```
@@ -377,13 +393,13 @@ mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
 [system]#*{linux}*#
 
 Run the integration tests against a cluster running at the default Minikube IP address:
-
+[role='command']
 ```
 mvn verify -Ddockerfile.skip=true
 ```
 
-You can also run the integration tests with an IP address of `192.168.99.100`:
-
+You can also run the integration tests with an IP address of [hotspot=35]`192.168.99.100`:
+[role='command']
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.100
 ```
@@ -427,12 +443,12 @@ Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 == Tearing down the environment
 
 When you no longer need your deployed microservices, you can delete all {kube} resources by running the `kubectl delete` command:
-
+[role='command']
 ```
 kubectl delete -f kubernetes.yaml
 ```
 
-
+[role='command']
 include::{common-includes}/kube-minikube-teardown.adoc[]
 
 
@@ -442,11 +458,8 @@ include::{common-includes}/kube-minikube-teardown.adoc[]
 
 == Great work! You're done!
 
-You have just deployed two microservices to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube}
-cluster.
+You have just deployed two microservices running in Open Liberty to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
-include::{common-includes}/finish.adoc[]
 
-// DO NO CREATE ANYMORE SECTIONS AT THIS POINT
-// Related guides will be added in automatically here if you included them in ":page-related-guides"
+include::{common-includes}/attribution.adoc[subs="attributes"]
