@@ -167,7 +167,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>${version.maven-surefire-plugin}</version>
                     <executions>
                         <execution>
                             <phase>test</phase>
@@ -187,7 +187,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>${version.maven-failsafe-plugin}</version>
                     <executions>
                         <execution>
                             <phase>integration-test</phase>
