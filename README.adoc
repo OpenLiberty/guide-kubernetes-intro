@@ -55,7 +55,7 @@ further leveraged for all steps of a continuous delivery pipeline.
 
 Managing individual containers can be challenging.  A few containers used for development by a small team might not pose a problem,
 but managing hundreds of containers can give even a large team of experienced developers a headache. {kube} is a primary
-tool for development in containerized
+tool for deployment in containerized
 environments. It handles scheduling, deployment, as well as mass deletion and creation of containers.
 It provides update rollout abilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
