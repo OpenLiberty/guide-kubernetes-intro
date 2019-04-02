@@ -40,7 +40,7 @@ public class SystemEndpointTest {
     @BeforeClass
     public static void oneTimeSetup() {
         String clusterIp = System.getProperty("cluster.ip");
-        String nodePort = System.getProperty("name.node.port");
+        String nodePort = System.getProperty("system.node.port");
         clusterUrl = "http://" + clusterIp + ":" + nodePort + "/system/properties/";
     }
     

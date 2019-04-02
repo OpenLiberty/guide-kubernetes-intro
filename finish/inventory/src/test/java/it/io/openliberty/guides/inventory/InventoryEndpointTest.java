@@ -41,10 +41,10 @@ public class InventoryEndpointTest {
     @BeforeClass
     public static void oneTimeSetup() {
         String clusterIp = System.getProperty("cluster.ip");
-        String invNodePort = System.getProperty("ping.node.port");
-        String sysNodePort = System.getProperty("name.node.port");
+        String invNodePort = System.getProperty("inventory.node.port");
+        String sysNodePort = System.getProperty("system.node.port");
         
-        sysKubeService = System.getProperty("name.kube.service");
+        sysKubeService = System.getProperty("system.kube.service");
         invUrl = "http://" + clusterIp + ":" + invNodePort + "/inventory/systems/";
         sysUrl = "http://" + clusterIp + ":" + sysNodePort + "/system/properties/";
     }
@@ -107,13 +107,13 @@ public class InventoryEndpointTest {
 
         int expected = 1;
         int actual = obj.getInt("total");
-        assertEquals("The inventory should have one entry for system-service", expected,
+        assertEquals("The inventory should have one entry for " + sysKubeService, expected,
                     actual);
 
         boolean serviceExists = obj.getJsonArray("systems").getJsonObject(0)
                                     .get("hostname").toString()
-                                    .contains("system-service");
-        assertTrue("A host was registered, but it was not system-service",
+                                    .contains(sysKubeService);
+        assertTrue("A host was registered, but it was not " + sysKubeService,
                 serviceExists);
 
         response.close();
@@ -137,12 +137,12 @@ public class InventoryEndpointTest {
 
         String osNameFromInventory = jsonFromInventory.getString("os.name");
         String osNameFromSystem = jsonFromSystem.getString("os.name");
-        this.assertProperty("os.name", "system-service", osNameFromSystem,
+        this.assertProperty("os.name", sysKubeService, osNameFromSystem,
                             osNameFromInventory);
 
         String userNameFromInventory = jsonFromInventory.getString("user.name");
         String userNameFromSystem = jsonFromSystem.getString("user.name");
-        this.assertProperty("user.name", "system-service", userNameFromSystem,
+        this.assertProperty("user.name", sysKubeService, userNameFromSystem,
                             userNameFromInventory);
 
         invResponse.close();
@@ -237,7 +237,7 @@ public class InventoryEndpointTest {
         response.close();
 
         Response targetResponse = client
-            .target(invUrl + "system-service")
+            .target(invUrl + sysKubeService)
             .request()
             .get();
 

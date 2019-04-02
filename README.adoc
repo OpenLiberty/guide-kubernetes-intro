@@ -103,8 +103,8 @@ interface for {kube}. The `kubectl` CLI is your primary tool for communicating w
 {kube} cluster.
 
 The two microservices you will deploy are called `system` and `inventory`. The `system` microservice simply
-displays a brief greeting and the name of the
-container that it runs in, making it easy to distinguish it from its other replicas. The `inventory` microservice
+returns the JVM systems properties of the container it is running in and it returns the Pod's name in the HTTP header
+making it easy to distinguish it from its other replicas. The `inventory` microservice
 adds the properties from the `system` microservice to the inventory. This demonstrates
 how communication can be established between pods inside a cluster.
 
@@ -344,7 +344,7 @@ Wait for your two new pods to be in the ready state, then `curl -I` or visit the
 
 == Redeploy microservices
 
-When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one name pod after you redeploy since you're deleting all of the existing pods.
+When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one system pod after you redeploy since you're deleting all of the existing pods.
 [role='command']
 ```
 mvn clean package
@@ -372,10 +372,10 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=35]`cluster.ip`            | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
-| [hotspot=36]`name.kube.service`     | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
-| [hotspot=37]`name.node.port`        | The NodePort of the {kube} Service `name-service`, 31000 by default.
-| [hotspot=38]`ping.node.port`        | The NodePort of the {kube} Service `ping-service`, 32000 by default.
+| [hotspot=35]`cluster.ip`            | IP or hostname for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
+| [hotspot=36]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=37]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=38]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
@@ -386,21 +386,15 @@ Navigate back to the `start` directory.
 Run the integration tests against a cluster running with a hostname of `localhost`:
 [role='command']
 ```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
+mvn verify -Ddockerfile.skip=true
 ```
 
 [system]#*{linux}*#
 
-Run the integration tests against a cluster running at the default Minikube IP address:
+Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
-mvn verify -Ddockerfile.skip=true
-```
-
-You can also run the integration tests with an IP address of [hotspot=35]`192.168.99.100`:
-[role='command']
-```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.100
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 ```
 ****
 
