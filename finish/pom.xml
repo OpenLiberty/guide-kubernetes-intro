@@ -60,6 +60,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.json</artifactId>
+                <version>1.0.4</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-rs-extension-providers</artifactId>
                 <version>3.2.6</version>
@@ -238,8 +244,8 @@
     </build>
 
     <modules>
-        <module>name</module>
-        <module>ping</module>
+        <module>system</module>
+        <module>inventory</module>
     </modules>
 
 </project>
