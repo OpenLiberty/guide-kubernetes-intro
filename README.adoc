@@ -102,9 +102,9 @@ You will then manage your deployed microservices using the `kubectl` command lin
 interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your
 {kube} cluster.
 
-The two microservices you will deploy are called `system` and `inventory`. The `system` microservice simply
-returns the JVM systems properties of the container it is running in and it returns the Pod's name in the HTTP header
-making it easy to distinguish it from its other replicas. The `inventory` microservice
+The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
+returns the JVM systems properties of the running container and it returns the pod's name in the HTTP header
+making replicas easy to distinquish from each other. The `inventory` microservice
 adds the properties from the `system` microservice to the inventory. This demonstrates
 how communication can be established between pods inside a cluster.
 
@@ -307,6 +307,7 @@ Then `curl` or visit the following URLs to access your microservices, substituti
 - `{inventory-api}/system-service`
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
+To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
 The second URL adds proprties from `system-service` to the inventory.
 {kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
 depending on whether `kube-service` is a valid {kube} Service that can be accessed.
