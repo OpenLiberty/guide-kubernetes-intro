@@ -103,7 +103,7 @@ interface for {kube}. The `kubectl` CLI is your primary tool for communicating w
 {kube} cluster.
 
 The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
-returns the JVM systems properties of the running container and it returns the pod's name in the HTTP header
+returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
 making replicas easy to distinquish from each other. The `inventory` microservice
 adds the properties from the `system` microservice to the inventory. This demonstrates
 how communication can be established between pods inside a cluster.
