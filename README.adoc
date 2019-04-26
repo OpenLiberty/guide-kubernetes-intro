@@ -59,7 +59,7 @@ environments. It handles scheduling, deployment, as well as mass deletion and cr
 It provides update rollout abilities on a large scale that would otherwise prove extremely tedious
 to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
 While you could destroy and then re-create these containers, you can also run a short one-line
-command to have {kube} make all those updates for you. Of course this is just a simple example.
+command to have {kube} make all those updates for you. Of course, this is just a simple example.
 {kube} has a lot more to offer.
 
 // {kube} provides much other functionality
@@ -293,21 +293,21 @@ Next you will make requests to your services.
 ****
 [system]#*{win} | {mac}*#
 
-The default hostname for Docker Desktop is `localhost`.
+The default host name for Docker Desktop is `localhost`.
 
 [system]#*{linux}*#
 
-The default hostname for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
+The default host name for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
 ****
 
-Then `curl` or visit the following URLs to access your microservices, substituting the appropriate hostname:
+Then `curl` or visit the following URLs to access your microservices, substituting the appropriate host name:
 
 - `{system-api}`
 - `{inventory-api}/system-service`
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
-The second URL adds proprties from `system-service` to the inventory.
+The second URL adds properties from `system-service` to the inventory.
 {kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
 depending on whether `kube-service` is a valid {kube} Service that can be accessed.
 
@@ -319,7 +319,7 @@ depending on whether `kube-service` is a valid {kube} Service that can be access
 
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
-As an example, scale the `system` Deployment to 3 pods by running the following command:
+As an example, scale the `system` Deployment to three pods by running the following command:
 [role='command']
 ```
 kubectl scale deployment/system-deployment --replicas=3
@@ -372,7 +372,7 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=35]`cluster.ip`            | IP or hostname for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
+| [hotspot=35]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
 | [hotspot=36]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
 | [hotspot=37]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
 | [hotspot=38]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
@@ -383,7 +383,7 @@ Navigate back to the `start` directory.
 ****
 [system]#*{win} | {mac}*#
 
-Run the integration tests against a cluster running with a hostname of `localhost`:
+Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
 ```
 mvn verify -Ddockerfile.skip=true
