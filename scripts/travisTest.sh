@@ -17,12 +17,10 @@ kubectl get pods
 
 echo `minikube ip`
 
-curl http://`minikube ip`:31000/api/name
-
-curl http://`minikube ip`:32000/api/ping/name-service
+curl http://`minikube ip`:31000/system/properties
+curl http://`minikube ip`:32000/inventory/systems
 
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep name)
-
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep ping)
+kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
+kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)

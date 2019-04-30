@@ -35,9 +35,8 @@ Deploy microservices in Open Liberty Docker containers to Kubernetes and manage 
 :win: WINDOWS
 :mac: MAC
 :linux: LINUX
-:name-api: http://[hostname]:31000/api/name
-:ping-api: http://[hostname]:32000/api/ping
-
+:system-api: http://[hostname]:31000/system/properties
+:inventory-api: http://[hostname]:32000/inventory/systems
 
 // =================================================================================================
 // What is {kube}
@@ -103,10 +102,10 @@ You will then manage your deployed microservices using the `kubectl` command lin
 interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your
 {kube} cluster.
 
-The two microservices you will deploy are called `name` and `ping`. The `name` microservice simply
-displays a brief greeting and the name of the
-container that it runs in, making it easy to distinguish it from its other replicas. The `ping` microservice
-simply pings the {kube} Service that encapsulates the pods running the `name` microservice. This demonstrates
+The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
+returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
+making replicas easy to distinguish from each other. The `inventory` microservice
+adds the properties from the `system` microservice to the inventory. This demonstrates
 how communication can be established between pods inside a cluster.
 
 You will use a local single-node {kube} cluster.
@@ -142,8 +141,8 @@ include::{common-includes}/kube-start.adoc[]
 The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
 
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven
-project that's made up of the `name` and `ping` microservices. Each microservice resides in its own directory,
-`start/name` and `start/ping`. Each of these directories also contains a Dockerfile, which is necessary
+project that's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
+`start/system` and `start/inventory`. Each of these directories also contains a Dockerfile, which is necessary
 for building Docker images. If you're unfamiliar with Dockerfiles, check out the
 https://openliberty.io/guides/docker.html[Using Docker containers to develop microservices^] guide,
 which covers Dockerfiles in depth.
@@ -153,12 +152,11 @@ use the `.war` file produced by the build to build a Docker image. While it is b
 approach, we've setup the projects such that this process is automated
 as a part of a single Maven build. This is done by using the `dockerfile-maven` plug-in, which automatically
 picks up the Dockerfile located in the same directory as its POM file and builds a Docker image from it.
-If you're using Docker for Windows ensure that, on the Docker for Windows _General Setting_ page, the option is set to `Expose daemon on tcp://localhost:2375 without TLS`. This is required by the `dockerfile-maven` part of the build.
 
 Navigate to the `start` directory and run the following command:
 [role='command']
 ```
-mvn package
+mvn clean package
 ```
 
 The `package` goal automatically invokes the `dockerfile-maven:build` goal, which runs during the
@@ -172,7 +170,7 @@ built. When the build finishes, run the following command to list all local Dock
 docker images
 ```
 
-Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed among them, for example:
+Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
 
 ****
 [system]#*{win} | {mac}*#
@@ -180,8 +178,8 @@ Verify that the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images are listed am
 [source, role="no_copy"]
 ----
 REPOSITORY                                                       TAG
-ping                                                             1.0-SNAPSHOT
-name                                                             1.0-SNAPSHOT
+inventory                                                        1.0-SNAPSHOT
+system                                                           1.0-SNAPSHOT
 open-liberty                                                     latest
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
 k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
@@ -199,8 +197,8 @@ k8s.gcr.io/pause-amd64                                           3.1
 [source, role="no_copy"]
 ----
 REPOSITORY                                                       TAG
-ping                                                             1.0-SNAPSHOT
-name                                                             1.0-SNAPSHOT
+inventory                                                        1.0-SNAPSHOT
+system                                                           1.0-SNAPSHOT
 open-liberty                                                     latest
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.0
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.0
@@ -226,7 +224,7 @@ k8s.gcr.io/pause-amd64                                           3.0
 ----
 ****
 
-If you don't see the `name:1.0-SNAPSHOT` and `ping:1.0-SNAPSHOT` images, then check the Maven
+If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
 In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon and not your host's as described in the previous section.
 
@@ -276,9 +274,9 @@ You'll see an output similar to the following if all the pods are healthy and ru
 
 [source, role="no_copy"]
 ----
-NAME                               READY     STATUS    RESTARTS   AGE
-name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          15s
-ping-deployment-645767664f-nbtd9   1/1       Running   0          15s
+NAME                                    READY     STATUS    RESTARTS   AGE
+system-deployment-6bd97d9bf6-4ccds      1/1       Running   0          15s
+inventory-deployment-645767664f-nbtd9   1/1       Running   0          15s
 ----
 
 You can also inspect individual pods in more detail by running the following command:
@@ -304,13 +302,14 @@ The default hostname for minikube is {minikube-ip}. Otherwise it can be found us
 
 Then `curl` or visit the following URLs to access your microservices, substituting the appropriate hostname:
 
-- `{name-api}`
-- `{ping-api}/name-service`
+- `{system-api}`
+- `{inventory-api}/system-service`
 
-The first URL returns a brief greeting followed by the name of the pod that the `name` microservice
-runs in. The second URL returns `pong` if it received a good response from the `name-service`
-{kube} Service. Visiting `{ping-api}/[kube-service]` in general returns either
-a good or a bad response depending on whether `kube-service` is a valid {kube} Service that can be accessed.
+The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
+To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
+The second URL adds proprties from `system-service` to the inventory.
+{kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
+depending on whether `kube-service` is a valid {kube} Service that can be accessed.
 
 // =================================================================================================
 // Scaling a deployment
@@ -320,10 +319,10 @@ a good or a bad response depending on whether `kube-service` is a valid {kube} S
 
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
-As an example, scale the `name` Deployment to 3 pods by running the following command:
+As an example, scale the `system` Deployment to 3 pods by running the following command:
 [role='command']
 ```
-kubectl scale deployment/name-deployment --replicas=3
+kubectl scale deployment/system-deployment --replicas=3
 ```
 
 Use the following command to verify that two new pods have been created.
@@ -334,21 +333,21 @@ kubectl get pods
 
 [source, role="no_copy"]
 ----
-NAME                               READY     STATUS    RESTARTS   AGE
-name-deployment-6bd97d9bf6-4ccds   1/1       Running   0          1m
-name-deployment-6bd97d9bf6-jf9rs   1/1       Running   0          25s
-name-deployment-6bd97d9bf6-x4zth   1/1       Running   0          25s
-ping-deployment-645767664f-nbtd9   1/1       Running   0          1m
+NAME                                    READY     STATUS    RESTARTS   AGE
+system-deployment-6bd97d9bf6-4ccds      1/1       Running   0          1m
+system-deployment-6bd97d9bf6-jf9rs      1/1       Running   0          25s
+system-deployment-6bd97d9bf6-x4zth      1/1       Running   0          25s
+inventory-deployment-645767664f-nbtd9   1/1       Running   0          1m
 ----
 
-Wait for your two new pods to be in the ready state, then `curl` or visit the `{name-api}` URL. You'll notice that the service will respond with a different name when you call it multiple times. This is because there are now three pods running all serving the `name` application. Similarly, to descale your deployments you can use the same scale command with fewer replicas.
+Wait for your two new pods to be in the ready state, then `curl -I` or visit the `{system-api}` URL. You'll notice that the `X-Pod-Name` header will have a different value when you call it multiple times. This is because there are now three pods running all serving the `system` application. Similarly, to descale your deployments you can use the same scale command with fewer replicas.
 
 == Redeploy microservices
 
-When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one name pod after you redeploy since you're deleting all of the existing pods.
+When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one system pod after you redeploy since you're deleting all of the existing pods.
 [role='command']
 ```
-mvn package
+mvn clean package
 kubectl delete -f kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
@@ -373,10 +372,10 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=35]`cluster.ip`            | IP or hostname for your cluster, `{minikube-ip}` by default, which is appropriate when using Minikube.
-| [hotspot=36]`name.kube.service`     | Name of the {kube} Service wrapping the `name` pods, `name-service` by default.
-| [hotspot=37]`name.node.port`        | The NodePort of the {kube} Service `name-service`, 31000 by default.
-| [hotspot=38]`ping.node.port`        | The NodePort of the {kube} Service `ping-service`, 32000 by default.
+| [hotspot=35]`cluster.ip`            | IP or hostname for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
+| [hotspot=36]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=37]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=38]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
@@ -387,21 +386,15 @@ Navigate back to the `start` directory.
 Run the integration tests against a cluster running with a hostname of `localhost`:
 [role='command']
 ```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=localhost
+mvn verify -Ddockerfile.skip=true
 ```
 
 [system]#*{linux}*#
 
-Run the integration tests against a cluster running at the default Minikube IP address:
+Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
-mvn verify -Ddockerfile.skip=true
-```
-
-You can also run the integration tests with an IP address of [hotspot=35]`192.168.99.100`:
-[role='command']
-```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=192.168.99.100
+mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 ```
 ****
 
@@ -414,12 +407,12 @@ If the tests pass, you'll see an output similar to the following for each servic
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.name.NameEndpointTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.673 sec - in it.io.openliberty.guides.name.NameEndpointTest
+Running it.io.openliberty.guides.system.SystemEndpointTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.567 s - in it.io.openliberty.guides.system.SystemEndpointTest
 
-Results :
+Results:
 
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 [source, role="no_copy"]
@@ -427,12 +420,12 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.ping.PingEndpointTest
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.222 sec - in it.io.openliberty.guides.ping.PingEndpointTest
+Running it.io.openliberty.guides.inventory.InventoryEndpointTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.893 s - in it.io.openliberty.guides.inventory.InventoryEndpointTest
 
-Results :
+Results:
 
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 
