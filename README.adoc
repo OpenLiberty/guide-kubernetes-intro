@@ -172,9 +172,19 @@ docker images
 
 Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
 
-****
-[system]#*{win} | {mac}*#
+[.tab_link]
+[.windows_link]
+`*WINDOWS*`
+[.tab_link]
+[.mac_link]
+`*MAC*`
+[.tab_link]
+[.linux_link]
+`*LINUX*`
 
+[.tab_content]
+[.windows_section]
+--
 [source, role="no_copy"]
 ----
 REPOSITORY                                                       TAG
@@ -191,9 +201,34 @@ k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
 k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
 k8s.gcr.io/pause-amd64                                           3.1
 ----
+--
 
-[system]#*{linux}*#
 
+[.tab_content]
+[.mac_section]
+--
+[source, role="no_copy"]
+----
+REPOSITORY                                                       TAG
+inventory                                                        1.0-SNAPSHOT
+system                                                           1.0-SNAPSHOT
+open-liberty                                                     latest
+k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
+k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
+k8s.gcr.io/kube-controller-manager-amd64                         v1.10.3
+k8s.gcr.io/kube-apiserver-amd64                                  v1.10.3
+k8s.gcr.io/etcd-amd64                                            3.1.12
+k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.8
+k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
+k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
+k8s.gcr.io/pause-amd64                                           3.1
+----
+--
+
+
+[.tab_content]
+[.linux_section]
+--
 [source, role="no_copy"]
 ----
 REPOSITORY                                                       TAG
@@ -222,7 +257,8 @@ k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.4
 k8s.gcr.io/etcd-amd64                                            3.0.17
 k8s.gcr.io/pause-amd64                                           3.0
 ----
-****
+--
+
 
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
@@ -290,15 +326,35 @@ free to inspect all other resources.
 
 Next you will make requests to your services.
 
-****
-[system]#*{win} | {mac}*#
+[.tab_link]
+[.windows_link]
+`*WINDOWS*`
+[.tab_link]
+[.mac_link]
+`*MAC*`
+[.tab_link]
+[.linux_link]
+`*LINUX*`
 
+[.tab_content]
+[.windows_section]
+--
 The default host name for Docker Desktop is `localhost`.
+--
 
-[system]#*{linux}*#
 
+[.tab_content]
+[.mac_section]
+--
+The default host name for Docker Desktop is `localhost`.
+--
+
+
+[.tab_content]
+[.linux_section]
+--
 The default host name for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
-****
+--
 
 Then `curl` or visit the following URLs to access your microservices, substituting the appropriate host name:
 
@@ -380,23 +436,49 @@ in the ready state before proceeding further. The default properties defined in 
 
 Navigate back to the `start` directory.
 
-****
-[system]#*{win} | {mac}*#
+[.tab_link]
+[.windows_link]
+`*WINDOWS*`
+[.tab_link]
+[.mac_link]
+`*MAC*`
+[.tab_link]
+[.linux_link]
+`*LINUX*`
+
+[.tab_content]
+[.windows_section]
+--
 
 Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
 ```
 mvn verify -Ddockerfile.skip=true
 ```
+--
 
-[system]#*{linux}*#
 
+[.tab_content]
+[.mac_section]
+--
+
+Run the integration tests against a cluster running with a host name of `localhost`:
+[role='command']
+```
+mvn verify -Ddockerfile.skip=true
+```
+--
+
+
+[.tab_content]
+[.linux_section]
+--
 Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
 mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
 ```
-****
+--
 
 The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
 
