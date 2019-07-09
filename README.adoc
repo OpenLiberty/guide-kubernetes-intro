@@ -172,18 +172,14 @@ docker images
 
 Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
 
-[.tab_link]
-[.windows_link]
+[.tab_link.windows_link]
 `*WINDOWS*`
-[.tab_link]
-[.mac_link]
+[.tab_link.mac_link]
 `*MAC*`
-[.tab_link]
-[.linux_link]
+[.tab_link.linux_link]
 `*LINUX*`
 
-[.tab_content]
-[.windows_section]
+[.tab_content.windows_section.mac_section]
 --
 [source, role="no_copy"]
 ----
@@ -203,31 +199,7 @@ k8s.gcr.io/pause-amd64                                           3.1
 ----
 --
 
-
-[.tab_content]
-[.mac_section]
---
-[source, role="no_copy"]
-----
-REPOSITORY                                                       TAG
-inventory                                                        1.0-SNAPSHOT
-system                                                           1.0-SNAPSHOT
-open-liberty                                                     latest
-k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
-k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
-k8s.gcr.io/kube-controller-manager-amd64                         v1.10.3
-k8s.gcr.io/kube-apiserver-amd64                                  v1.10.3
-k8s.gcr.io/etcd-amd64                                            3.1.12
-k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.8
-k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
-k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
-k8s.gcr.io/pause-amd64                                           3.1
-----
---
-
-
-[.tab_content]
-[.linux_section]
+[.tab_content.linux_section]
 --
 [source, role="no_copy"]
 ----
@@ -326,32 +298,19 @@ free to inspect all other resources.
 
 Next you will make requests to your services.
 
-[.tab_link]
-[.windows_link]
+[.tab_link.windows_link]
 `*WINDOWS*`
-[.tab_link]
-[.mac_link]
+[.tab_link.mac_link]
 `*MAC*`
-[.tab_link]
-[.linux_link]
+[.tab_link.linux_link]
 `*LINUX*`
 
-[.tab_content]
-[.windows_section]
+[.tab_content.windows_section.mac_section]
 --
 The default host name for Docker Desktop is `localhost`.
 --
 
-
-[.tab_content]
-[.mac_section]
---
-The default host name for Docker Desktop is `localhost`.
---
-
-
-[.tab_content]
-[.linux_section]
+[.tab_content.linux_section]
 --
 The default host name for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
 --
@@ -436,18 +395,15 @@ in the ready state before proceeding further. The default properties defined in 
 
 Navigate back to the `start` directory.
 
-[.tab_link]
-[.windows_link]
+[.tab_link.windows_link]
 `*WINDOWS*`
-[.tab_link]
-[.mac_link]
+[.tab_link.mac_link]
 `*MAC*`
-[.tab_link]
-[.linux_link]
+[.tab_link.linux_link]
 `*LINUX*`
 
 [.tab_content]
-[.windows_section]
+[.windows_section.mac_section]
 --
 
 Run the integration tests against a cluster running with a host name of `localhost`:
@@ -457,21 +413,7 @@ mvn verify -Ddockerfile.skip=true
 ```
 --
 
-
-[.tab_content]
-[.mac_section]
---
-
-Run the integration tests against a cluster running with a host name of `localhost`:
-[role='command']
-```
-mvn verify -Ddockerfile.skip=true
-```
---
-
-
-[.tab_content]
-[.linux_section]
+[.tab_content.linux_section]
 --
 Run the integration tests with the IP address for Minikube:
 [role='command']
