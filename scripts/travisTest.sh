@@ -9,6 +9,11 @@ set -euxo pipefail
 
 mvn -q package
 
+docker pull open-liberty
+
+docker build -t system system/.
+docker build -t inventory inventory/.
+
 kubectl apply -f kubernetes.yaml
 
 sleep 120
