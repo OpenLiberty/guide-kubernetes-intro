@@ -157,8 +157,8 @@ mvn clean package
 Next, run the `docker build` commands to build container images for your application:
 [role='command']
 ```
-docker build -t system system/.
-docker build -t inventory inventory/.
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
 The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. 
@@ -387,7 +387,7 @@ Navigate back to the `start` directory.
 Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
 ```
-mvn verify -Ddockerfile.skip=true
+mvn verify
 ```
 
 [system]#*{linux}*#
@@ -395,7 +395,7 @@ mvn verify -Ddockerfile.skip=true
 Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
-mvn verify -Ddockerfile.skip=true -Dcluster.ip=`minikube ip`
+mvn verify -Dcluster.ip=`minikube ip`
 ```
 ****
 
