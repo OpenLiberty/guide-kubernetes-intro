@@ -123,14 +123,10 @@
                     <execution>
                         <id>package-server</id>
                         <configuration>
-                            <packageFile>${project.build.directory}/defaultServer.zip</packageFile>
+                            <packageFile>${project.build.directory}/system.tar.gz</packageFile>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
             </plugin>
             <!-- for tests -->
             <plugin>

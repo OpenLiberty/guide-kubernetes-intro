@@ -23,7 +23,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Plugins -->
         <version.maven-war-plugin>2.6</version.maven-war-plugin>
-        <version.dockerfile-maven-plugin>1.4.10</version.dockerfile-maven-plugin>
         <version.exec-maven-plugin>1.6.0</version.exec-maven-plugin>
         <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
         <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
@@ -135,23 +134,6 @@
                             <version>RELEASE</version>
                             <type>zip</type>
                         </assemblyArtifact>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>${version.dockerfile-maven-plugin}</version>
-                    <executions>
-                        <execution>
-                            <id>default</id>
-                            <goals>
-                                <goal>build</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <repository>${project.artifactId}</repository>
-                        <tag>${project.version}</tag>
                     </configuration>
                 </plugin>
                 <!-- Plugin to run unit tests -->
