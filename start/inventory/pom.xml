@@ -61,9 +61,9 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-        </dependency>
+        </dependency>        
     </dependencies>
-
+    
     <profiles>
         <profile>
             <id>update-deployment</id>
@@ -131,14 +131,10 @@
                     <execution>
                         <id>package-server</id>
                         <configuration>
-                            <packageFile>${project.build.directory}/defaultServer.zip</packageFile>
+                            <packageFile>${project.build.directory}/inventory.tar.gz</packageFile>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
             </plugin>
             <!-- for tests -->
             <plugin>
