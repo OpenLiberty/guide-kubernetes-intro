@@ -173,12 +173,7 @@ docker images
 
 Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
 
-[.tab_link.windows_link]
-`*WINDOWS*`
-[.tab_link.mac_link]
-`*MAC*`
-[.tab_link.linux_link]
-`*LINUX*`
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.windows_section.mac_section]
 --
@@ -299,12 +294,7 @@ free to inspect all other resources.
 
 Next you will make requests to your services.
 
-[.tab_link.windows_link]
-`*WINDOWS*`
-[.tab_link.mac_link]
-`*MAC*`
-[.tab_link.linux_link]
-`*LINUX*`
+include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.windows_section.mac_section]
 --
@@ -396,15 +386,9 @@ in the ready state before proceeding further. The default properties defined in 
 
 Navigate back to the `start` directory.
 
-[.tab_link.windows_link]
-`*WINDOWS*`
-[.tab_link.mac_link]
-`*MAC*`
-[.tab_link.linux_link]
-`*LINUX*`
+include::{common-includes}/os-tabs.adoc[]
 
-[.tab_content]
-[.windows_section.mac_section]
+[.tab_content.windows_section.mac_section]
 --
 
 Run the integration tests against a cluster running with a host name of `localhost`:
