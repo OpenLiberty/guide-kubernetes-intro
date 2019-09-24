@@ -173,9 +173,10 @@ docker images
 
 Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
+[.tab_content.windows_section.mac_section]
+--
 [source, role="no_copy"]
 ----
 REPOSITORY                                                       TAG
@@ -192,9 +193,10 @@ k8s.gcr.io/k8s-dns-sidecar-amd64                                 1.14.8
 k8s.gcr.io/k8s-dns-kube-dns-amd64                                1.14.8
 k8s.gcr.io/pause-amd64                                           3.1
 ----
+--
 
-[system]#*{linux}*#
-
+[.tab_content.linux_section]
+--
 [source, role="no_copy"]
 ----
 REPOSITORY                                                       TAG
@@ -223,7 +225,8 @@ k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64                           1.14.4
 k8s.gcr.io/etcd-amd64                                            3.0.17
 k8s.gcr.io/pause-amd64                                           3.0
 ----
-****
+--
+
 
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
@@ -291,15 +294,17 @@ free to inspect all other resources.
 
 Next you will make requests to your services.
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
 
+[.tab_content.windows_section.mac_section]
+--
 The default host name for Docker Desktop is `localhost`.
+--
 
-[system]#*{linux}*#
-
+[.tab_content.linux_section]
+--
 The default host name for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
-****
+--
 
 Then `curl` or visit the following URLs to access your microservices, substituting the appropriate host name:
 
@@ -381,23 +386,26 @@ in the ready state before proceeding further. The default properties defined in 
 
 Navigate back to the `start` directory.
 
-****
-[system]#*{win} | {mac}*#
+include::{common-includes}/os-tabs.adoc[]
+
+[.tab_content.windows_section.mac_section]
+--
 
 Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
 ```
 mvn verify
 ```
+--
 
-[system]#*{linux}*#
-
+[.tab_content.linux_section]
+--
 Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
 mvn verify -Dcluster.ip=`minikube ip`
 ```
-****
+--
 
 The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
 
