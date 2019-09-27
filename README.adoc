@@ -255,12 +255,12 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=atag hotspot=atag hotspot=atag]`label`, [hotspot=atag hotspot=atag]`image`, and [hotspot=atag hotspot=atag]`containerPort` fields. The [hotspot=atag hotspot=atag hotspot=atag]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=atag hotspot=atag]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=atag hotspot=atag]`containerPort` is the port that your container exposes for purposes of accessing your application. 
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application. 
 For the services, the key point to understand is that they expose your deployments. 
-The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=atag hotspot=atag hotspot=atag hotspot=atag hotspot=atag hotspot=atag hotspot=atag hotspot=atag]`app` label. 
-You will also notice the service has a type of [hotspot=atag hotspot=atag]`NodePort`. 
+The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` label. 
+You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`. 
 This means you can access these services from outside of your cluster via a specific port. 
-In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=atag hotspot=atag]`nodePort` field is not used.
+In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=55 hotspot=69]`nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 [role='command']
@@ -378,10 +378,10 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=atag]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
-| [hotspot=atag]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=atag]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=atag]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
+| [hotspot=localhost]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
+| [hotspot=system-service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system-node-part]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=inventory-node-part]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
