@@ -31,18 +31,10 @@
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <!-- Default test properties -->
-        <!-- tag::localhost -->
         <cluster.ip>localhost</cluster.ip>
-        <!-- end::localhost -->
-        <!-- tag::system-service -->
         <system.kube.service>system-service</system.kube.service>
-        <!-- end::system-service -->
-        <!-- tag::system-node-port -->
         <system.node.port>31000</system.node.port>
-        <!-- end::system-node-port -->
-        <!-- tag::inventory-node-port -->
         <inventory.node.port>32000</inventory.node.port>
-        <!-- end::inventory-node-port -->
     </properties>
 
     <dependencyManagement>

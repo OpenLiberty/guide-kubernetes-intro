@@ -380,8 +380,8 @@ in the ready state before proceeding further. The default properties defined in 
 | *Property*                        | *Description*
 | [hotspot=localhost]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
 | [hotspot=system-service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=system-node-part]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=inventory-node-part]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
+| [hotspot=system-node-port]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=inventory-node-port]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
