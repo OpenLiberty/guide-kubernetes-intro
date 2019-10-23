@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>io.openliberty.guides</groupId>
-    <artifactId>kube-demo</artifactId>
+    <artifactId>guide-kubernetes-intro</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 

@@ -252,7 +252,7 @@ A Kubernetes resource definition is a yaml file that contains a description of a
 kubernetes.yaml
 [source, yaml, linenums, role="code_column"]
 ----
-include::finish/kubernetes.yaml[tags=**;]
+include::finish/kubernetes.yaml[]
 ----
 
 This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application. 
@@ -368,7 +368,7 @@ This is not how you would want to update your applications when running in produ
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/pom.xml[tags=**]
+include::finish/pom.xml[]
 ----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
@@ -378,10 +378,10 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=34]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
-| [hotspot=35]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=36]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=37]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
+| [hotspot=localhost]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
+| [hotspot=system-service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system-node-port]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=inventory-node-port]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
