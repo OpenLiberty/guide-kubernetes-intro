@@ -368,11 +368,7 @@ This is not how you would want to update your applications when running in produ
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-<<<<<<< HEAD
 include::finish/inventory/pom.xml[]
-=======
-include::finish/pom.xml[]
->>>>>>> bd0cf4461a507796725244064bb92228afe3c0ab
 ----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
@@ -382,17 +378,10 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-<<<<<<< HEAD
 | [hotspot=cluster.ip]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
 | [hotspot=system.kube.service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
 | [hotspot=system.node.port]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
 | [hotspot=inventory.node.port]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
-=======
-| [hotspot=localhost]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
-| [hotspot=system-service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=system-node-port]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=inventory-node-port]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
->>>>>>> bd0cf4461a507796725244064bb92228afe3c0ab
 |===
 
 Navigate back to the `start` directory.
