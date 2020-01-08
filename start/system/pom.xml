@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.openliberty.guides</groupId>
-    <artifactId>inventory</artifactId>
+    <artifactId>system</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
@@ -22,9 +22,7 @@
         <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
         <!-- Default test properties -->
         <cluster.ip>localhost</cluster.ip>
-        <system.kube.service>system-service</system.kube.service>
         <system.node.port>31000</system.node.port>
-        <inventory.node.port>32000</inventory.node.port>
         <!-- Liberty configuration -->
         <liberty.var.default.http.port>9080</liberty.var.default.http.port>
         <liberty.var.default.https.port>9443</liberty.var.default.https.port>
@@ -33,29 +31,17 @@
     <dependencies>
       <!-- Provided dependencies -->
        <dependency>
-           <groupId>org.eclipse.microprofile</groupId>
-           <artifactId>microprofile</artifactId>
-           <version>3.0</version>
-           <type>pom</type>
-           <scope>provided</scope>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>3.0</version>
+            <type>pom</type>
+            <scope>provided</scope>
        </dependency>
-       <!-- Java utility classes -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
-        </dependency>
-        <!-- For tests -->
+       <!-- For tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.5.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-rs-client</artifactId>
-            <version>3.3.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -65,9 +51,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>1.1.4</version>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-client</artifactId>
+            <version>3.3.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -80,12 +66,13 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.maven-war-plugin}</version>
             </plugin>
+            <!-- Enable Liberty Maven plugin -->
             <plugin>
                 <groupId>net.wasdev.wlp.maven.plugins</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>${version.liberty-maven-plugin}</version>
             </plugin>
-             <!-- Plugin to run unit tests -->
+            <!-- Plugin to run unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -99,9 +86,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <cluster.ip>${cluster.ip}</cluster.ip>
-                        <inventory.node.port>${inventory.node.port}</inventory.node.port>
                         <system.node.port>${system.node.port}</system.node.port>
-                        <system.kube.service>${system.kube.service}</system.kube.service>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
