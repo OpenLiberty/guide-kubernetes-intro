@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,25 +22,33 @@
         <version.maven-war-plugin>3.2.3</version.maven-war-plugin>
         <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
         <!-- Default test properties -->
+        <!-- tag::cluster.ip[] -->
         <cluster.ip>localhost</cluster.ip>
+        <!-- end::cluster.ip[] -->
+        <!-- tag::system.kube.service[] -->
         <system.kube.service>system-service</system.kube.service>
+        <!-- end::system.kube.service[] -->
+        <!-- tag::system.node.port[] -->
         <system.node.port>31000</system.node.port>
+        <!-- end::system.node.port[] -->
+        <!-- tag::inventory.node.port[] -->
         <inventory.node.port>32000</inventory.node.port>
+        <!-- end::inventory.node.port[] -->
         <!-- Liberty configuration -->
         <liberty.var.default.http.port>9080</liberty.var.default.http.port>
         <liberty.var.default.https.port>9443</liberty.var.default.https.port>
     </properties>
 
     <dependencies>
-      <!-- Provided dependencies -->
-       <dependency>
-           <groupId>org.eclipse.microprofile</groupId>
-           <artifactId>microprofile</artifactId>
-           <version>3.0</version>
-           <type>pom</type>
-           <scope>provided</scope>
-       </dependency>
-       <!-- Java utility classes -->
+        <!-- Provided dependencies -->
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>3.0</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Java utility classes -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -85,7 +94,7 @@
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>${version.liberty-maven-plugin}</version>
             </plugin>
-             <!-- Plugin to run unit tests -->
+            <!-- Plugin to run unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
