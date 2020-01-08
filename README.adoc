@@ -421,7 +421,8 @@ If the tests pass, you'll see an output similar to the following for each servic
 [INFO]
 [INFO] Results:
 [INFO]
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0----
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+----
 
 [source, role="no_copy"]
 ----
