@@ -148,7 +148,7 @@ https://openliberty.io/guides/containerize.html[Containerizing Microservices^] g
 which covers Dockerfiles in depth.
 
 
-Navigate to the `start` directory and run the following command to build the applications: 
+Navigate to the `start` directory and run the following command to build the applications:
 [role='command']
 ```
 mvn clean package
@@ -161,7 +161,7 @@ docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
-The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. 
+The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format.
 The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
 
 During the build, you'll see various Docker messages describing what images are being downloaded and
@@ -252,11 +252,11 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[tags=**;]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application. 
-For the services, the key point to understand is that they expose your deployments. 
-The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` label. 
-You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`. 
-This means you can access these services from outside of your cluster via a specific port. 
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application.
+For the services, the key point to understand is that they expose your deployments.
+The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` label.
+You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`.
+This means you can access these services from outside of your cluster via a specific port.
 In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=55 hotspot=69]`nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
@@ -387,7 +387,7 @@ Navigate back to the `start` directory.
 Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
 ```
-mvn verify
+mvn failsafe:integration-test
 ```
 
 [system]#*{linux}*#
@@ -395,7 +395,7 @@ mvn verify
 Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
-mvn verify -Dcluster.ip=`minikube ip`
+mvn failsafe:integration-test -Dcluster.ip=`minikube ip`
 ```
 ****
 
@@ -405,28 +405,29 @@ If the tests pass, you'll see an output similar to the following for each servic
 
 [source, role="no_copy"]
 ----
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
-Running it.io.openliberty.guides.system.SystemEndpointTest
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.567 s - in it.io.openliberty.guides.system.SystemEndpointTest
-
-Results:
-
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
-----
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running it.io.openliberty.guides.system.SystemEndpointIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.372 s - in it.io.openliberty.guides.system.SystemEndpointIT
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0----
 
 [source, role="no_copy"]
 ----
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
-Running it.io.openliberty.guides.inventory.InventoryEndpointTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.893 s - in it.io.openliberty.guides.inventory.InventoryEndpointTest
-
-Results:
-
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (default-cli) @ inventory ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running it.io.openliberty.guides.inventory.InventoryEndpointIT
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.714 s - in it.io.openliberty.guides.inventory.InventoryEndpointIT
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 
