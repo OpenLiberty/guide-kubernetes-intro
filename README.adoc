@@ -255,7 +255,7 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=13 hotspot=26 hotspot=34]`labels`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the Docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application.
 For the services, the key point to understand is that they expose your deployments.
 The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` label.
 You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`.
@@ -313,7 +313,7 @@ Then `curl` or visit the following URLs to access your microservices, substituti
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
-The second URL adds properties from `system-service` to the inventory.
+The second URL adds properties from `system-service` to the inventory
 {kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
 depending on whether `kube-service` is a valid {kube} Service that can be accessed.
 
@@ -325,7 +325,7 @@ depending on whether `kube-service` is a valid {kube} Service that can be access
 
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
-As an example, scale the `system` Deployment to three pods by running the following command:
+As an example, scale the `system` deployment to three pods by running the following command:
 [role='command']
 ```
 kubectl scale deployment/system-deployment --replicas=3
@@ -350,7 +350,7 @@ Wait for your two new pods to be in the ready state, then `curl -I` or visit the
 
 == Redeploy microservices
 
-When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one system pod after you redeploy since you're deleting all of the existing pods.
+When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your Docker images then delete and re-create your {kube} resources. Note that there will only be one `system` pod after you redeploy since you're deleting all of the existing pods.
 [role='command']
 ```
 mvn clean package
