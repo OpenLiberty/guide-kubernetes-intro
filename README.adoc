@@ -255,12 +255,12 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=13 hotspot=26 hotspot=34]`labels`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the Docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=labels]`labels`, [hotspot=image]`image`, and [hotspot=containerPort]`containerPort` fields. The [hotspot=labels]`labels` is a way for a {kube} service to reference specific deployments. The [hotspot=image]`image` is the name and tag of the Docker image that you want to use for this container. Finally, the [hotspot=containerPort]`containerPort` is the port that your container exposes for purposes of accessing your application.
 For the services, the key point to understand is that they expose your deployments.
-The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` label.
-You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`.
+The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=app]`app` label.
+You will also notice the service has a type of [hotspot=NodePort]`NodePort`.
 This means you can access these services from outside of your cluster via a specific port.
-In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=55 hotspot=69]`nodePort` field is not used.
+In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=nodePort]`nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 [role='command']
@@ -406,8 +406,6 @@ Run the integration tests with the IP address for Minikube:
 mvn failsafe:integration-test -Dcluster.ip=`minikube ip`
 ```
 --
-
-The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
 

@@ -2,68 +2,109 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: system-deployment
+  # tag::labels[]
   labels:
+  # end::labels[]
+    # tag::app[]
     app: system
+    # end::app[]
 spec:
   selector:
     matchLabels:
+      # tag::app[]
       app: system
+      # end::app[]
   template:
     metadata:
+      # tag::labels[]
       labels:
+      # end::labels[]
+        # tag::app[]
         app: system
+        # end::app[]
     spec:
       containers:
       - name: system-container
+        # tag::image[]
         image: system:1.0-SNAPSHOT
+        # end::image[]
         ports:
+        # tag::containerPort[]
         - containerPort: 9080
+        # end::containerPort[]
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: inventory-deployment
+  # tag::labels[]
   labels:
+  # end::labels[]
+    # tag::app[]
     app: inventory
+    # end::app[]
 spec:
   selector:
     matchLabels:
+      # tag::app[]
       app: inventory
+      # end::app[]
   template:
     metadata:
+      # tag::labels[]
       labels:
+      # end::labels[]
+        # tag::app[]
         app: inventory
+        # end::app[]
     spec:
       containers:
       - name: inventory-container
+        # tag::image[]
         image: inventory:1.0-SNAPSHOT
+        # end::image[]
         ports:
+        # tag::containerPort[]
         - containerPort: 9080
+        # end::containerPort[]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: system-service
 spec:
+  # tag::NodePort[]
   type: NodePort
+  # end::NodePort[]
   selector:
+    # tag::app[]
     app: system
+    # end::app[]
   ports:
   - protocol: TCP
     port: 9080
     targetPort: 9080
+    # tag::nodePort[]
     nodePort: 31000
+    # end::nodePort[]
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: inventory-service
 spec:
+  # tag::NodePort[]
   type: NodePort
+  # end::NodePort[]
   selector:
+    # tag::app[]
     app: inventory
+    # end::app[]
   ports:
   - protocol: TCP
     port: 9080
     targetPort: 9080
+    # tag::nodePort[]
     nodePort: 32000
+    # end::nodePort[]
