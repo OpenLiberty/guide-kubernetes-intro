@@ -148,7 +148,7 @@ https://openliberty.io/guides/containerize.html[Containerizing Microservices^] g
 which covers Dockerfiles in depth.
 
 
-Navigate to the `start` directory and run the following command to build the applications: 
+Navigate to the `start` directory and run the following command to build the applications:
 [role='command']
 ```
 mvn clean package
@@ -161,7 +161,7 @@ docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
-The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. 
+The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format.
 The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
 
 During the build, you'll see various Docker messages describing what images are being downloaded and
@@ -255,12 +255,12 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=5 hotspot=26 hotspot=34]`label`, [hotspot=18 hotspot=39]`image`, and [hotspot=20 hotspot=41]`containerPort` fields. The [hotspot=5 hotspot=26 hotspot=34]`label` is a way for a {kube} service to reference specific deployments. The [hotspot=18 hotspot=39]`image` is the name and tag of the docker image that you want to use for this container. Finally, the [hotspot=20 hotspot=41]`containerPort` is the port that your container exposes for purposes of accessing your application. 
-For the services, the key point to understand is that they expose your deployments. 
-The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=6 hotspot=10 hotspot=14 hotspot=27 hotspot=31 hotspot=35 hotspot=50 hotspot=64]`app` label. 
-You will also notice the service has a type of [hotspot=48 hotspot=62]`NodePort`. 
-This means you can access these services from outside of your cluster via a specific port. 
-In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=55 hotspot=69]`nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, [hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. The [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels` is a way for a {kube} service to reference specific deployments. The [hotspot=image1 hotspot=image2]`image` is the name and tag of the Docker image that you want to use for this container. Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes for purposes of accessing your application.
+For the services, the key point to understand is that they expose your deployments.
+The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=app1 hotspot=app2 hotspot=app3 hotspot=app4 hotspot=app5 hotspot=app6 hotspot=app7 hotspot=app8]`app` label.
+You will also notice the service has a type of [hotspot=NodePort1 hotspot=NodePort2]`NodePort`.
+This means you can access these services from outside of your cluster via a specific port.
+In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=nodePort1 hotspot=nodePort2]`nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 [role='command']
@@ -313,7 +313,7 @@ Then `curl` or visit the following URLs to access your microservices, substituti
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
-The second URL adds properties from `system-service` to the inventory.
+The second URL adds properties from `system-service` to the inventory
 {kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
 depending on whether `kube-service` is a valid {kube} Service that can be accessed.
 
@@ -325,7 +325,7 @@ depending on whether `kube-service` is a valid {kube} Service that can be access
 
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
-As an example, scale the `system` Deployment to three pods by running the following command:
+As an example, scale the `system` deployment to three pods by running the following command:
 [role='command']
 ```
 kubectl scale deployment/system-deployment --replicas=3
@@ -350,7 +350,7 @@ Wait for your two new pods to be in the ready state, then `curl -I` or visit the
 
 == Redeploy microservices
 
-When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your docker images then delete and re-create your {kube} resources. Note that there will only be one system pod after you redeploy since you're deleting all of the existing pods.
+When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your Docker images then delete and re-create your {kube} resources. Note that there will only be one `system` pod after you redeploy since you're deleting all of the existing pods.
 [role='command']
 ```
 mvn clean package
@@ -368,7 +368,7 @@ This is not how you would want to update your applications when running in produ
 pom.xml
 [source, xml, linenums, role='code_column']
 ----
-include::finish/pom.xml[]
+include::finish/inventory/pom.xml[]
 ----
 
 A few tests are included for you to test the basic functionality of the microservices. If a test failure
@@ -378,10 +378,10 @@ in the ready state before proceeding further. The default properties defined in 
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=localhost]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
-| [hotspot=system-service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=system-node-port]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=inventory-node-port]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
+| [hotspot=cluster.ip]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
+| [hotspot=system.kube.service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system.node.port]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
+| [hotspot=inventory.node.port]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
 |===
 
 Navigate back to the `start` directory.
@@ -394,7 +394,7 @@ include::{common-includes}/os-tabs.adoc[]
 Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
 ```
-mvn verify
+mvn failsafe:integration-test
 ```
 --
 
@@ -403,11 +403,9 @@ mvn verify
 Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
-mvn verify -Dcluster.ip=`minikube ip`
+mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
 ```
 --
-
-The `dockerfile.skip` parameter is set to `true` in order to skip building a new Docker image.
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
 
@@ -416,8 +414,8 @@ If the tests pass, you'll see an output similar to the following for each servic
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.system.SystemEndpointTest
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.567 s - in it.io.openliberty.guides.system.SystemEndpointTest
+Running it.io.openliberty.guides.system.SystemEndpointIT
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.372 s - in it.io.openliberty.guides.system.SystemEndpointIT
 
 Results:
 
@@ -429,12 +427,12 @@ Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.inventory.InventoryEndpointTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.893 s - in it.io.openliberty.guides.inventory.InventoryEndpointTest
+Running it.io.openliberty.guides.inventory.InventoryEndpointIT
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.714 s - in it.io.openliberty.guides.inventory.InventoryEndpointIT
 
 Results:
 
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 

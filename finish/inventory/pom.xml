@@ -1,104 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.openliberty.guides</groupId>
-        <artifactId>guide-kubernetes-intro</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-
+    <groupId>io.openliberty.guides</groupId>
     <artifactId>inventory</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Plugin versions -->
+        <version.liberty-maven-plugin>3.1</version.liberty-maven-plugin>
+        <version.maven-failsafe-plugin>2.22.2</version.maven-failsafe-plugin>
+        <version.maven-war-plugin>3.2.3</version.maven-war-plugin>
+        <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
+        <!-- Default test properties -->
+        <!-- tag::cluster.ip[] -->
+        <cluster.ip>localhost</cluster.ip>
+        <!-- end::cluster.ip[] -->
+        <!-- tag::system.kube.service[] -->
+        <system.kube.service>system-service</system.kube.service>
+        <!-- end::system.kube.service[] -->
+        <!-- tag::system.node.port[] -->
+        <system.node.port>31000</system.node.port>
+        <!-- end::system.node.port[] -->
+        <!-- tag::inventory.node.port[] -->
+        <inventory.node.port>32000</inventory.node.port>
+        <!-- end::inventory.node.port[] -->
+        <!-- Liberty configuration -->
+        <liberty.var.default.http.port>9080</liberty.var.default.http.port>
+        <liberty.var.default.https.port>9443</liberty.var.default.https.port>
+    </properties>
+
     <dependencies>
-       <dependency>
-           <groupId>io.openliberty.features</groupId>
-           <artifactId>jaxrs-2.1</artifactId>
-           <type>esa</type>
-           <scope>provided</scope>
-       </dependency>
-       <dependency>
-           <groupId>io.openliberty.features</groupId>
-           <artifactId>cdi-2.0</artifactId>
-           <type>esa</type>
-           <scope>provided</scope>
-       </dependency>
-       <dependency>
-           <groupId>org.eclipse.microprofile.rest.client</groupId>
-           <artifactId>microprofile-rest-client-api</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>io.openliberty.features</groupId>
-           <artifactId>mpConfig-1.3</artifactId>
-           <type>esa</type>
-           <scope>provided</scope>
-       </dependency>
+        <!-- Provided dependencies -->
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>3.0</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Java utility classes -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
         </dependency>
+        <!-- For tests -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-rs-extension-providers</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
+            <version>3.3.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-extension-providers</artifactId>
+            <version>3.3.4</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
+            <version>1.1.4</version>
+            <scope>test</scope>
         </dependency>
-        <!-- Support for JDK 9 and above -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-        </dependency>        
     </dependencies>
-    
-    <profiles>
-        <profile>
-            <id>update-deployment</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${version.exec-maven-plugin}</version>
-                        <executions>
-                            <execution>
-                                <id>update-kubernetes-deployment</id>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <phase>package</phase>
-                                <configuration>
-                                    <workingDirectory>.</workingDirectory>
-                                    <!-- kubectl${kubectl.extension -->
-                                    <executable>kubectl</executable>
-                                    <arguments>
-                                        <argument>set</argument>
-                                        <argument>image</argument>
-                                        <argument>deployment/ol-${project.artifactId}-ibm-open-liberty</argument>
-                                        <argument>ibm-open-liberty=${project.artifactId}:${project.version}</argument>
-                                        <argument>--record</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -106,44 +87,32 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+                <version>${version.maven-war-plugin}</version>
             </plugin>
             <plugin>
-                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <configuration>
-                    <configFile>src/main/liberty/config/server.xml</configFile>
-                    <include>usr</include>
-                    <bootstrapProperties>
-                        <default.http.port>${http.port}</default.http.port>
-                        <default.https.port>${https.port}</default.https.port>
-                    </bootstrapProperties>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>install-apps</id>
-                        <configuration>
-                            <appsDirectory>apps</appsDirectory>
-                            <stripVersion>true</stripVersion>
-                            <installAppPackages>project</installAppPackages>
-                            <looseApplication>true</looseApplication>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>package-server</id>
-                        <configuration>
-                            <packageFile>${project.build.directory}/inventory.tar.gz</packageFile>
-                        </configuration>
-                    </execution>
-                </executions>
+                <version>${version.liberty-maven-plugin}</version>
             </plugin>
-            <!-- for tests -->
+            <!-- Plugin to run unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.maven-surefire-plugin}</version>
             </plugin>
+            <!-- Plugin to run functional tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${version.maven-failsafe-plugin}</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <cluster.ip>${cluster.ip}</cluster.ip>
+                        <inventory.node.port>${inventory.node.port}</inventory.node.port>
+                        <system.node.port>${system.node.port}</system.node.port>
+                        <system.kube.service>${system.kube.service}</system.kube.service>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>
