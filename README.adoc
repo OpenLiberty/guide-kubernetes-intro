@@ -154,6 +154,8 @@ Navigate to the `start` directory and run the following command to build the app
 mvn clean package
 ```
 
+include::{common-includes}/ol-kernel-docker-pull.adoc[]
+
 Next, run the `docker build` commands to build container images for your application:
 [role='command']
 ```
@@ -182,7 +184,7 @@ include::{common-includes}/os-tabs.adoc[]
 REPOSITORY                                                       TAG
 inventory                                                        1.0-SNAPSHOT
 system                                                           1.0-SNAPSHOT
-open-liberty                                                     latest
+openliberty/open-liberty                                         kernel-java8-openj9-ubi
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
 k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.3
@@ -202,7 +204,7 @@ k8s.gcr.io/pause-amd64                                           3.1
 REPOSITORY                                                       TAG
 inventory                                                        1.0-SNAPSHOT
 system                                                           1.0-SNAPSHOT
-open-liberty                                                     latest
+openliberty/open-liberty                                         kernel-java8-openj9-ubi
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.0
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.0
 k8s.gcr.io/kube-apiserver-amd64                                  v1.10.0
