@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018, 2019 IBM Corporation and others.
+ * Copyright (c) 2018, 2020 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -150,9 +150,13 @@ public class InventoryEndpointIT {
         Response badResponse = client.target(invUrl + "badhostname")
                         .request(MediaType.APPLICATION_JSON).get();
 
+        assertEquals(404, badResponse.getStatus(),
+                     "BadResponse expected status: 404. " 
+                     + "Response code not as expected.");
+
         String obj = badResponse.readEntity(String.class);
 
-        boolean isError = obj.contains("ERROR");
+        boolean isError = obj.contains("error");
         assertTrue(isError,
                         "badhostname is not a valid host but it didn't raise an error");
 
