@@ -17,7 +17,7 @@
 :page-tags: ['Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio']
-:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/k8preq
 :source-highlighter: prettify
 :page-seo-title: Deploying Java microservices to Kubernetes
 :page-seo-description: A getting started tutorial on how to deploy Java microservices in Docker containers to a Kubernetes cluster with examples of how to manage and scale the Kubernetes deployment.
