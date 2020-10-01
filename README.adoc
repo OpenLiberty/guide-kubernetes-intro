@@ -151,6 +151,7 @@ which covers Dockerfiles in depth.
 Navigate to the `start` directory and run the following command to build the applications:
 [role='command']
 ```
+cd start
 mvn clean package
 ```
 
