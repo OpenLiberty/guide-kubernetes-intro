@@ -148,9 +148,10 @@ https://openliberty.io/guides/containerize.html[Containerizing Microservices^] g
 which covers Dockerfiles in depth.
 
 
-Navigate to the `start` directory and run the following command to build the applications:
+Navigate to the `start` directory and build the applications by running the following commands:
 [role='command']
 ```
+cd start
 mvn clean package
 ```
 
