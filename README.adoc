@@ -148,7 +148,7 @@ https://openliberty.io/guides/containerize.html[Containerizing Microservices^] g
 which covers Dockerfiles in depth.
 
 
-Navigate to the `start` directory build the applications by running the following commands:
+Navigate to the `start` directory and build the applications by running the following commands:
 [role='command']
 ```
 cd start
