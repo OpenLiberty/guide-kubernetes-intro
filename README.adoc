@@ -407,51 +407,50 @@ Navigate back to the `start` directory.
 
 [.tab_content.maven_section]
 --
+include::{common-includes}/os-tabs.adoc[]
 
-    include::{common-includes}/os-tabs.adoc[]
+[.tab_content.windows_section.mac_section]
+--
 
-    [.tab_content.windows_section.mac_section]
-    --
+Run the integration tests against a cluster running with a host name of `localhost`:
+[role='command']
+```
+mvn failsafe:integration-test
+```
+--
 
-    Run the integration tests against a cluster running with a host name of `localhost`:
-    [role='command']
-    ```
-    mvn failsafe:integration-test
-    ```
-    --
-
-    [.tab_content.linux_section]
-    --
-    Run the integration tests with the IP address for Minikube:
-    [role='command']
-    ```
-    mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
-    ```
-    --
+[.tab_content.linux_section]
+--
+Run the integration tests with the IP address for Minikube:
+[role='command']
+```
+mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
+```
+--
 --
 
 [.tab_content.gradle_section]
 --
-    include::{common-includes}/os-tabs.adoc[]
+include::{common-includes}/os-tabs.adoc[]
 
-    [.tab_content.windows_section.mac_section]
-    --
+[.tab_content.windows_section.mac_section]
+--
 
-    Run the integration tests against a cluster running with a host name of `localhost`:
-    [role='command']
-    ```
-    ./gradlew integrationTest
-    ```
-    --
+Run the integration tests against a cluster running with a host name of `localhost`:
+[role='command']
+```
+./gradlew integrationTest
+```
+--
 
-    [.tab_content.linux_section]
-    --
-    Run the integration tests with the IP address for Minikube:
-    [role='command']
-    ```
-    ./gradlew integrationTest -Dcluster.ip=$(minikube ip)
-    ```
-    --
+[.tab_content.linux_section]
+--
+Run the integration tests with the IP address for Minikube:
+[role='command']
+```
+./gradlew integrationTest -Dcluster.ip=$(minikube ip)
+```
+--
 --
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
