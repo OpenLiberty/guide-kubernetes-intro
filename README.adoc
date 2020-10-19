@@ -62,11 +62,6 @@ While you could destroy and then re-create these containers, you can also run a 
 command to have {kube} make all those updates for you. Of course, this is just a simple example.
 {kube} has a lot more to offer.
 
-// {kube} provides much other functionality
-// that simply makes your development, testing, and production environments much more stable, much more
-// automated, and much more powerful to use. Some of this functionality, we're hoping you can learn in
-// this guide.
-
 === Architecture
 
 Deploying an application to Kubernetes means deploying an application to a Kubernetes cluster.
@@ -147,13 +142,26 @@ for building Docker images. If you're unfamiliar with Dockerfiles, check out the
 https://openliberty.io/guides/containerize.html[Containerizing Microservices^] guide,
 which covers Dockerfiles in depth.
 
-
 Navigate to the `start` directory and build the applications by running the following commands:
+
+[.tab_link.maven_link]
+`*MAVEN*`
+[.tab_link.gradle_link]
+`*GRADLE*`
+[.tab_content.maven_section]
+--
 [role='command']
 ```
 cd start
 mvn clean package
 ```
+--
+[role='command']
+```
+cd start
+./gradlew --init
+```
+--
 
 include::{common-includes}/ol-kernel-docker-pull.adoc[]
 
@@ -389,25 +397,58 @@ in the ready state before proceeding further. The default properties defined in 
 
 Navigate back to the `start` directory.
 
-include::{common-includes}/os-tabs.adoc[]
+[.tab_link.maven_link]
+`*MAVEN*`
+[.tab_link.gradle_link]
+`*GRADLE*`
 
-[.tab_content.windows_section.mac_section]
+[.tab_content.maven_section]
 --
 
-Run the integration tests against a cluster running with a host name of `localhost`:
-[role='command']
-```
-mvn failsafe:integration-test
-```
+    include::{common-includes}/os-tabs.adoc[]
+
+    [.tab_content.windows_section.mac_section]
+    --
+
+    Run the integration tests against a cluster running with a host name of `localhost`:
+    [role='command']
+    ```
+    mvn failsafe:integration-test
+    ```
+    --
+
+    [.tab_content.linux_section]
+    --
+    Run the integration tests with the IP address for Minikube:
+    [role='command']
+    ```
+    mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
+    ```
+    --
 --
 
-[.tab_content.linux_section]
+[.tab_content.gradle_section]
 --
-Run the integration tests with the IP address for Minikube:
-[role='command']
-```
-mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
-```
+    include::{common-includes}/os-tabs.adoc[]
+
+    [.tab_content.windows_section.mac_section]
+    --
+
+    Run the integration tests against a cluster running with a host name of `localhost`:
+    [role='command']
+    ```
+    ./gradlew integrationTest
+    ```
+    --
+
+    [.tab_content.linux_section]
+    --
+    Run the integration tests with the IP address for Minikube:
+    [role='command']
+    ```
+    ./gradlew integrationTest -Dcluster.ip=$(minikube ip)
+    ```
+    --
 --
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
