@@ -156,6 +156,9 @@ cd start
 mvn clean package
 ```
 --
+
+[.tab_content.gradle_section]
+--
 [role='command']
 ```
 cd start
