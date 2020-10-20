@@ -17,7 +17,7 @@
 :page-tags: ['Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio']
-:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/gkwan-maven-gradle
 :source-highlighter: prettify
 :page-seo-title: Deploying Java microservices to Kubernetes
 :page-seo-description: A getting started tutorial on how to deploy Java microservices in Docker containers to a Kubernetes cluster with examples of how to manage and scale the Kubernetes deployment.
@@ -122,6 +122,8 @@ include::{common-includes}/kube-prereq.adoc[]
 // =================================================================================================
 [role='command']
 include::{common-includes}/gitclone.adoc[]
+
+include::{common-includes}/maven-gradle.adoc[]
 
 // no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
 
@@ -396,10 +398,28 @@ include::{common-includes}/os-tabs.adoc[]
 
 Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
+[.tab_link.maven_link]
+
+[.tab_link.gradle_link]
+
+[.tab_content.maven_section]
+--
 ```
 mvn failsafe:integration-test
 ```
 --
+# maven_section end
+
+[.tab_content.gradle_section]
+--
+```
+gradle test
+```
+--
+# gradle_section end
+
+--
+# windows_section.mac_section end
 
 [.tab_content.linux_section]
 --
