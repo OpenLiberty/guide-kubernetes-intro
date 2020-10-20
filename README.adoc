@@ -413,8 +413,6 @@ gradle test
 ```
 --
 --
-# windows_section.mac_section end
-
 [.tab_content.linux_section]
 --
 Run the integration tests with the IP address for Minikube:
