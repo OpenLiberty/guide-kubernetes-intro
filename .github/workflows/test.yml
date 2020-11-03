@@ -1,0 +1,37 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ master, qa ]
+  pull_request:
+    branches: [ master, qa]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CHANGE_MINIKUBE_NONE_USER: true
+    defaults:
+      run:
+        working-directory: finish
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - run: unset _JAVA_OPTIONS
+    - name: Set up Minikube
+      run: curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - run: chmod +x kubectl
+    - run: sudo ln -s $(pwd)/kubectl /usr/local/bin/kubectl
+    - run: wget https://github.com/kubernetes/minikube/releases/download/v0.28.2/minikube-linux-amd64 -q -O minikube
+    - run: chmod +x minikube
+    - run: sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
+    - run: sudo minikube start --vm-driver=none --bootstrapper=localkube
+    - name: Build with Maven
+      run: ../scripts/travisTest.sh
