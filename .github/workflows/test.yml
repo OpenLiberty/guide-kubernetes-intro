@@ -34,6 +34,6 @@ jobs:
     - run: sudo apt-get update -y
     - run: sudo apt-get install -y conntrack
     - name: Start Minikube
-      run: sudo minikube start --vm-driver=none --bootstrapper=localkube
+      run: sudo minikube start --vm-driver=none --bootstrapper=kubeadm
     - name: Build with Maven
       run: ../scripts/travisTest.sh
