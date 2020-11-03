@@ -31,7 +31,6 @@ jobs:
     - run: sudo ln -s $(pwd)/kubectl /usr/local/bin/kubectl
     - run: wget https://github.com/kubernetes/minikube/releases/download/v0.28.2/minikube-linux-amd64 -q -O minikube
     - run: chmod +x minikube
-    - run: sudo ln -s $(pwd)/minikube /usr/local/bin/minikube
     - run: sudo minikube start --vm-driver=none --bootstrapper=localkube
     - name: Build with Maven
       run: ../scripts/travisTest.sh
