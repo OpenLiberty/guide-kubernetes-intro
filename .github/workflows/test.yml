@@ -1,8 +1,6 @@
 name: Test application
 
 on:
-  push:
-    branches: [ qa ]
   pull_request:
     branches: [ qa ]
 
