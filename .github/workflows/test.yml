@@ -2,9 +2,9 @@ name: Test application
 
 on:
   push:
-    branches: [ master, qa ]
+    branches: [ qa ]
   pull_request:
-    branches: [ master, qa]
+    branches: [ qa ]
 
 jobs:
   build:
@@ -35,5 +35,8 @@ jobs:
         sudo apt-get install -y conntrack
     - name: Start Minikube
       run: sudo minikube start --vm-driver=none --bootstrapper=kubeadm
-    - name: Build with Maven
+    - name: Run tests
       run: sudo ../scripts/travisTest.sh
+    - name: Post tests
+      if: always()
+      run: sudo docker images
