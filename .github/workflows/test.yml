@@ -7,7 +7,7 @@ on:
     branches: [ qa ]
 
 jobs:
-  build:
+  java8build:
     runs-on: ubuntu-latest
     env:
       CHANGE_MINIKUBE_NONE_USER: true
