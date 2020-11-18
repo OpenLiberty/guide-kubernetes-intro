@@ -1,1 +1,1 @@
-sudo docker images
+docker images
