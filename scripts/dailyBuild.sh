@@ -30,7 +30,7 @@ echo "Testing daily Docker image"
 
 sed -i "s;FROM "$DOCKER_USERNAME"/olguides:"$BUILD";FROM openliberty/daily:latest;g" system/Dockerfile inventory/Dockerfile
 
-cat Dockerfile
+cat system/Dockerfile inventory/Dockerfile
 
 docker pull "openliberty/daily:latest"
 
