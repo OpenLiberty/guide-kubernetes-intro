@@ -19,6 +19,4 @@ sed -i "s;FROM openliberty/open-liberty:kernel-java8-openj9-ubi;FROM "$DOCKER_US
 cat system/Dockerfile
 cat inventory/Dockerfile
 
-sudo ../scripts/startMinikube.sh
 sudo ../scripts/testApp.sh
-sudo ../scripts/stopMinikube.sh
