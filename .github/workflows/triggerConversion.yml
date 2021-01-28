@@ -28,4 +28,4 @@ jobs:
         repo: OpenLiberty/quick-labs
         token: ${{ secrets.GUIDECONVERSIONTOOL_PASSWORD }}
         inputs: '{ "branch": "${{ github.ref }}", "guide_name": "${{ github.event.repository.name }}" }'
-        ref: "refs/heads/master"
+        ref: "refs/heads/prod"
