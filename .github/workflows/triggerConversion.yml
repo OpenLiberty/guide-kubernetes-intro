@@ -25,7 +25,7 @@ jobs:
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: GuideConverter
-        repo: OpenLiberty/quick-labs
+        repo: OpenLiberty/cloud-hosted-guides
         token: ${{ secrets.GUIDECONVERSIONTOOL_PASSWORD }}
         inputs: '{ "branch": "${{ github.ref }}", "guide_name": "${{ github.event.repository.name }}" }'
         ref: "refs/heads/prod"
