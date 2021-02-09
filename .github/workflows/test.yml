@@ -52,7 +52,7 @@ jobs:
           java-version: 8
       - run: unset _JAVA_OPTIONS
       - name: Run tests
-        run: sudo ../scripts/testApp.sh
+        run: ../scripts/testApp.sh
       - name: Post tests
         if: always()
         run: sudo docker images
