@@ -2,45 +2,57 @@ name: Test application
 
 on:
   pull_request:
-    branches: [ master, qa ]
+    branches: [master, qa]
 
 jobs:
-  needTest:
+  check-files:
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     outputs:
-        canSkip: ${{ steps.checkFiles.outputs.canSkip }}
+      canSkip: ${{ steps.Checker.outputs.canSkip }}
     steps:
-    - name: Check files in PR
-      id: checkFiles
-      run: |
-           PR_FILES_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{github.event.pull_request.number}}/files"
-           FILES_CHANGED=$(curl -s -X GET -G $PR_FILES_URL | jq -r '.[] | .filename')
-           echo $FILES_CHANGED
-           if [ ${#FILES_CHANGED[@]} == 1 ] && [ ${FILES_CHANGED[0]} == README.adoc ]; then
-             echo "Test can be skipped because only updated README.adoc"
-             echo "::set-output name=canSkip::true"
-           else
-             echo "Need to run test"           
-             echo "::set-output name=canSkip::false"
-           fi
-  java8build:
+      - name: Get files
+        uses: actions/checkout@v2
+      - name: Get tools
+        uses: actions/checkout@v2
+        with:
+          path: tools/
+          repository: openliberty/guides-common
+      - id: Checker
+        shell: bash
+        run: bash ./tools/pr-checker/checker.sh ${{ github.repository }} ${{ github.event.pull_request.number }} | tee checker.log
+      - id: Lint-Code-Base
+        if: always()
+        uses: github/super-linter@v3
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINTER_RULES_PATH: ./tools/pr-checker/linters/
+      - name: Summary
+        if: always()
+        run: |
+          cat ./checker.log |  tail -n +2; echo "====== Super Linter ======"
+          cat ./super-linter.log | sed -n '/.*The script has completed.*/,$p' | tail -n +4 | sed  's/.*\(\[[A-Z]\+\]\)/\1/'
+          echo "====== Examine logs in Checker and Super-Linter steps for more details ======"
+          if [ '${{ steps.Checker.outcome }}' != 'success' ] || [ '${{ steps.Lint-Code-Base.outcome }}' != 'success' ]; then exit 1; fi
+  test-app:
     runs-on: ubuntu-latest
-    needs: [needTest]
-    if: "!contains(needs.needTest.outputs.canSkip, 'true')"
+    needs: [check-files]
+    if: "!contains(needs.check-files.outputs.canSkip, 'true')"
     env:
       CHANGE_MINIKUBE_NONE_USER: true
     defaults:
       run:
         working-directory: finish
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 8
-    - run: unset _JAVA_OPTIONS
-    - name: Run tests
-      run: sudo ../scripts/testApp.sh
-    - name: Post tests
-      if: always()
-      run: sudo docker images
+      - uses: actions/checkout@v2
+      - name: Set up JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - run: unset _JAVA_OPTIONS
+      - name: Run tests
+        run: sudo ../scripts/testApp.sh
+      - name: Post tests
+        if: always()
+        run: sudo docker images
