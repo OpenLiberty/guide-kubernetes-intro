@@ -390,6 +390,12 @@ Then use `curl` or visit the following URLs to access your microservices, substi
 
 * `{system-api}`
 * `{inventory-api}/system-service`
+
+The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
+To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
+The second URL adds properties from `system-service` to the inventory {kube} Service. 
+Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
+depending on whether `kube-service` is a valid {kube} service that can be accessed.
 endif::[]
 
 // Cloud-hosted guide instruction
@@ -449,13 +455,14 @@ curl http://$SYSTEM_HOST:31000/system/properties
 curl http://$INVENTORY_HOST:32000/inventory/systems/system-service
 ```
 {: codeblock}
-endif::[]
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
-To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
+To view the header, you may use the `-I` option in the `curl` when making a request to the 
+`http://$SYSTEM_HOST:31000/system/properties` URL.
 The second URL adds properties from `system-service` to the inventory {kube} Service. 
-Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
-depending on whether `kube-service` is a valid {kube} Service that can be accessed.
+Making a request to the `http://$INVENTORY_HOST:32000/inventory/systems/[kube-service]` URL in general 
+adds to the inventory depending on whether `kube-service` is a valid {kube} service that can be accessed.
+endif::[]
 
 // =================================================================================================
 // Scaling a deployment
