@@ -153,7 +153,7 @@ Store the namespace name in a variable.
 Use the namespace name obtained from the previous command. 
 
 ```
-NAMESPACE={namespace_name}
+NAMESPACE_NAME={namespace_name}
 ```
 {: codeblock}
 
@@ -370,6 +370,8 @@ kubectl describe pods
 You can also issue the `kubectl get` and `kubectl describe` commands on other {kube} resources, so feel
 free to inspect all other resources.
 
+// Static guide instruction
+ifndef::cloud-hosted[]
 Next you will make requests to your services.
 
 include::{common-includes}/os-tabs.adoc[]
@@ -388,11 +390,71 @@ Then use `curl` or visit the following URLs to access your microservices, substi
 
 * `{system-api}`
 * `{inventory-api}/system-service`
+endif::[]
+
+// Cloud-hosted guide instruction
+ifdef::cloud-hosted[]
+Run the following command to get the node IP for the `system` service:
+
+```
+kubectl describe pod system | grep Node
+```
+{: codeblock}
+
+The output will show the node IP that will be used to access the service later. 
+It will appear in a format similar to the following:
+
+```
+Node:         10.114.85.140/10.114.85.140
+Node-Selectors:  <none>
+```
+
+Here the IP is `10.114.85.140` for the system service.
+Store the IP in a variable.
+
+```
+SYSTEM_HOST={system-node-ip}
+```
+{: codeblock}
+
+Use another `kubectl` command to get the node IP for the `inventory` service:
+
+```
+kubectl describe pod inventory | grep Node
+```
+{: codeblock}
+
+Store this IP in a variable as well.
+
+```
+INVENTORY_HOST={inventory-node-ip}
+```
+{: codeblock}
+
+Verify that the variables containing the IPs have been set correctly:
+
+```
+echo $SYSTEM_HOST && echo $INVENTORY_HOST
+```
+{: codeblock}
+
+Then use the following `curl` commands to access your microservices:
+
+```
+curl http://$SYSTEM_HOST:31000/system/properties
+```
+{: codeblock}
+
+```
+curl http://$INVENTORY_HOST:32000/inventory/systems/system-service
+```
+{: codeblock}
+endif::[]
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
-The second URL adds properties from `system-service` to the inventory
-{kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
+The second URL adds properties from `system-service` to the inventory {kube} Service. 
+Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
 depending on whether `kube-service` is a valid {kube} Service that can be accessed.
 
 // =================================================================================================
