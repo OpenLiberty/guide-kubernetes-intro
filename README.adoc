@@ -167,9 +167,9 @@ echo $NAMESPACE_NAME
 Log in to the registry with the following command:
 ```
 bx cr login
+```
 {: codeblock}
 
-```
 endif::[]
 
 // =================================================================================================
@@ -181,12 +181,12 @@ endif::[]
 The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
 
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven
-project that's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory,
-`start/system` and `start/inventory`. Each of these directories also contains a Dockerfile, which is necessary
-for building Docker images. If you're unfamiliar with Dockerfiles, check out the
+project that's made up of the `system` and `inventory` microservices. 
+Each microservice resides in its own directory, `start/system` and `start/inventory`. 
+Each of these directories also contains a Dockerfile, which is necessary for building Docker images. 
+If you're unfamiliar with Dockerfiles, check out the
 https://openliberty.io/guides/containerize.html[Containerizing Microservices^] guide,
 which covers Dockerfiles in depth.
-
 
 Navigate to the `start` directory and build the applications by running the following commands:
 [role='command']
@@ -208,8 +208,8 @@ The `-t` flag in the `docker build` command allows the Docker image to be labele
 The tag for an image describes the specific image version. 
 If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
 
-During the build, you'll see various Docker messages describing what images are being downloaded and
-built. When the build finishes, run the following command to list all local Docker images:
+During the build, you'll see various Docker messages describing what images are being downloaded and built. 
+When the build finishes, run the following command to list all local Docker images:
 [role='command']
 ```
 docker images
@@ -271,12 +271,23 @@ k8s.gcr.io/pause-amd64                                           3.0
 ----
 --
 
-
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
 In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon 
 and not your host's as described in the previous section.
 
+// Cloud hosted guide instruction
+ifdef::cloud-hosted[]
+If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
+
+```
+docker tag inventory:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
+docker push us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
+docker push us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
+```
+{: codeblock}
+endif::[]
 
 // =================================================================================================
 // Deploying the microservices
@@ -317,6 +328,17 @@ You will also notice the service has a type of [hotspot=NodePort1 hotspot=NodePo
 This means you can access these services from outside of your cluster via a specific port.
 In this case, the ports will be `31000` and `32000`, but it can also be randomized if the 
 [hotspot=nodePort1 hotspot=nodePort2]`nodePort` field is not used.
+
+// Cloud hosted guide instruction
+ifdef::cloud-hosted[]
+Update the image names so that the images in your IBM Cloud container registry are used:
+
+```
+sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"$NAMESPACE_NAME"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
+sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"$NAMESPACE_NAME"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
+```
+{: codeblock}
+endif::[]
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 [role='command']
@@ -439,9 +461,10 @@ pom.xml
 include::finish/inventory/pom.xml[]
 ----
 
-A few tests are included for you to test the basic functionality of the microservices. If a test failure
-occurs, then you might have introduced a bug into the code. To run the tests, wait for all pods to be
-in the ready state before proceeding further. The default properties defined in the [hotspot]`pom.xml` are:
+A few tests are included for you to test the basic functionality of the microservices. 
+If a test failure occurs, then you might have introduced a bug into the code. 
+To run the tests, wait for all pods to be in the ready state before proceeding further. 
+The default properties defined in the [hotspot]`pom.xml` are:
 
 [cols="15, 100", options="header"]
 |===
