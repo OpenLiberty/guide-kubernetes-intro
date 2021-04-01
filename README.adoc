@@ -122,8 +122,55 @@ include::{common-includes}/gitclone.adoc[]
 // =================================================================================================
 // Staring and preparing your cluster for deployment
 // =================================================================================================
+// Static guide instruction
+ifndef::cloud-hosted[]
 [role='command']
 include::{common-includes}/kube-start.adoc[]
+endif::[]
+
+// Cloud hosted guide instructions
+ifdef::cloud-hosted[]
+== Logging into your cluster
+
+For this guide you will use a container registry on IBM Cloud to deploy to Kubernetes.
+Get the name of your namespace with the following command:
+
+```
+bx cr namespace-list
+```
+{: codeblock}
+
+You will see an output similar to the following:
+
+```
+Listing namespaces for account 'QuickLabs - IBM Skills Network' in registry 'us.icr.io'...
+
+Namespace
+sn-labs-yourname
+```
+
+Store the namespace name in a variable.
+Use the namespace name obtained from the previous command. 
+
+```
+NAMESPACE={namespace_name}
+```
+{: codeblock}
+
+Verify that the variable contains your namespace name correctly:
+
+```
+echo $NAMESPACE_NAME
+```
+{: codeblock}
+
+Log in to the registry with the following command:
+```
+bx cr login
+{: codeblock}
+
+```
+endif::[]
 
 // =================================================================================================
 // Building and containerizing the microservices
