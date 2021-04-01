@@ -236,7 +236,9 @@ In addition, if you are using Minikube, make sure your Docker CLI is configured 
 
 Now that your Docker images are built, deploy them using a Kubernetes resource definition.
 
-A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you want to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
+A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, 
+or any other resources that you want to deploy. 
+All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -250,7 +252,13 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource responsible for controlling the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, [hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. The [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels` is a way for a {kube} service to reference specific deployments. The [hotspot=image1 hotspot=image2]`image` is the name and tag of the Docker image that you want to use for this container. Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes for purposes of accessing your application.
+This file defines four {kube} resources. It defines two deployments and two services. 
+A {kube} deployment is a resource responsible for controlling the creation and management of pods. 
+A service exposes your deployment so that you can make requests to your containers. 
+Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, [hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. 
+The [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels` is a way for a {kube} service to reference specific deployments. 
+The [hotspot=image1 hotspot=image2]`image` is the name and tag of the Docker image that you want to use for this container. 
+Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes for purposes of accessing your application.
 For the services, the key point to understand is that they expose your deployments.
 The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=app1 hotspot=app2 hotspot=app3 hotspot=app4 hotspot=app5 hotspot=app6 hotspot=app7 hotspot=app8]`app` label.
 You will also notice the service has a type of [hotspot=NodePort1 hotspot=NodePort2]`NodePort`.
@@ -301,10 +309,10 @@ The default host name for Docker Desktop is `localhost`.
 The default host name for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
 --
 
-Then `curl` or visit the following URLs to access your microservices, substituting the appropriate host name:
+Then use `curl` or visit the following URLs to access your microservices, substituting the appropriate host name:
 
-- `{system-api}`
-- `{inventory-api}/system-service`
+* `{system-api}`
+* `{inventory-api}/system-service`
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
@@ -318,7 +326,9 @@ depending on whether `kube-service` is a valid {kube} Service that can be access
 
 == Scaling a deployment
 
-To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
+To use load balancing, you need to scale your deployments. 
+When you scale a deployment, you replicate its pods, creating more running instances of your applications. 
+Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
 As an example, scale the `system` deployment to three pods by running the following command:
 [role='command']
@@ -341,11 +351,16 @@ system-deployment-6bd97d9bf6-x4zth      1/1       Running   0          25s
 inventory-deployment-645767664f-nbtd9   1/1       Running   0          1m
 ----
 
-Wait for your two new pods to be in the ready state, then `curl -I` or visit the `{system-api}` URL. You'll notice that the `X-Pod-Name` header will have a different value when you call it multiple times. This is because there are now three pods running all serving the `system` application. Similarly, to descale your deployments you can use the same scale command with fewer replicas.
+Wait for your two new pods to be in the ready state, then `curl -I` or visit the `{system-api}` URL. 
+You'll notice that the `X-Pod-Name` header will have a different value when you call it multiple times. 
+This is because there are now three pods running all serving the `system` application. 
+Similarly, to descale your deployments you can use the same scale command with fewer replicas.
 
 == Redeploy microservices
 
-When you're building your application, you may find that you want to quickly test a change. To do that, you can rebuild your Docker images then delete and re-create your {kube} resources. Note that there will only be one `system` pod after you redeploy since you're deleting all of the existing pods.
+When you're building your application, you may find that you want to quickly test a change. 
+To do that, you can rebuild your Docker images then delete and re-create your {kube} resources. 
+Note that there will only be one `system` pod after you redeploy since you're deleting all of the existing pods.
 [role='command']
 ```
 mvn clean package
@@ -353,7 +368,9 @@ kubectl delete -f kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
 
-This is not how you would want to update your applications when running in production, but in a development environment this is fine. If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image. Then, {kube} will automate the creation of a new container and decommissioning of the old one once the new container is ready.
+This is not how you would want to update your applications when running in production, but in a development environment this is fine. 
+If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image. 
+Then, {kube} will automate the creation of a new container and decommissioning of the old one once the new container is ready.
 
 // =================================================================================================
 // Testing microservices that are running on {kube}
@@ -453,7 +470,8 @@ include::{common-includes}/kube-minikube-teardown.adoc[]
 
 == Great work! You're done!
 
-You have just deployed two microservices running in Open Liberty to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
+You have just deployed two microservices running in Open Liberty to {kube}. 
+You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 
