@@ -52,20 +52,16 @@ further leveraged for all steps of a continuous delivery pipeline.
 
 === Why use {kube}?
 
-Managing individual containers can be challenging.  A few containers used for development by a small team might not pose a problem,
-but managing hundreds of containers can give even a large team of experienced developers a headache. {kube} is a primary
-tool for deployment in containerized
-environments. It handles scheduling, deployment, as well as mass deletion and creation of containers.
-It provides update rollout abilities on a large scale that would otherwise prove extremely tedious
-to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers.
+Managing individual containers can be challenging. 
+A few containers used for development by a small team might not pose a problem,
+but managing hundreds of containers can give even a large team of experienced developers a headache. 
+{kube} is a primary tool for deployment in containerized environments. 
+It handles scheduling, deployment, as well as mass deletion and creation of containers. 
+It provides update rollout abilities on a large scale that would otherwise prove extremely tedious to do. 
+Imagine that you updated a Docker image, which now needs to propagate to a dozen containers. 
 While you could destroy and then re-create these containers, you can also run a short one-line
 command to have {kube} make all those updates for you. Of course, this is just a simple example.
 {kube} has a lot more to offer.
-
-// {kube} provides much other functionality
-// that simply makes your development, testing, and production environments much more stable, much more
-// automated, and much more powerful to use. Some of this functionality, we're hoping you can learn in
-// this guide.
 
 === Architecture
 
@@ -90,7 +86,6 @@ the pods encapsulated by the service.
 
 To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
 
-
 // =================================================================================================
 // Introduction
 // =================================================================================================
@@ -98,18 +93,16 @@ To learn about the various Kubernetes resources that you can configure, see the 
 == What you'll learn
 
 You will learn how to deploy two microservices in Open Liberty containers to a local {kube} cluster.
-You will then manage your deployed microservices using the `kubectl` command line
-interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your
-{kube} cluster.
+You will then manage your deployed microservices using the `kubectl` command line interface for {kube}. 
+The `kubectl` CLI is your primary tool for communicating with and managing your {kube} cluster.
 
 The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
 returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
 making replicas easy to distinguish from each other. The `inventory` microservice
-adds the properties from the `system` microservice to the inventory. This demonstrates
-how communication can be established between pods inside a cluster.
+adds the properties from the `system` microservice to the inventory. 
+This demonstrates how communication can be established between pods inside a cluster.
 
 You will use a local single-node {kube} cluster.
-
 
 // =================================================================================================
 // Prerequisites
@@ -124,7 +117,6 @@ include::{common-includes}/kube-prereq.adoc[]
 include::{common-includes}/gitclone.adoc[]
 
 // no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
-
 
 // =================================================================================================
 // Staring and preparing your cluster for deployment
