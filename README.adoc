@@ -84,7 +84,8 @@ that define a set of rules by which the pods can be accessed. In a basic scenari
 service exposes a node port that can be used together with the cluster IP address to access
 the pods encapsulated by the service.
 
-To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
+To learn about the various Kubernetes resources that you can configure, 
+see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
 
 // =================================================================================================
 // Introduction
@@ -157,7 +158,8 @@ docker build -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
 The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format.
-The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
+The tag for an image describes the specific image version. 
+If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
 
 During the build, you'll see various Docker messages describing what images are being downloaded and
 built. When the build finishes, run the following command to list all local Docker images:
@@ -225,7 +227,8 @@ k8s.gcr.io/pause-amd64                                           3.0
 
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
-In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon and not your host's as described in the previous section.
+In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon 
+and not your host's as described in the previous section.
 
 
 // =================================================================================================
@@ -255,15 +258,18 @@ include::finish/kubernetes.yaml[]
 This file defines four {kube} resources. It defines two deployments and two services. 
 A {kube} deployment is a resource responsible for controlling the creation and management of pods. 
 A service exposes your deployment so that you can make requests to your containers. 
-Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, [hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. 
+Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, 
+[hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. 
 The [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels` is a way for a {kube} service to reference specific deployments. 
 The [hotspot=image1 hotspot=image2]`image` is the name and tag of the Docker image that you want to use for this container. 
 Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes for purposes of accessing your application.
 For the services, the key point to understand is that they expose your deployments.
-The binding between deployments and services is specified by the use of labels -- in this case the [hotspot=app1 hotspot=app2 hotspot=app3 hotspot=app4 hotspot=app5 hotspot=app6 hotspot=app7 hotspot=app8]`app` label.
+The binding between deployments and services is specified by the use of labels -- in this case the 
+[hotspot=app1 hotspot=app2 hotspot=app3 hotspot=app4 hotspot=app5 hotspot=app6 hotspot=app7 hotspot=app8]`app` label.
 You will also notice the service has a type of [hotspot=NodePort1 hotspot=NodePort2]`NodePort`.
 This means you can access these services from outside of your cluster via a specific port.
-In this case, the ports will be `31000` and `32000`, but it can also be randomized if the [hotspot=nodePort1 hotspot=nodePort2]`nodePort` field is not used.
+In this case, the ports will be `31000` and `32000`, but it can also be randomized if the 
+[hotspot=nodePort1 hotspot=nodePort2]`nodePort` field is not used.
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
 [role='command']
@@ -328,7 +334,8 @@ depending on whether `kube-service` is a valid {kube} Service that can be access
 
 To use load balancing, you need to scale your deployments. 
 When you scale a deployment, you replicate its pods, creating more running instances of your applications. 
-Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
+Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, 
+and then descale your deployments to free up resources when the traffic decreases.
 
 As an example, scale the `system` deployment to three pods by running the following command:
 [role='command']
@@ -368,8 +375,10 @@ kubectl delete -f kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
 
-This is not how you would want to update your applications when running in production, but in a development environment this is fine. 
-If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image. 
+This is not how you would want to update your applications when running in production, 
+but in a development environment this is fine. 
+If you want to deploy an updated image to a production cluster, 
+you can update the container in your deployment with a new image. 
 Then, {kube} will automate the creation of a new container and decommissioning of the old one once the new container is ready.
 
 // =================================================================================================
@@ -454,7 +463,8 @@ Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 
 == Tearing down the environment
 
-When you no longer need your deployed microservices, you can delete all {kube} resources by running the `kubectl delete` command:
+When you no longer need your deployed microservices, 
+you can delete all {kube} resources by running the `kubectl delete` command:
 [role='command']
 ```
 kubectl delete -f kubernetes.yaml
