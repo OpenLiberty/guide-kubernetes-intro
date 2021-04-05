@@ -497,7 +497,7 @@ inventory-deployment-645767664f-nbtd9   1/1       Running   0          1m
 ----
 
 // Static guide instruction
-ifdef::cloud-hosted[]
+ifndef::cloud-hosted[]
 Wait for your two new pods to be in the ready state, then make a `curl -I` request to, or visit the `{system-api}` URL. 
 endif::[]
 
@@ -566,7 +566,6 @@ include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.windows_section.mac_section]
 --
-
 Run the integration tests against a cluster running with a host name of `localhost`:
 [role='command']
 ```
@@ -644,9 +643,11 @@ you can delete all {kube} resources by running the `kubectl delete` command:
 kubectl delete -f kubernetes.yaml
 ```
 
+// Static guide only instruction
+ifndef::cloud-hosted[]
 [role='command']
 include::{common-includes}/kube-minikube-teardown.adoc[]
-
+endif::[]
 
 // =================================================================================================
 // finish
