@@ -496,7 +496,21 @@ system-deployment-6bd97d9bf6-x4zth      1/1       Running   0          25s
 inventory-deployment-645767664f-nbtd9   1/1       Running   0          1m
 ----
 
-Wait for your two new pods to be in the ready state, then `curl -I` or visit the `{system-api}` URL. 
+// Static guide instruction
+ifdef::cloud-hosted[]
+Wait for your two new pods to be in the ready state, then make a `curl -I` request to, or visit the `{system-api}` URL. 
+endif::[]
+
+// Cloud-hosted guide instruction
+ifdef::cloud-hosted[]
+Wait for your two new pods to be in the ready state, then make the following `curl` command:
+
+```
+curl http://$SYSTEM_HOST:31000/system/properties
+```
+{: codeblock}
+endif::[]
+
 You'll notice that the `X-Pod-Name` header will have a different value when you call it multiple times. 
 This is because there are now three pods running all serving the `system` application. 
 Similarly, to descale your deployments you can use the same scale command with fewer replicas.
@@ -546,6 +560,8 @@ The default properties defined in the [hotspot]`pom.xml` are:
 
 Navigate back to the `start` directory.
 
+// Static guide instruction
+ifndef::cloud-hosted[]
 include::{common-includes}/os-tabs.adoc[]
 
 [.tab_content.windows_section.mac_section]
@@ -566,6 +582,25 @@ Run the integration tests with the IP address for Minikube:
 mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
 ```
 --
+endif::[]
+
+// Cloud-hosted guide instruction
+ifdef::cloud-hosted[]
+Update the `pom.xml` files so that the `cluster.ip` properties match the values of your node IPs.
+
+```
+sed -i 's=localhost='"$INVENTORY_HOST"'=g' inventory/pom.xml
+sed -i 's=localhost='"$SYSTEM_HOST"'=g' system/pom.xml
+```
+{: codeblock}
+
+Run the integration tests using the following command:
+
+```
+mvn failsafe:integration-test
+```
+{: codeblock}
+endif::[]
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
 
