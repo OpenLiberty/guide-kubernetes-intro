@@ -506,7 +506,7 @@ ifdef::cloud-hosted[]
 Wait for your two new pods to be in the ready state, then make the following `curl` command:
 
 ```
-curl http://$SYSTEM_HOST:31000/system/properties
+curl -I http://$SYSTEM_HOST:31000/system/properties
 ```
 {: codeblock}
 endif::[]
@@ -526,12 +526,35 @@ When you're building your application, you may find that you want to quickly tes
 To do that, you can rebuild your Docker images then delete and re-create your {kube} resources. 
 Note that there will only be one `system` pod after you redeploy since you're deleting all of the existing pods.
 
+// Static guide instruction
+ifndef::cloud-hosted[]
 [role='command']
 ```
 mvn clean package
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+
 kubectl delete -f kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
+endif::[]
+
+// Cloud-hosted guide instruction
+ifdef::cloud-hosted[]
+```
+mvn clean package
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+docker tag inventory:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
+docker push us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
+docker push us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
+
+kubectl delete -f kubernetes.yaml
+kubectl apply -f kubernetes.yaml
+```
+{: codeblock}
+endif::[]
 
 This is not how you would want to update your applications when running in production, 
 but in a development environment this is fine. 
