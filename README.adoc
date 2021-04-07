@@ -515,11 +515,17 @@ You'll notice that the `X-Pod-Name` header will have a different value when you 
 This is because there are now three pods running all serving the `system` application. 
 Similarly, to descale your deployments you can use the same scale command with fewer replicas.
 
+[role='command']
+```
+kubectl scale deployment/system-deployment --replicas=1
+```
+
 == Redeploy microservices
 
 When you're building your application, you may find that you want to quickly test a change. 
 To do that, you can rebuild your Docker images then delete and re-create your {kube} resources. 
 Note that there will only be one `system` pod after you redeploy since you're deleting all of the existing pods.
+
 [role='command']
 ```
 mvn clean package
