@@ -515,6 +515,17 @@ You'll notice that the `X-Pod-Name` header will have a different value when you 
 This is because there are now three pods running all serving the `system` application. 
 Similarly, to descale your deployments you can use the same scale command with fewer replicas.
 
+// Cloud-hosted guide instruction
+ifdef::cloud-hosted[]
+```
+curl -I http://$SYSTEM_HOST:31000/system/properties
+curl -I http://$SYSTEM_HOST:31000/system/properties
+curl -I http://$SYSTEM_HOST:31000/system/properties
+
+```
+{: codeblock}
+endif::[]
+
 == Redeploy microservices
 
 When you're building your application, you may find that you want to quickly test a change. 
