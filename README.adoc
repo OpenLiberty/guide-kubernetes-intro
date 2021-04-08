@@ -215,6 +215,8 @@ When the build finishes, run the following command to list all local Docker imag
 docker images
 ```
 
+// Static guide instruction
+ifndef::cloud-hosted[]
 Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
 
 include::{common-includes}/os-tabs.adoc[]
@@ -275,9 +277,21 @@ If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, 
 build log for any potential errors.
 In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon 
 and not your host's as described in the previous section.
+endif::[]
 
 // Cloud hosted guide instruction
 ifdef::cloud-hosted[]
+Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
+
+```
+REPOSITORY                                TAG                       
+inventory                                 1.0-SNAPSHOT
+system                                    1.0-SNAPSHOT
+openliberty/open-liberty                  kernel-java8-openj9-ubi
+```
+
+If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
+build log for any potential errors.
 If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
 
 ```
