@@ -53,9 +53,9 @@ further leveraged for all steps of a continuous delivery pipeline.
 === Why use {kube}?
 
 Managing individual containers can be challenging. 
-A few containers used for development by a small team might not pose a problem,
-but managing hundreds of containers can give even a large team of experienced developers a headache. 
-{kube} is a primary tool for deployment in containerized environments. 
+A small team can easily manage a few containers for development but 
+managing hundreds of containers can be a headache, even for a large team of experienced developers.
+{kube} is a tool for deployment in containerized environments. 
 It handles scheduling, deployment, as well as mass deletion and creation of containers. 
 It provides update rollout abilities on a large scale that would otherwise prove extremely tedious to do. 
 Imagine that you updated a Docker image, which now needs to propagate to a dozen containers. 
@@ -101,7 +101,7 @@ The two microservices you will deploy are called `system` and `inventory`. The `
 returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
 making replicas easy to distinguish from each other. The `inventory` microservice
 adds the properties from the `system` microservice to the inventory. 
-This demonstrates how communication can be established between pods inside a cluster.
+This process demonstrates how communication can be established between pods inside a cluster.
 
 You will use a local single-node {kube} cluster.
 
@@ -132,7 +132,7 @@ endif::[]
 ifdef::cloud-hosted[]
 == Logging into your cluster
 
-For this guide you will use a container registry on IBM Cloud to deploy to Kubernetes.
+For this guide, you will use a container registry on IBM Cloud to deploy to Kubernetes.
 Get the name of your namespace with the following command:
 
 ```
@@ -140,7 +140,7 @@ bx cr namespace-list
 ```
 {: codeblock}
 
-You will see an output similar to the following:
+Look for output that is similar to the following:
 
 ```
 Listing namespaces for account 'QuickLabs - IBM Skills Network' in registry 'us.icr.io'...
@@ -150,14 +150,14 @@ sn-labs-yourname
 ```
 
 Store the namespace name in a variable.
-Use the namespace name obtained from the previous command. 
+Use the namespace name that was obtained from the previous command.
 
 ```
 NAMESPACE_NAME={namespace_name}
 ```
 {: codeblock}
 
-Verify that the variable contains your namespace name correctly:
+Verify that the variable contains your namespace name:
 
 ```
 echo $NAMESPACE_NAME
@@ -276,7 +276,7 @@ k8s.gcr.io/pause-amd64                                           3.0
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
 build log for any potential errors.
 In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon 
-and not your host's as described in the previous section.
+instead of your host's Docker daemon.
 endif::[]
 
 // Cloud hosted guide instruction
@@ -328,19 +328,19 @@ include::finish/kubernetes.yaml[]
 ----
 
 This file defines four {kube} resources. It defines two deployments and two services. 
-A {kube} deployment is a resource responsible for controlling the creation and management of pods. 
+A {kube} deployment is a resource that controls the creation and management of pods. 
 A service exposes your deployment so that you can make requests to your containers. 
 Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, 
 [hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. 
 The [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels` is a way for a {kube} service to reference specific deployments. 
 The [hotspot=image1 hotspot=image2]`image` is the name and tag of the Docker image that you want to use for this container. 
-Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes for purposes of accessing your application.
+Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes to access your application.
 For the services, the key point to understand is that they expose your deployments.
-The binding between deployments and services is specified by the use of labels -- in this case the 
+The binding between deployments and services is specified by labels -- in this case the 
 [hotspot=app1 hotspot=app2 hotspot=app3 hotspot=app4 hotspot=app5 hotspot=app6 hotspot=app7 hotspot=app8]`app` label.
 You will also notice the service has a type of [hotspot=NodePort1 hotspot=NodePort2]`NodePort`.
 This means you can access these services from outside of your cluster via a specific port.
-In this case, the ports will be `31000` and `32000`, but it can also be randomized if the 
+In this case, the ports are `31000` and `32000`, but port numbers can also be randomized if the
 [hotspot=nodePort1 hotspot=nodePort2]`nodePort` field is not used.
 
 // Cloud hosted guide instruction
@@ -400,14 +400,14 @@ The default host name for Docker Desktop is `localhost`.
 The default host name for minikube is {minikube-ip}. Otherwise it can be found using the `minikube ip` command.
 --
 
-Then use `curl` or visit the following URLs to access your microservices, substituting the appropriate host name:
+Then, run the `curl` command or visit the following URLs to access your microservices, substituting the appropriate host name:
 
 * `{system-api}`
 * `{inventory-api}/system-service`
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
 To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
-The second URL adds properties from `system-service` to the inventory {kube} Service. 
+The second URL adds properties from the `system-service` endpoint to the inventory {kube} Service. 
 Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
 depending on whether `kube-service` is a valid {kube} service that can be accessed.
 endif::[]
@@ -421,15 +421,15 @@ kubectl describe pod system | grep Node
 ```
 {: codeblock}
 
-The output will show the node IP that will be used to access the service later. 
-It will appear in a format similar to the following:
+The output shows the node IP that is later used to access the service. 
+It appears in a format similar to the following:
 
 ```
 Node:         10.114.85.140/10.114.85.140
 Node-Selectors:  <none>
 ```
 
-Here the IP is `10.114.85.140` for the system service.
+The IP for the system service is `10.114.85.140`.
 Store the IP in a variable.
 
 ```
@@ -451,7 +451,7 @@ INVENTORY_HOST={inventory-node-ip}
 ```
 {: codeblock}
 
-Verify that the variables containing the IPs have been set correctly:
+Verify that the variables that contain the IPs are set correctly:
 
 ```
 echo $SYSTEM_HOST && echo $INVENTORY_HOST
@@ -471,7 +471,7 @@ curl http://$INVENTORY_HOST:32000/inventory/systems/system-service
 {: codeblock}
 
 The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
-To view the header, you may use the `-I` option in the `curl` when making a request to the 
+To view the header, you can use the `-I` option in the `curl` command when you make a request to the
 `http://$SYSTEM_HOST:31000/system/properties` URL.
 The second URL adds properties from `system-service` to the inventory {kube} Service. 
 Making a request to the `http://$INVENTORY_HOST:32000/inventory/systems/[kube-service]` URL in general 
@@ -486,7 +486,7 @@ endif::[]
 
 To use load balancing, you need to scale your deployments. 
 When you scale a deployment, you replicate its pods, creating more running instances of your applications. 
-Scaling is one of the primary advantages of {kube} because replicating your application allows it to accommodate more traffic, 
+Scaling is one of the primary advantages of {kube} because you can replicate your application to accommodate more traffic, 
 and then descale your deployments to free up resources when the traffic decreases.
 
 As an example, scale the `system` deployment to three pods by running the following command:
@@ -525,8 +525,8 @@ curl -I http://$SYSTEM_HOST:31000/system/properties
 {: codeblock}
 endif::[]
 
-You'll notice that the `X-Pod-Name` header will have a different value when you call it multiple times. 
-This is because there are now three pods running all serving the `system` application. 
+Notice that the `X-Pod-Name` header has a different value when you call it multiple times.
+The value changes because three pods that all serve the `system` application are now running.
 Similarly, to descale your deployments you can use the same scale command with fewer replicas.
 
 [role='command']
@@ -536,9 +536,9 @@ kubectl scale deployment/system-deployment --replicas=1
 
 == Redeploy microservices
 
-When you're building your application, you may find that you want to quickly test a change. 
-To do that, you can rebuild your Docker images then delete and re-create your {kube} resources. 
-Note that there will only be one `system` pod after you redeploy since you're deleting all of the existing pods.
+When you're building your application, you might want to quickly test a change. 
+To run a quick test, you can rebuild your Docker images then delete and re-create your {kube} resources. 
+Note that there is only one `system` pod after you redeploy since you're deleting all of the existing pods.
 
 // Static guide instruction
 ifndef::cloud-hosted[]
@@ -570,11 +570,10 @@ kubectl apply -f kubernetes.yaml
 {: codeblock}
 endif::[]
 
-This is not how you would want to update your applications when running in production, 
-but in a development environment this is fine. 
+Updating your applications in this way is fine for development environments, but it is not suitable for production.
 If you want to deploy an updated image to a production cluster, 
 you can update the container in your deployment with a new image. 
-Then, {kube} will automate the creation of a new container and decommissioning of the old one once the new container is ready.
+Once the new container is ready, {kube} automates both the creation of a new container and the decommissioning of the old one.
 
 // =================================================================================================
 // Testing microservices that are running on {kube}
@@ -636,7 +635,7 @@ sed -i 's=localhost='"$SYSTEM_HOST"'=g' system/pom.xml
 ```
 {: codeblock}
 
-Run the integration tests using the following command:
+Run the integration tests by using the following command:
 
 ```
 mvn failsafe:integration-test
@@ -672,7 +671,6 @@ Results:
 Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ----
 
-
 // =================================================================================================
 // Tear Down
 // =================================================================================================
@@ -698,7 +696,7 @@ endif::[]
 
 == Great work! You're done!
 
-You have just deployed two microservices running in Open Liberty to {kube}. 
+You have just deployed two microservices that are running in Open Liberty to {kube}.
 You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
