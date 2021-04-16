@@ -12,5 +12,5 @@ apt-get install -y conntrack
 
 sysctl fs.protected_regular=0
 
-sudo minikube start --bootstrapper=kubeadm
+minikube start --driver=none --bootstrapper=kubeadm
 eval "$(minikube docker-env)"
