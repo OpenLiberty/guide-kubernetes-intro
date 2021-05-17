@@ -16,7 +16,7 @@ sleep 120
 
 kubectl get pods
 
-echo "$(minikube ip)"
+minikube ip
 
 curl http://"$(minikube ip)":31000/system/properties
 curl http://"$(minikube ip)":32000/inventory/systems
@@ -24,7 +24,7 @@ curl http://"$(minikube ip)":32000/inventory/systems
 mvn failsafe:integration-test -Ddockerfile.skip=true -Dcluster.ip="$(minikube ip)"
 mvn failsafe:verify
 
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)
-kubectl logs $(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)
+kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
+kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
 
 ../scripts/stopMinikube.sh
