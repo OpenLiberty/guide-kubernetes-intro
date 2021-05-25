@@ -2,7 +2,7 @@ name: Test application
 
 on:
   pull_request:
-    branches: [master, qa]
+    branches: [ prod, staging ]
 
 jobs:
   check-files:
@@ -28,6 +28,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: ./tools/pr-checker/linters/
+          DEFAULT_BRANCH: prod
       - name: Summary
         if: always()
         run: |
