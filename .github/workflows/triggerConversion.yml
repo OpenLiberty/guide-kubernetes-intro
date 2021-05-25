@@ -5,8 +5,8 @@ name: Rebuild cloud-hosted guide
 on:
   push:
     branches:
-      - 'master'
-      - 'qa'
+      - 'prod'
+      - 'staging'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
