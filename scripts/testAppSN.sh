@@ -24,12 +24,12 @@ sleep 120
 
 kubectl get pods
 
-IPSTR=`kubectl describe pod system | grep Node: | cut -c 15-`
+IPSTR=$(kubectl describe pod system | grep Node: | cut -c 15-)
 IFS=\/
 read -a system_ip <<< ${IPSTR}
 curl http://${system_ip[0]}:31000/system/properties
 
-IPSTR=`kubectl describe pod inventory | grep Node: | cut -c 15-`
+IPSTR=$(kubectl describe pod inventory | grep Node: | cut -c 15-)
 read -a inventory_ip <<< ${IPSTR}
 
 curl http://${inventory_ip[0]}:32000/inventory/systems
