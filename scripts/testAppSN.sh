@@ -8,7 +8,7 @@ docker pull openliberty/open-liberty:full-java11-openj9-ubi
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 
-NAMESPACE_NAME=`bx cr namespace-list | grep sn-labs- | sed 's/ *$//g'`
+NAMESPACE_NAME=$(bx cr namespace-list | grep sn-labs- | sed 's/ *$//g')
 echo $NAMESPACE_NAME
 docker tag inventory:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
 docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
