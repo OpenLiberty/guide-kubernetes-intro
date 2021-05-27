@@ -9,11 +9,11 @@ docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 
 NAMESPACE_NAME=$(bx cr namespace-list | grep sn-labs- | sed 's/ *$//g')
-echo ${NAMESPACE_NAME}
-docker tag inventory:1.0-SNAPSHOT us.icr.io/${NAMESPACE_NAME}/inventory:1.0-SNAPSHOT
-docker tag system:1.0-SNAPSHOT us.icr.io/${NAMESPACE_NAME}/system:1.0-SNAPSHOT
-docker push us.icr.io/${NAMESPACE_NAME}/inventory:1.0-SNAPSHOT
-docker push us.icr.io/${NAMESPACE_NAME}/system:1.0-SNAPSHOT
+echo "${NAMESPACE_NAME}"
+docker tag inventory:1.0-SNAPSHOT us.icr.io/"${NAMESPACE_NAME}"/inventory:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT us.icr.io/"${NAMESPACE_NAME}"/system:1.0-SNAPSHOT
+docker push us.icr.io/"${NAMESPACE_NAME}"/inventory:1.0-SNAPSHOT
+docker push us.icr.io/"${NAMESPACE_NAME}"/system:1.0-SNAPSHOT
 
 sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"${NAMESPACE_NAME}"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
 sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"${NAMESPACE_NAME}"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
@@ -25,12 +25,12 @@ sleep 120
 kubectl get pods
 
 IPSTR=$(kubectl describe pod system | grep Node: | cut -c 15-)
-IFS=\/
-read -a system_ip <<< ${IPSTR}
-curl http://${system_ip[0]}:31000/system/properties
+IFS=/
+read -a system_ip <<< "${IPSTR}"
+curl http://"${system_ip[0]}":31000/system/properties
 
 IPSTR=$(kubectl describe pod inventory | grep Node: | cut -c 15-)
-read -a inventory_ip <<< ${IPSTR}
+read -a inventory_ip <<< "${IPSTR}"
 
 curl http://${inventory_ip[0]}:32000/inventory/systems
 
