@@ -26,13 +26,13 @@ kubectl get pods
 
 IPSTR=$(kubectl describe pod system | grep Node: | cut -c 15-)
 IFS=/
-read -a system_ip <<< "${IPSTR}"
+read -r -a system_ip <<< "${IPSTR}"
 curl http://"${system_ip[0]}":31000/system/properties
 
 IPSTR=$(kubectl describe pod inventory | grep Node: | cut -c 15-)
-read -a inventory_ip <<< "${IPSTR}"
+read -r -a inventory_ip <<< "${IPSTR}"
 
-curl http://${inventory_ip[0]}:32000/inventory/systems
+curl http://"${inventory_ip[0]}":32000/inventory/systems
 
 sed -i 's=localhost='"${inventory_ip[0]}"'=g' inventory/pom.xml
 sed -i 's=localhost='"${system_ip[0]}"'=g' system/pom.xml
