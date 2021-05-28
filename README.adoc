@@ -228,7 +228,7 @@ include::{common-includes}/os-tabs.adoc[]
 REPOSITORY                                                       TAG
 inventory                                                        1.0-SNAPSHOT
 system                                                           1.0-SNAPSHOT
-openliberty/open-liberty                                         full-java8-openj9-ubi
+openliberty/open-liberty                                         full-java11-openj9-ubi
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
 k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.3
@@ -248,7 +248,7 @@ k8s.gcr.io/pause-amd64                                           3.1
 REPOSITORY                                                       TAG
 inventory                                                        1.0-SNAPSHOT
 system                                                           1.0-SNAPSHOT
-openliberty/open-liberty                                         full-java8-openj9-ubi
+openliberty/open-liberty                                         full-java11-openj9-ubi
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.0
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.0
 k8s.gcr.io/kube-apiserver-amd64                                  v1.10.0
@@ -287,7 +287,7 @@ Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are li
 REPOSITORY                                TAG                       
 inventory                                 1.0-SNAPSHOT
 system                                    1.0-SNAPSHOT
-openliberty/open-liberty                  full-java8-openj9-ubi
+openliberty/open-liberty                  full-java11-openj9-ubi
 ```
 
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
