@@ -544,11 +544,12 @@ Note that there is only one `system` pod after you redeploy since you're deletin
 ifndef::cloud-hosted[]
 [role='command']
 ```
+kubectl delete -f kubernetes.yaml
+
 mvn clean package
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 
-kubectl delete -f kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
 endif::[]
@@ -556,6 +557,8 @@ endif::[]
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
 ```
+kubectl delete -f kubernetes.yaml
+
 mvn clean package
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
@@ -564,7 +567,6 @@ docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
 docker push us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
 docker push us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
 
-kubectl delete -f kubernetes.yaml
 kubectl apply -f kubernetes.yaml
 ```
 {: codeblock}
