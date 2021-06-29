@@ -20,7 +20,7 @@
         <!-- tag::system.kube.service[] -->
         <system.kube.service>system-service</system.kube.service>
         <!-- end::system.kube.service[] -->
-        <!-- tag::system.nservice.root[] -->
+        <!-- tag::system.service.root[] -->
         <system.service.root>localhost:31000</system.service.root>
         <!-- end::system.service.root[] -->
         <!-- tag::inventory.service.root[] -->
