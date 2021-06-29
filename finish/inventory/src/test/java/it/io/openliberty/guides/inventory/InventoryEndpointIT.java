@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018, 2020 IBM Corporation and others.
+ * Copyright (c) 2018, 2021 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -42,13 +42,12 @@ public class InventoryEndpointIT {
 
     @BeforeAll
     public static void oneTimeSetup() {
-        String clusterIp = System.getProperty("cluster.ip");
-        String invNodePort = System.getProperty("inventory.node.port");
-        String sysNodePort = System.getProperty("system.node.port");
+        String invRootPath = System.getProperty("inventory.service.root");
+        String sysRootPath = System.getProperty("system.service.root");
 
         sysKubeService = System.getProperty("system.kube.service");
-        invUrl = "http://" + clusterIp + ":" + invNodePort + "/inventory/systems/";
-        sysUrl = "http://" + clusterIp + ":" + sysNodePort + "/system/properties/";
+        invUrl = "http://" + invRootPath + "/inventory/systems/";
+        sysUrl = "http://" + sysRootPath + "/system/properties/";
 
         client = ClientBuilder.newBuilder().hostnameVerifier(new HostnameVerifier() {
             public boolean verify(String hostname, SSLSession session) {

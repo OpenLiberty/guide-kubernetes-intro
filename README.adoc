@@ -596,10 +596,9 @@ The default properties defined in the [hotspot]`pom.xml` are:
 [cols="15, 100", options="header"]
 |===
 | *Property*                        | *Description*
-| [hotspot=cluster.ip]`cluster.ip`            | IP or host name for your cluster, `localhost` by default, which is appropriate when using Docker Desktop.
-| [hotspot=system.kube.service]`system.kube.service`     | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
-| [hotspot=system.node.port]`system.node.port`        | The NodePort of the {kube} Service `system-service`, 31000 by default.
-| [hotspot=inventory.node.port]`inventory.node.port`        | The NodePort of the {kube} Service `inventory-service`, 32000 by default.
+| [hotspot=system.kube.service]`system.kube.service` | Name of the {kube} Service wrapping the `system` pods, `system-service` by default.
+| [hotspot=system.service.root]`system.service.root` | The {kube} Service `system-service` root path, `localhost:31000` by default.
+| [hotspot=inventory.node.port]`inventory.node.port` | The {kube} Service `inventory-service` root path, `localhost:32000` by default.
 |===
 
 Navigate back to the `start` directory.
