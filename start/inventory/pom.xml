@@ -100,9 +100,8 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <cluster.ip>${cluster.ip}</cluster.ip>
-                        <inventory.node.port>${inventory.node.port}</inventory.node.port>
-                        <system.node.port>${system.node.port}</system.node.port>
+                        <inventory.service.root>${inventory.service.root}</inventory.service.root>
+                        <system.service.root>${system.service.root}</system.service.root>
                         <system.kube.service>${system.kube.service}</system.kube.service>
                     </systemPropertyVariables>
                 </configuration>
