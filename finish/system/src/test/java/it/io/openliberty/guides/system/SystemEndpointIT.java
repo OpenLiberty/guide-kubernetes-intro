@@ -57,7 +57,7 @@ public class SystemEndpointIT {
     public void teardown() {
         client.close();
     }
- 
+
     @Test
     public void testPodNameNotNull() {
         response = this.getResponse(clusterUrl);
