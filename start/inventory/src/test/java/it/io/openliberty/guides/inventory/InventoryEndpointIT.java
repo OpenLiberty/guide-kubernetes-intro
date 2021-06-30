@@ -77,7 +77,7 @@ public class InventoryEndpointIT {
         int expected = 0;
         int actual = obj.getInt("total");
         assertEquals(expected, actual,
-                        "The inventory should be empty on application start but it wasn't");
+            "The inventory should be empty on application start but it wasn't");
 
         response.close();
     }
@@ -97,12 +97,12 @@ public class InventoryEndpointIT {
         int expected = 1;
         int actual = obj.getInt("total");
         assertEquals(expected, actual,
-                        "The inventory should have one entry for " + sysKubeService);
+            "The inventory should have one entry for " + sysKubeService);
 
         boolean serviceExists = obj.getJsonArray("systems").getJsonObject(0)
                         .get("hostname").toString().contains(sysKubeService);
         assertTrue(serviceExists,
-                        "A host was registered, but it was not " + sysKubeService);
+            "A host was registered, but it was not " + sysKubeService);
 
         response.close();
     }
@@ -150,14 +150,14 @@ public class InventoryEndpointIT {
                         .request(MediaType.APPLICATION_JSON).get();
 
         assertEquals(404, badResponse.getStatus(),
-                     "BadResponse expected status: 404. " 
+                     "BadResponse expected status: 404. "
                      + "Response code not as expected.");
 
         String obj = badResponse.readEntity(String.class);
 
         boolean isError = obj.contains("error");
         assertTrue(isError,
-                        "badhostname is not a valid host but it didn't raise an error");
+            "badhostname is not a valid host but it didn't raise an error");
 
         response.close();
         badResponse.close();

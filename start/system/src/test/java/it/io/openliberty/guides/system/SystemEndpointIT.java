@@ -64,8 +64,8 @@ public class SystemEndpointIT {
         this.assertResponse(clusterUrl, response);
         String greeting = response.getHeaderString("X-Pod-Name");
 
-        assertNotNull(greeting,
-            "Container name should not be null but it was. The service is probably not running inside a container");
+        assertNotNull(greeting, "Container name should not be null. " +
+            "The service is probably not running inside a container");
     }
 
     @Test
@@ -76,7 +76,8 @@ public class SystemEndpointIT {
         WebTarget target = client.target(clusterUrl);
         Response response = target.request().get();
 
-        assertEquals(200, response.getStatus(), "Incorrect response code from " + clusterUrl);
+        assertEquals(200, response.getStatus(),
+            "Incorrect response code from " + clusterUrl);
         response.close();
     }
 
