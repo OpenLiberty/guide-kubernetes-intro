@@ -416,7 +416,7 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-In this execise, you need to access the services by using Kubernetes API.
+In this execise, you need to access the services by using the Kubernetes API.
 Run the following command to start a proxy to the Kubernetes API server:
 
 ```
@@ -441,28 +441,29 @@ echo $SYSTEM_PROXY && echo $INVENTORY_PROXY
 {: codeblock}
 
 
-The output appears similar to the following:
+The output appears as shown in the following example:
 
 ```
 localhost:8001/api/v1/namespaces/sn-labs-yourname/services/system-service/proxy
 localhost:8001/api/v1/namespaces/sn-labs-yourname/services/inventory-service/proxy
 ```
 
-Then use the following **curl** command to access your **system** microservice:
+Then, use the following **curl** command to access your **system** microservice:
 
 ```
 curl http://$SYSTEM_PROXY/system/properties | jq
 ```
 {: codeblock}
 
-and use the following **curl** command to access your **inventory** microservice:
+Also, use the following **curl** command to access your **inventory** microservice:
 
 ```
 curl http://$INVENTORY_PROXY/inventory/systems/system-service | jq
 ```
 {: codeblock}
 
-The first URL returns system properties and the name of the pod in an HTTP header called **X-Pod-Name**.
+The **http://$SYSTEM_PROXY/system/properties** URL returns system properties and the name of the pod 
+in an HTTP header that is called **X-Pod-Name**.
 To view the header, you can use the **-I** option in the **curl** command when you make a request to the
 **http://$SYSTEM_PROXY/system/properties** URL.
 
@@ -471,9 +472,11 @@ curl -I http://$SYSTEM_PROXY/system/properties
 ```
 {: codeblock}
 
-The second URL adds properties from **system-service** to the inventory {kube} Service. 
+The **http://$INVENTORY_PROXY/inventory/systems/system-service** URL adds properties 
+from the **system-service** endpoint to the inventory {kube} Service. 
 Making a request to the **http://$INVENTORY_PROXY/inventory/systems/[kube-service]** URL in general 
-adds to the inventory depending on whether **kube-service** is a valid {kube} service that can be accessed.
+adds to the inventory. That result depends on whether **kube-service** is a valid {kube} service 
+that can be accessed.
 endif::[]
 
 // =================================================================================================
