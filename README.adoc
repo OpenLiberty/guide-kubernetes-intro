@@ -475,7 +475,7 @@ curl -I http://$SYSTEM_PROXY/system/properties
 The **http://$INVENTORY_PROXY/inventory/systems/system-service** URL adds properties 
 from the **system-service** endpoint to the inventory {kube} Service. 
 Making a request to the **http://$INVENTORY_PROXY/inventory/systems/[kube-service]** URL in general 
-adds to the inventory. That result depends on whether **kube-service** is a valid {kube} service 
+adds to the inventory. That result depends on whether the **kube-service** endpoint is a valid {kube} service 
 that can be accessed.
 endif::[]
 
