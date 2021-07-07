@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2018, 2020 IBM Corporation and others.
+ * Copyright (c) 2018, 2021 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -42,13 +42,12 @@ public class InventoryEndpointIT {
 
     @BeforeAll
     public static void oneTimeSetup() {
-        String clusterIp = System.getProperty("cluster.ip");
-        String invNodePort = System.getProperty("inventory.node.port");
-        String sysNodePort = System.getProperty("system.node.port");
+        String invRootPath = System.getProperty("inventory.service.root");
+        String sysRootPath = System.getProperty("system.service.root");
 
         sysKubeService = System.getProperty("system.kube.service");
-        invUrl = "http://" + clusterIp + ":" + invNodePort + "/inventory/systems/";
-        sysUrl = "http://" + clusterIp + ":" + sysNodePort + "/system/properties/";
+        invUrl = "http://" + invRootPath + "/inventory/systems/";
+        sysUrl = "http://" + sysRootPath + "/system/properties/";
 
         client = ClientBuilder.newBuilder().hostnameVerifier(new HostnameVerifier() {
             public boolean verify(String hostname, SSLSession session) {
@@ -78,7 +77,7 @@ public class InventoryEndpointIT {
         int expected = 0;
         int actual = obj.getInt("total");
         assertEquals(expected, actual,
-                        "The inventory should be empty on application start but it wasn't");
+            "The inventory should be empty on application start but it wasn't");
 
         response.close();
     }
@@ -98,12 +97,12 @@ public class InventoryEndpointIT {
         int expected = 1;
         int actual = obj.getInt("total");
         assertEquals(expected, actual,
-                        "The inventory should have one entry for " + sysKubeService);
+            "The inventory should have one entry for " + sysKubeService);
 
         boolean serviceExists = obj.getJsonArray("systems").getJsonObject(0)
                         .get("hostname").toString().contains(sysKubeService);
         assertTrue(serviceExists,
-                        "A host was registered, but it was not " + sysKubeService);
+            "A host was registered, but it was not " + sysKubeService);
 
         response.close();
     }
@@ -151,7 +150,7 @@ public class InventoryEndpointIT {
                         .request(MediaType.APPLICATION_JSON).get();
 
         assertEquals(404, badResponse.getStatus(),
-                     "BadResponse expected status: 404. " 
+                     "BadResponse expected status: 404. "
                      + "Response code not as expected.");
 
         String obj = badResponse.readEntity(String.class);
@@ -171,7 +170,7 @@ public class InventoryEndpointIT {
      * <p>
      * Returns response information from the specified URL.
      * </p>
-     * 
+     *
      * @param url - target URL.
      * @return Response object with the response from the specified URL.
      */
@@ -185,7 +184,7 @@ public class InventoryEndpointIT {
      * <p>
      * Asserts that the given URL has the correct response code of 200.
      * </p>
-     * 
+     *
      * @param url      - target URL.
      * @param response - response received from the target URL.
      */
@@ -198,7 +197,7 @@ public class InventoryEndpointIT {
     /**
      * Asserts that the specified JVM system property is equivalent in both the
      * system and inventory services.
-     * 
+     *
      * @param propertyName - name of the system property to check.
      * @param hostname     - name of JVM's host.
      * @param expected     - expected name.
