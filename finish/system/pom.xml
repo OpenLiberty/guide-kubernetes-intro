@@ -86,7 +86,7 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <system.service.root>${system.node.port}</system.service.root>
+                        <system.service.root>${system.service.root}</system.service.root>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
