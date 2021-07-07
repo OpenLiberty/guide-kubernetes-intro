@@ -47,6 +47,6 @@ curl http://"${INVENTORY_PROXY}"/inventory/systems
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
 
-kill $(pidof kubectl)
+kill "$(pidof kubectl)"
 
 kubectl delete -f kubernetes.yaml
