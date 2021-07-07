@@ -28,7 +28,7 @@ kubectl get pods
 
 kubectl proxy &
 
-NAMESPACE_NAME=`bx cr namespace-list | grep sn-labs- | sed 's/ //g'`
+NAMESPACE_NAME=$(bx cr namespace-list | grep sn-labs- | sed 's/ //g')
 SYSTEM_PROXY=localhost:8001/api/v1/namespaces/"$NAMESPACE_NAME"/services/system-service/proxy
 INVENTORY_PROXY=localhost:8001/api/v1/namespaces/"$NAMESPACE_NAME"/services/inventory-service/proxy
 
@@ -47,6 +47,6 @@ curl http://"${INVENTORY_PROXY}":32000/inventory/systems
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
 
-kill `pidof kubectl`
+kill $(pidof kubectl)
 
 kubectl delete -f kubernetes.yaml
