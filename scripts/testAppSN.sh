@@ -42,7 +42,7 @@ mvn failsafe:integration-test
 mvn failsafe:verify
 
 curl http://"${SYSTEM_PROXY}"/system/properties
-curl http://"${INVENTORY_PROXY}":32000/inventory/systems
+curl http://"${INVENTORY_PROXY}"/inventory/systems
 
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
