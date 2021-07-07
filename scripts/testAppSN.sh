@@ -17,30 +17,36 @@ docker push us.icr.io/"${NAMESPACE_NAME}"/system:1.0-SNAPSHOT
 
 sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"${NAMESPACE_NAME}"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
 sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"${NAMESPACE_NAME}"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
+sed -i 's=nodePort: 31000==g' kubernetes.yaml
+sed -i 's=nodePort: 32000==g' kubernetes.yaml
 
 kubectl apply -f kubernetes.yaml
 
-sleep 120
+sleep 60
 
 kubectl get pods
 
-IPSTR=$(kubectl describe pod system | grep Node: | cut -c 15-)
-IFS=/
-read -r -a system_ip <<< "${IPSTR}"
-curl http://"${system_ip[0]}":31000/system/properties
+kubectl proxy &
 
-IPSTR=$(kubectl describe pod inventory | grep Node: | cut -c 15-)
-read -r -a inventory_ip <<< "${IPSTR}"
+NAMESPACE_NAME=`bx cr namespace-list | grep sn-labs- | sed 's/ //g'`
+SYSTEM_PROXY=localhost:8001/api/v1/namespaces/"$NAMESPACE_NAME"/services/system-service/proxy
+INVENTORY_PROXY=localhost:8001/api/v1/namespaces/"$NAMESPACE_NAME"/services/inventory-service/proxy
 
-curl http://"${inventory_ip[0]}":32000/inventory/systems
+echo "$SYSTEM_PROXY" && echo "$INVENTORY_PROXY"
 
-sed -i 's=localhost='"${inventory_ip[0]}"'=g' inventory/pom.xml
-sed -i 's=localhost='"${system_ip[0]}"'=g' system/pom.xml
+sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' inventory/pom.xml
+sed -i 's=localhost:32000='"$INVENTORY_PROXY"'=g' inventory/pom.xml
+sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' system/pom.xml
 
 mvn failsafe:integration-test 
 mvn failsafe:verify
 
+curl http://"${SYSTEM_PROXY}"/system/properties
+curl http://"${INVENTORY_PROXY}":32000/inventory/systems
+
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
+
+kill `pidof kubectl`
 
 kubectl delete -f kubernetes.yaml
