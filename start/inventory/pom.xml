@@ -17,10 +17,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Default test properties -->
-        <cluster.ip>localhost</cluster.ip>
         <system.kube.service>system-service</system.kube.service>
-        <system.node.port>31000</system.node.port>
-        <inventory.node.port>32000</inventory.node.port>
+        <system.service.root>localhost:31000</system.service.root>
+        <inventory.service.root>localhost:32000</inventory.service.root>
+
         <!-- Liberty configuration -->
         <liberty.var.default.http.port>9080</liberty.var.default.http.port>
         <liberty.var.default.https.port>9443</liberty.var.default.https.port>
@@ -100,9 +100,8 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <cluster.ip>${cluster.ip}</cluster.ip>
-                        <inventory.node.port>${inventory.node.port}</inventory.node.port>
-                        <system.node.port>${system.node.port}</system.node.port>
+                        <inventory.service.root>${inventory.service.root}</inventory.service.root>
+                        <system.service.root>${system.service.root}</system.service.root>
                         <system.kube.service>${system.kube.service}</system.kube.service>
                     </systemPropertyVariables>
                 </configuration>

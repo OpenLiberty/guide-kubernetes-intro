@@ -17,8 +17,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Default test properties -->
-        <cluster.ip>localhost</cluster.ip>
-        <system.node.port>31000</system.node.port>
+        <system.service.root>localhost:31000</system.service.root>
         <!-- Liberty configuration -->
         <liberty.var.default.http.port>9080</liberty.var.default.http.port>
         <liberty.var.default.https.port>9443</liberty.var.default.https.port>
@@ -87,8 +86,7 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <cluster.ip>${cluster.ip}</cluster.ip>
-                        <system.node.port>${system.node.port}</system.node.port>
+                        <system.service.root>${system.node.port}</system.service.root>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
