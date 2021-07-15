@@ -451,14 +451,14 @@ localhost:8001/api/v1/namespaces/sn-labs-yourname/services/inventory-service/pro
 Then, use the following **curl** command to access your **system** microservice:
 
 ```
-curl http://$SYSTEM_PROXY/system/properties | jq
+curl -s ttp://$SYSTEM_PROXY/system/properties | jq
 ```
 {: codeblock}
 
 Also, use the following **curl** command to access your **inventory** microservice:
 
 ```
-curl http://$INVENTORY_PROXY/inventory/systems/system-service | jq
+curl -s http://$INVENTORY_PROXY/inventory/systems/system-service | jq
 ```
 {: codeblock}
 
