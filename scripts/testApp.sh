@@ -3,7 +3,10 @@ set -euxo pipefail
 
 ../scripts/startMinikube.sh
 
-mvn -q package
+mvn -Dhttp.keepAlive=false \
+    -Dmaven.wagon.http.pool=false \
+    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+    -q clean package
 
 docker pull openliberty/open-liberty:full-java11-openj9-ubi
 
