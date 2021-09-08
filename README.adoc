@@ -17,7 +17,7 @@
 :page-tags: ['Kubernetes', 'Docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio-intro']
-:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/maven-gradle
 :source-highlighter: prettify
 :page-seo-title: Deploying Java microservices to Kubernetes
 :page-seo-description: A getting started tutorial on how to deploy Java microservices in Docker containers to a Kubernetes cluster with examples of how to manage and scale the Kubernetes deployment.
@@ -188,11 +188,17 @@ https://openliberty.io/guides/containerize.html[Containerizing Microservices^] g
 which covers Dockerfiles in depth.
 
 Navigate to the `start` directory and build the applications by running the following commands:
-[role='command']
-```
+[source, role="maven_section command"]
+----
 cd start
-mvn clean package
-```
+./mvnw clean package
+----
+
+[source, role="gradle_section command"]
+----
+cd start
+./gradlew clean jar
+----
 
 include::{common-includes}/ol-full-docker-pull.adoc[]
 
@@ -543,16 +549,27 @@ Note that there is only one `system` pod after you redeploy since you're deletin
 
 // Static guide instruction
 ifndef::cloud-hosted[]
-[role='command']
-```
+[source, role="maven_section command"]
+----
 kubectl delete -f kubernetes.yaml
 
-mvn clean package
+./mvnw clean package
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 
 kubectl apply -f kubernetes.yaml
-```
+----
+
+[source, role="gradle_section command"]
+----
+kubectl delete -f kubernetes.yaml
+
+./gradlew clean jar
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+
+kubectl apply -f kubernetes.yaml
+----
 endif::[]
 
 // Cloud-hosted guide instruction
@@ -612,19 +629,29 @@ include::{common-includes}/os-tabs.adoc[]
 [.tab_content.windows_section.mac_section]
 --
 Run the integration tests against a cluster running with a host name of `localhost`:
-[role='command']
-```
-mvn failsafe:integration-test
-```
+[source, role="maven_section command"]
+----
+./mvnw failsafe:integration-test
+----
+
+[source, role="gradle_section command"]
+----
+./gradlew test
+----
 --
 
 [.tab_content.linux_section]
 --
 Run the integration tests with the IP address for Minikube:
-[role='command']
-```
-mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
-```
+[source, role="maven_section command"]
+----
+./mvnw failsafe:integration-test -Dcluster.ip=$(minikube ip)
+----
+
+[source, role="gradle_section command"]
+----
+./gradlew test -Dcluster.ip=$(minikube ip)
+----
 --
 endif::[]
 
