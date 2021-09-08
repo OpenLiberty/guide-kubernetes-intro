@@ -179,7 +179,7 @@ endif::[]
 
 The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
 
-The starting Java project, which you can find in the `start` directory, is a multi-module Maven
+The starting Java project, which you can find in the `start` directory, is a multi-module
 project that's made up of the `system` and `inventory` microservices. 
 Each microservice resides in its own directory, `start/system` and `start/inventory`. 
 Each of these directories also contains a Dockerfile, which is necessary for building Docker images. 
@@ -278,7 +278,7 @@ k8s.gcr.io/pause-amd64                                           3.0
 ----
 --
 
-If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
+If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the 
 build log for any potential errors.
 In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon 
 instead of your host's Docker daemon.
