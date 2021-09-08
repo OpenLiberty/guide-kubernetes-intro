@@ -626,7 +626,21 @@ Navigate back to the `start` directory.
 ifndef::cloud-hosted[]
 include::{common-includes}/os-tabs.adoc[]
 
-[.tab_content.windows_section.mac_section]
+[.tab_content.windows_section]
+--
+Run the integration tests against a cluster running with a host name of `localhost`:
+[source, role="maven_section command"]
+----
+mvnw failsafe:integration-test
+----
+
+[source, role="gradle_section command"]
+----
+gradlew test
+----
+--
+
+[.tab_content.mac_section]
 --
 Run the integration tests against a cluster running with a host name of `localhost`:
 [source, role="maven_section command"]
