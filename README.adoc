@@ -188,17 +188,34 @@ https://openliberty.io/guides/containerize.html[Containerizing Microservices^] g
 which covers Dockerfiles in depth.
 
 Navigate to the `start` directory and build the applications by running the following commands:
+
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.windows_section]
+--
+[source, role="maven_section command"]
+----
+cd start
+mvnw clean package
+----
+[source, role="gradle_section command"]
+----
+cd start
+gradlew clean jar
+----
+--
+[.tab_content.mac_section.linux_section]
+--
 [source, role="maven_section command"]
 ----
 cd start
 ./mvnw clean package
 ----
-
 [source, role="gradle_section command"]
 ----
 cd start
 ./gradlew clean jar
 ----
+--
 
 include::{common-includes}/ol-full-docker-pull.adoc[]
 
@@ -549,6 +566,32 @@ Note that there is only one `system` pod after you redeploy since you're deletin
 
 // Static guide instruction
 ifndef::cloud-hosted[]
+include::{common-includes}/os-tabs.adoc[]
+[.tab_content.windows_section]
+--
+[source, role="maven_section command"]
+----
+kubectl delete -f kubernetes.yaml
+
+mvnw clean package
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+
+kubectl apply -f kubernetes.yaml
+----
+[source, role="gradle_section command"]
+----
+kubectl delete -f kubernetes.yaml
+
+gradlew clean jar
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+
+kubectl apply -f kubernetes.yaml
+----
+--
+[.tab_content.mac_section.linux_section]
+--
 [source, role="maven_section command"]
 ----
 kubectl delete -f kubernetes.yaml
@@ -559,7 +602,6 @@ docker build -t inventory:1.0-SNAPSHOT inventory/.
 
 kubectl apply -f kubernetes.yaml
 ----
-
 [source, role="gradle_section command"]
 ----
 kubectl delete -f kubernetes.yaml
@@ -570,6 +612,7 @@ docker build -t inventory:1.0-SNAPSHOT inventory/.
 
 kubectl apply -f kubernetes.yaml
 ----
+--
 endif::[]
 
 // Cloud-hosted guide instruction
