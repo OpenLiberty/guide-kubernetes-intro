@@ -128,48 +128,11 @@ ifndef::cloud-hosted[]
 include::{common-includes}/kube-start.adoc[]
 endif::[]
 
-// Cloud hosted guide instructions
-ifdef::cloud-hosted[]
-== Logging into your cluster
-
-For this guide, you will use a container registry on IBM Cloud to deploy to Kubernetes.
-Get the name of your namespace with the following command:
-
-```
-bx cr namespace-list
-```
-{: codeblock}
-
-Look for output that is similar to the following:
-
-```
-Listing namespaces for account 'QuickLabs - IBM Skills Network' in registry 'us.icr.io'...
-
-Namespace
-sn-labs-yourname
-```
-
-Run the following command to store the namespace name in a variable.
-
-```
-NAMESPACE_NAME=`bx cr namespace-list | grep sn-labs- | sed 's/ //g'`
-```
-{: codeblock}
-
-Verify that the variable contains your namespace name:
-
-```
-echo $NAMESPACE_NAME
-```
-{: codeblock}
-
-Log in to the registry with the following command:
-```
-bx cr login
-```
-{: codeblock}
-
-endif::[]
+// =================================================================================================
+// Logging into your cluster
+// =================================================================================================
+[role='command']
+include::{common-includes}/skills-network-kube-setup.adoc[]
 
 // =================================================================================================
 // Building and containerizing the microservices
