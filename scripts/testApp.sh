@@ -3,7 +3,10 @@ set -euxo pipefail
 
 ../scripts/startMinikube.sh
 
-mvn -q package
+mvn -Dhttp.keepAlive=false \
+    -Dmaven.wagon.http.pool=false \
+    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+    -q clean package
 
 docker pull openliberty/open-liberty:full-java11-openj9-ubi
 
@@ -21,7 +24,7 @@ minikube ip
 curl http://"$(minikube ip)":31000/system/properties
 curl http://"$(minikube ip)":32000/inventory/systems
 
-mvn failsafe:integration-test -Ddockerfile.skip=true -Dcluster.ip="$(minikube ip)"
+mvn failsafe:integration-test -Ddockerfile.skip=true -Dsystem.service.root="$(minikube ip):31000" -Dinventory.service.root="$(minikube ip):32000"
 mvn failsafe:verify
 
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
