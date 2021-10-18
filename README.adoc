@@ -279,7 +279,7 @@ All resources can also be deleted from the cluster by using the same yaml file t
 
 [role="code_command hotspot", subs="quotes"]
 ----
-#Create the Kubernetes configuration file.#
+#Create the Kubernetes configuration file in the `start` directory.#
 `kubernetes.yaml`
 ----
 
