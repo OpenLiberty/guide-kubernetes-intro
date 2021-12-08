@@ -68,7 +68,7 @@ command to have {kube} make all those updates for you. Of course, this is just a
 Deploying an application to Kubernetes means deploying an application to a Kubernetes cluster.
 
 A typical {kube} cluster is a collection of physical or virtual machines called nodes that run
-containerized applications. A cluster is made up of one master node that manages the cluster, and
+containerized applications. A cluster is made up of one parent node that manages the cluster, and
 many worker nodes that run the actual application instances inside {kube} objects called pods.
 
 A pod is a basic building block in a {kube} cluster. It represents a single running process that
@@ -117,7 +117,7 @@ include::{common-includes}/kube-prereq.adoc[]
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
-// no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
+// no "try what you'll build" section in this guide because it would be too long due to all setup the user will have to do.
 
 // =================================================================================================
 // Staring and preparing your cluster for deployment
@@ -157,7 +157,7 @@ cd start
 mvn clean package
 ```
 
-include::{common-includes}/ol-full-docker-pull.adoc[]
+include::{common-includes}/ol-icr-full-docker-pull.adoc[]
 
 Next, run the `docker build` commands to build container images for your application:
 [role='command']
@@ -502,7 +502,7 @@ kubectl scale deployment/system-deployment --replicas=1
 
 When you're building your application, you might want to quickly test a change. 
 To run a quick test, you can rebuild your Docker images then delete and re-create your {kube} resources. 
-Note that there is only one `system` pod after you redeploy since you're deleting all of the existing pods.
+Note that there is only one `system` pod after you redeploy because you're deleting all of the existing pods.
 
 // Static guide instruction
 ifndef::cloud-hosted[]
