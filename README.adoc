@@ -586,7 +586,7 @@ mvn failsafe:integration-test
 Run the integration tests with the IP address for Minikube:
 [role='command']
 ```
-mvn failsafe:integration-test -Dcluster.ip=$(minikube ip)
+mvn failsafe:integration-test -Dsystem.service.root=$(minikube ip):31000 -Dinventory.service.root=$(minikube ip):32000
 ```
 --
 endif::[]
