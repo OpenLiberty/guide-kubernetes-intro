@@ -93,7 +93,8 @@ public class SystemClient {
     } catch (RuntimeException e) {
       System.err.println("Runtime exception: " + e.getMessage());
     } catch (Exception e) {
-      System.err.println("Exception thrown while invoking the request: " + e.getMessage());
+      System.err.println("Exception thrown while invoking the request: "
+                         + e.getMessage());
     }
     return null;
   }
