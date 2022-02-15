@@ -76,7 +76,8 @@ public class SystemClient {
       Builder builder = client.target(urlString).request();
       return builder.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
     } catch (Exception e) {
-      System.err.println("Exception thrown while building the client: " + e.getMessage());
+      System.err.println("Exception thrown while building the client: "
+                         + e.getMessage());
       return null;
     }
   }
