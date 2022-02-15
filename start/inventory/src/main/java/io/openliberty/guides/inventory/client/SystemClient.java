@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2017, 2019 IBM Corporation and others.
+ * Copyright (c) 2017, 2022 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,15 +15,15 @@ package io.openliberty.guides.inventory.client;
 import java.net.URI;
 import java.util.Properties;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Invocation.Builder;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -33,11 +33,11 @@ public class SystemClient {
   // Constants for building URI to the system service.
   private final String SYSTEM_PROPERTIES = "/system/properties";
   private final String PROTOCOL = "http";
-  
+
   @Inject
   @ConfigProperty(name = "default.http.port")
   String DEFAULT_PORT;
-  
+
   // Wrapper function that gets properties
   public Properties getProperties(String hostname) {
     String url = buildUrl(PROTOCOL, hostname, Integer.valueOf(DEFAULT_PORT), SYSTEM_PROPERTIES);
