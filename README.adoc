@@ -100,12 +100,6 @@ include::{common-includes}/kube-start.adoc[]
 endif::[]
 
 // =================================================================================================
-// Logging into your cluster
-// =================================================================================================
-[role='command']
-include::{common-includes}/skills-network-kube-setup.adoc[]
-
-// =================================================================================================
 // Building and containerizing the microservices
 // =================================================================================================
 
@@ -214,10 +208,10 @@ openliberty/open-liberty                  full-java11-openj9-ubi
 If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven build log for any potential errors. If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
 
 ```
-docker tag inventory:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
+docker tag inventory:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
 ```
 {: codeblock}
 endif::[]
@@ -251,8 +245,8 @@ ifdef::cloud-hosted[]
 Update the image names so that the images in your IBM Cloud container registry are used, and remove the **nodePort** fields so that the ports can be generated automatically:
 
 ```
-sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"$NAMESPACE_NAME"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
-sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"$NAMESPACE_NAME"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
+sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"$SN_ICR_NAMESPACE"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
+sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"$SN_ICR_NAMESPACE"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
 sed -i 's=nodePort: 31000==g' kubernetes.yaml
 sed -i 's=nodePort: 32000==g' kubernetes.yaml
 ```
@@ -323,9 +317,8 @@ kubectl proxy
 
 Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. Run the following commands to store the proxy path of the **system** and **inventory** services.
 ```
-NAMESPACE_NAME=`bx cr namespace-list | grep sn-labs- | sed 's/ //g'`
-SYSTEM_PROXY=localhost:8001/api/v1/namespaces/$NAMESPACE_NAME/services/system-service/proxy
-INVENTORY_PROXY=localhost:8001/api/v1/namespaces/$NAMESPACE_NAME/services/inventory-service/proxy
+SYSTEM_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/system-service/proxy
+INVENTORY_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/inventory-service/proxy
 ```
 {: codeblock}
 
@@ -446,10 +439,10 @@ kubectl delete -f kubernetes.yaml
 mvn clean package
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
-docker tag inventory:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
+docker tag inventory:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
 
 kubectl apply -f kubernetes.yaml
 ```
