@@ -196,7 +196,7 @@ endif::[]
 
 // Cloud hosted guide instruction
 ifdef::cloud-hosted[]
-Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
+Verify that the ***system:1.0-SNAPSHOT*** and ***inventory:1.0-SNAPSHOT*** images are listed among them, for example:
 
 ```
 REPOSITORY                                TAG                       
@@ -205,7 +205,7 @@ system                                    1.0-SNAPSHOT
 openliberty/open-liberty                  full-java11-openj9-ubi
 ```
 
-If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven build log for any potential errors. If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
+If you don't see the ***system:1.0-SNAPSHOT*** and ***inventory:1.0-SNAPSHOT*** images, then check the Maven build log for any potential errors. If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
 
 ```
 docker tag inventory:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
@@ -351,14 +351,14 @@ curl -s http://$INVENTORY_PROXY/inventory/systems/system-service | jq
 ```
 {: codeblock}
 
-The `http://$SYSTEM_PROXY/system/properties` URL returns system properties and the name of the pod in an HTTP header that is called **X-Pod-Name**. To view the header, you can use the **-I** option in the **curl** command when you make a request to the `http://$SYSTEM_PROXY/system/properties` URL.
+The ***http://$SYSTEM_PROXY/system/properties*** URL returns system properties and the name of the pod in an HTTP header that is called **X-Pod-Name**. To view the header, you can use the **-I** option in the **curl** command when you make a request to the ***http://$SYSTEM_PROXY/system/properties*** URL.
 
 ```
 curl -I http://$SYSTEM_PROXY/system/properties
 ```
 {: codeblock}
 
-The `http://$INVENTORY_PROXY/inventory/systems/system-service` URL adds properties from the **system-service** endpoint to the inventory {kube} Service. Making a request to the `http://$INVENTORY_PROXY/inventory/systems/[kube-service]` URL in general adds to the inventory. That result depends on whether the **kube-service** endpoint is a valid {kube} service that can be accessed.
+The ***http://$INVENTORY_PROXY/inventory/systems/system-service*** URL adds properties from the **system-service** endpoint to the inventory {kube} Service. Making a request to the ***http://$INVENTORY_PROXY/inventory/systems/[kube-service]*** URL in general adds to the inventory. That result depends on whether the **kube-service** endpoint is a valid {kube} service that can be accessed.
 endif::[]
 
 // =================================================================================================
