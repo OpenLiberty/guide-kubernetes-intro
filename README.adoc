@@ -537,6 +537,11 @@ Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 
 == Tearing down the environment
 
+// Cloud-hosted guide instruction
+ifdef::cloud-hosted[]
+Press **CTRL+C** to stop the proxy server that was started at step 6 ***Deploying the microservices***.
+endif::[]
+
 When you no longer need your deployed microservices, you can delete all {kube} resources by running the `kubectl delete` command:
 [role='command']
 ```
@@ -547,11 +552,6 @@ kubectl delete -f kubernetes.yaml
 ifndef::cloud-hosted[]
 [role='command']
 include::{common-includes}/kube-minikube-teardown.adoc[]
-endif::[]
-
-// Cloud-hosted guide instruction
-ifdef::cloud-hosted[]
-Press **CTRL+C** to stop the proxy server that was started at step 6 ***Deploying the microservices***.
 endif::[]
 
 // =================================================================================================
