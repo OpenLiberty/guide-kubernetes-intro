@@ -207,13 +207,12 @@ openliberty/open-liberty                  full-java11-openj9-ubi
 
 If you don't see the ***system:1.0-SNAPSHOT*** and ***inventory:1.0-SNAPSHOT*** images, then check the Maven build log for any potential errors. If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
 
-```
+```bash
 docker tag inventory:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
 docker tag system:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
 docker push us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
 docker push us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
 ```
-{: codeblock}
 endif::[]
 
 // =================================================================================================
@@ -244,13 +243,12 @@ This file defines four {kube} resources. It defines two deployments and two serv
 ifdef::cloud-hosted[]
 Update the image names so that the images in your IBM Cloud container registry are used, and remove the **nodePort** fields so that the ports can be generated automatically:
 
-```
+```bash
 sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"$SN_ICR_NAMESPACE"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
 sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"$SN_ICR_NAMESPACE"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
 sed -i 's=nodePort: 31000==g' kubernetes.yaml
 sed -i 's=nodePort: 32000==g' kubernetes.yaml
 ```
-{: codeblock}
 endif::[]
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
@@ -310,25 +308,21 @@ endif::[]
 ifdef::cloud-hosted[]
 In this execise, you need to access the services by using the Kubernetes API. Run the following command to start a proxy to the Kubernetes API server:
 
-```
+```bash
 kubectl proxy
 ```
-{: codeblock}
 
 Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. Run the following commands to store the proxy path of the **system** and **inventory** services.
-```
+```bash
 SYSTEM_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/system-service/proxy
 INVENTORY_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/inventory-service/proxy
 ```
-{: codeblock}
 
 Run the following echo commands to verify the variables:
 
-```
+```bash
 echo $SYSTEM_PROXY && echo $INVENTORY_PROXY
 ```
-{: codeblock}
-
 
 The output appears as shown in the following example:
 
@@ -339,24 +333,21 @@ localhost:8001/api/v1/namespaces/sn-labs-yourname/services/inventory-service/pro
 
 Then, use the following **curl** command to access your **system** microservice:
 
-```
+```bash
 curl -s http://$SYSTEM_PROXY/system/properties | jq
 ```
-{: codeblock}
 
 Also, use the following **curl** command to access your **inventory** microservice:
 
-```
+```bash
 curl -s http://$INVENTORY_PROXY/inventory/systems/system-service | jq
 ```
-{: codeblock}
 
 The ***http://$SYSTEM_PROXY/system/properties*** URL returns system properties and the name of the pod in an HTTP header that is called **X-Pod-Name**. To view the header, you can use the **-I** option in the **curl** command when you make a request to the ***http://$SYSTEM_PROXY/system/properties*** URL.
 
-```
+```bash
 curl -I http://$SYSTEM_PROXY/system/properties
 ```
-{: codeblock}
 
 The ***http://$INVENTORY_PROXY/inventory/systems/system-service*** URL adds properties from the **system-service** endpoint to the inventory {kube} Service. Making a request to the ***http://$INVENTORY_PROXY/inventory/systems/[kube-service]*** URL in general adds to the inventory. That result depends on whether the **kube-service** endpoint is a valid {kube} service that can be accessed.
 endif::[]
@@ -399,10 +390,9 @@ endif::[]
 ifdef::cloud-hosted[]
 Wait for your two new pods to be in the ready state, then make the following **curl** command:
 
-```
+```bash
 curl -I http://$SYSTEM_PROXY/system/properties
 ```
-{: codeblock}
 endif::[]
 
 Notice that the `X-Pod-Name` header has a different value when you call it multiple times. The value changes because three pods that all serve the `system` application are now running. Similarly, to descale your deployments you can use the same scale command with fewer replicas.
@@ -432,7 +422,7 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-```
+```bash
 cd /home/project/guide-kubernetes-intro/start
 kubectl delete -f kubernetes.yaml
 
@@ -446,7 +436,6 @@ docker push us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
 
 kubectl apply -f kubernetes.yaml
 ```
-{: codeblock}
 endif::[]
 
 Updating your applications in this way is fine for development environments, but it is not suitable for production. If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image. Once the new container is ready, {kube} automates both the creation of a new container and the decommissioning of the old one.
@@ -501,19 +490,17 @@ endif::[]
 ifdef::cloud-hosted[]
 Update the **pom.xml** files so that the **system.service.root** and **inventory.service.root** properties match the values to access the **system** and **inventory** services.
 
-```
+```bash
 sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' inventory/pom.xml
 sed -i 's=localhost:32000='"$INVENTORY_PROXY"'=g' inventory/pom.xml
 sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' system/pom.xml
 ```
-{: codeblock}
 
 Run the integration tests by using the following command:
 
-```
+```bash
 mvn failsafe:integration-test
 ```
-{: codeblock}
 endif::[]
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
@@ -564,7 +551,7 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-Press **CTRL+C** to stop the proxy server that was started at step 7.
+Press **CTRL+C** to stop the proxy server that was started at step 6 ***Deploying the microservices***.
 endif::[]
 
 // =================================================================================================
