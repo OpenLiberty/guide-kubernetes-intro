@@ -241,7 +241,7 @@ This file defines four {kube} resources. It defines two deployments and two serv
 
 // Cloud hosted guide instruction
 ifdef::cloud-hosted[]
-Update the image names so that the images in your IBM Cloud container registry are used, and remove the **nodePort** fields so that the ports can be generated automatically:
+Update the image names so that the images in your IBM Cloud container registry are used, and remove the ***nodePort*** fields so that the ports can be generated automatically:
 
 ```bash
 sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"$SN_ICR_NAMESPACE"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
@@ -312,7 +312,7 @@ In this execise, you need to access the services by using the Kubernetes API. Ru
 kubectl proxy
 ```
 
-Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. Run the following commands to store the proxy path of the **system** and **inventory** services.
+Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. Run the following commands to store the proxy path of the ***system*** and ***inventory*** services.
 ```bash
 SYSTEM_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/system-service/proxy
 INVENTORY_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/inventory-service/proxy
@@ -331,25 +331,25 @@ localhost:8001/api/v1/namespaces/sn-labs-yourname/services/system-service/proxy
 localhost:8001/api/v1/namespaces/sn-labs-yourname/services/inventory-service/proxy
 ```
 
-Then, use the following **curl** command to access your **system** microservice:
+Then, use the following ***curl*** command to access your ***system*** microservice:
 
 ```bash
 curl -s http://$SYSTEM_PROXY/system/properties | jq
 ```
 
-Also, use the following **curl** command to access your **inventory** microservice:
+Also, use the following ***curl*** command to access your ***inventory*** microservice:
 
 ```bash
 curl -s http://$INVENTORY_PROXY/inventory/systems/system-service | jq
 ```
 
-The ***http://$SYSTEM_PROXY/system/properties*** URL returns system properties and the name of the pod in an HTTP header that is called **X-Pod-Name**. To view the header, you can use the **-I** option in the **curl** command when you make a request to the ***http://$SYSTEM_PROXY/system/properties*** URL.
+The ***http://$SYSTEM_PROXY/system/properties*** URL returns system properties and the name of the pod in an HTTP header that is called ***X-Pod-Name***. To view the header, you can use the ***-I*** option in the ***curl*** command when you make a request to the ***http://$SYSTEM_PROXY/system/properties*** URL.
 
 ```bash
 curl -I http://$SYSTEM_PROXY/system/properties
 ```
 
-The ***http://$INVENTORY_PROXY/inventory/systems/system-service*** URL adds properties from the **system-service** endpoint to the inventory {kube} Service. Making a request to the ***http://$INVENTORY_PROXY/inventory/systems/[kube-service]*** URL in general adds to the inventory. That result depends on whether the **kube-service** endpoint is a valid {kube} service that can be accessed.
+The ***http://$INVENTORY_PROXY/inventory/systems/system-service*** URL adds properties from the ***system-service*** endpoint to the inventory {kube} Service. Making a request to the ***http://$INVENTORY_PROXY/inventory/systems/[kube-service]*** URL in general adds to the inventory. That result depends on whether the ***kube-service*** endpoint is a valid {kube} service that can be accessed.
 endif::[]
 
 // =================================================================================================
@@ -388,7 +388,7 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-Wait for your two new pods to be in the ready state, then make the following **curl** command:
+Wait for your two new pods to be in the ready state, then make the following ***curl*** command:
 
 ```bash
 curl -I http://$SYSTEM_PROXY/system/properties
@@ -488,7 +488,7 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-Update the **pom.xml** files so that the **system.service.root** and **inventory.service.root** properties match the values to access the **system** and **inventory** services.
+Update the ***pom.xml*** files so that the ***system.service.root*** and ***inventory.service.root*** properties match the values to access the ***system*** and **inventory*** services.
 
 ```bash
 sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' inventory/pom.xml
@@ -542,7 +542,7 @@ ifdef::cloud-hosted[]
 Press **CTRL+C** to stop the proxy server that was started at step 6 ***Deploying the microservices***.
 endif::[]
 
-When you no longer need your deployed microservices, you can delete all {kube} resources by running the `kubectl delete` command:
+When you no longer need your deployed microservices, you can delete all {kube} resources by running the ***kubectl delete*** command:
 [role='command']
 ```
 kubectl delete -f kubernetes.yaml
