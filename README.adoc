@@ -44,48 +44,25 @@ Deploy microservices in Open Liberty Docker containers to Kubernetes and manage 
 
 == What is {kube}?
 
-{kube} is an open source container orchestrator that automates many tasks involved in deploying,
-managing, and scaling containerized applications.
+{kube} is an open source container orchestrator that automates many tasks involved in deploying, managing, and scaling containerized applications.
 
-Over the years, {kube} has become a major tool in containerized environments as containers are being
-further leveraged for all steps of a continuous delivery pipeline.
+Over the years, {kube} has become a major tool in containerized environments as containers are being further leveraged for all steps of a continuous delivery pipeline.
 
 === Why use {kube}?
 
-Managing individual containers can be challenging. 
-A small team can easily manage a few containers for development but 
-managing hundreds of containers can be a headache, even for a large team of experienced developers.
-{kube} is a tool for deployment in containerized environments. 
-It handles scheduling, deployment, as well as mass deletion and creation of containers. 
-It provides update rollout abilities on a large scale that would otherwise prove extremely tedious to do. 
-Imagine that you updated a Docker image, which now needs to propagate to a dozen containers. 
-While you could destroy and then re-create these containers, you can also run a short one-line
-command to have {kube} make all those updates for you. Of course, this is just a simple example.
-{kube} has a lot more to offer.
+Managing individual containers can be challenging. A small team can easily manage a few containers for development but managing hundreds of containers can be a headache, even for a large team of experienced developers. {kube} is a tool for deployment in containerized environments. It handles scheduling, deployment, as well as mass deletion and creation of containers. It provides update rollout abilities on a large scale that would otherwise prove extremely tedious to do. Imagine that you updated a Docker image, which now needs to propagate to a dozen containers. While you could destroy and then re-create these containers, you can also run a short one-line command to have {kube} make all those updates for you. Of course, this is just a simple example. {kube} has a lot more to offer.
 
 === Architecture
 
 Deploying an application to Kubernetes means deploying an application to a Kubernetes cluster.
 
-A typical {kube} cluster is a collection of physical or virtual machines called nodes that run
-containerized applications. A cluster is made up of one parent node that manages the cluster, and
-many worker nodes that run the actual application instances inside {kube} objects called pods.
+A typical {kube} cluster is a collection of physical or virtual machines called nodes that run containerized applications. A cluster is made up of one parent node that manages the cluster, and many worker nodes that run the actual application instances inside {kube} objects called pods.
 
-A pod is a basic building block in a {kube} cluster. It represents a single running process that
-encapsulates a container or in some scenarios many closely coupled containers. Pods can be
-replicated to scale applications and handle more traffic. From the perspective of a cluster, a set
-of replicated pods is still one application instance, although it might be made up of dozens of
-instances of itself. A single pod or a group of replicated pods are managed by {kube} objects
-called controllers. A controller handles replication, self-healing, rollout of updates, and general
-management of pods. One example of a controller that you will use in this guide is a deployment.
+A pod is a basic building block in a {kube} cluster. It represents a single running process that encapsulates a container or in some scenarios many closely coupled containers. Pods can be replicated to scale applications and handle more traffic. From the perspective of a cluster, a set of replicated pods is still one application instance, although it might be made up of dozens of instances of itself. A single pod or a group of replicated pods are managed by {kube} objects called controllers. A controller handles replication, self-healing, rollout of updates, and general management of pods. One example of a controller that you will use in this guide is a deployment.
 
-A pod or a group of replicated pods are abstracted through {kube} objects called services
-that define a set of rules by which the pods can be accessed. In a basic scenario, a {kube}
-service exposes a node port that can be used together with the cluster IP address to access
-the pods encapsulated by the service.
+A pod or a group of replicated pods are abstracted through {kube} objects called services that define a set of rules by which the pods can be accessed. In a basic scenario, a {kube} service exposes a node port that can be used together with the cluster IP address to access the pods encapsulated by the service.
 
-To learn about the various Kubernetes resources that you can configure, 
-see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
+To learn about the various Kubernetes resources that you can configure, see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
 
 // =================================================================================================
 // Introduction
@@ -93,15 +70,9 @@ see the https://kubernetes.io/docs/concepts/[official {kube} documentation^].
 
 == What you'll learn
 
-You will learn how to deploy two microservices in Open Liberty containers to a local {kube} cluster.
-You will then manage your deployed microservices using the `kubectl` command line interface for {kube}. 
-The `kubectl` CLI is your primary tool for communicating with and managing your {kube} cluster.
+You will learn how to deploy two microservices in Open Liberty containers to a local {kube} cluster. You will then manage your deployed microservices using the `kubectl` command line interface for {kube}. The `kubectl` CLI is your primary tool for communicating with and managing your {kube} cluster.
 
-The two microservices you will deploy are called `system` and `inventory`. The `system` microservice
-returns the JVM system properties of the running container and it returns the pod's name in the HTTP header
-making replicas easy to distinguish from each other. The `inventory` microservice
-adds the properties from the `system` microservice to the inventory. 
-This process demonstrates how communication can be established between pods inside a cluster.
+The two microservices you will deploy are called `system` and `inventory`. The `system` microservice returns the JVM system properties of the running container and it returns the pod's name in the HTTP header making replicas easy to distinguish from each other. The `inventory` microservice adds the properties from the `system` microservice to the inventory. This process demonstrates how communication can be established between pods inside a cluster.
 
 You will use a local single-node {kube} cluster.
 
@@ -129,12 +100,6 @@ include::{common-includes}/kube-start.adoc[]
 endif::[]
 
 // =================================================================================================
-// Logging into your cluster
-// =================================================================================================
-[role='command']
-include::{common-includes}/skills-network-kube-setup.adoc[]
-
-// =================================================================================================
 // Building and containerizing the microservices
 // =================================================================================================
 
@@ -142,13 +107,7 @@ include::{common-includes}/skills-network-kube-setup.adoc[]
 
 The first step of deploying to {kube} is to build your microservices and containerize them with Docker.
 
-The starting Java project, which you can find in the `start` directory, is a multi-module Maven
-project that's made up of the `system` and `inventory` microservices. 
-Each microservice resides in its own directory, `start/system` and `start/inventory`. 
-Each of these directories also contains a Dockerfile, which is necessary for building Docker images. 
-If you're unfamiliar with Dockerfiles, check out the
-https://openliberty.io/guides/containerize.html[Containerizing Microservices^] guide,
-which covers Dockerfiles in depth.
+The starting Java project, which you can find in the `start` directory, is a multi-module Maven project that's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory, `start/system` and `start/inventory`. Each of these directories also contains a Dockerfile, which is necessary for building Docker images. If you're unfamiliar with Dockerfiles, check out the https://openliberty.io/guides/containerize.html[Containerizing Microservices^] guide, which covers Dockerfiles in depth.
 
 Navigate to the `start` directory and build the applications by running the following commands:
 [role='command']
@@ -166,12 +125,9 @@ docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 ```
 
-The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format.
-The tag for an image describes the specific image version. 
-If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
+The `-t` flag in the `docker build` command allows the Docker image to be labeled (tagged) in the `name[:tag]` format. The tag for an image describes the specific image version. If the optional `[:tag]` tag is not specified, the `latest` tag is created by default.
 
-During the build, you'll see various Docker messages describing what images are being downloaded and built. 
-When the build finishes, run the following command to list all local Docker images:
+During the build, you'll see various Docker messages describing what images are being downloaded and built. When the build finishes, run the following command to list all local Docker images:
 [role='command']
 ```
 docker images
@@ -235,15 +191,12 @@ k8s.gcr.io/pause-amd64                                           3.0
 ----
 --
 
-If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
-build log for any potential errors.
-In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon 
-instead of your host's Docker daemon.
+If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven build log for any potential errors. In addition, if you are using Minikube, make sure your Docker CLI is configured to use Minikube's Docker daemon instead of your host's Docker daemon.
 endif::[]
 
 // Cloud hosted guide instruction
 ifdef::cloud-hosted[]
-Verify that the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images are listed among them, for example:
+Verify that the ***system:1.0-SNAPSHOT*** and ***inventory:1.0-SNAPSHOT*** images are listed among them, for example:
 
 ```
 REPOSITORY                                TAG                       
@@ -252,17 +205,14 @@ system                                    1.0-SNAPSHOT
 openliberty/open-liberty                  full-java11-openj9-ubi
 ```
 
-If you don't see the `system:1.0-SNAPSHOT` and `inventory:1.0-SNAPSHOT` images, then check the Maven
-build log for any potential errors.
-If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
+If you don't see the ***system:1.0-SNAPSHOT*** and ***inventory:1.0-SNAPSHOT*** images, then check the Maven build log for any potential errors. If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
 
+```bash
+docker tag inventory:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
 ```
-docker tag inventory:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
-```
-{: codeblock}
 endif::[]
 
 // =================================================================================================
@@ -273,9 +223,7 @@ endif::[]
 
 Now that your Docker images are built, deploy them using a Kubernetes resource definition.
 
-A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, 
-or any other resources that you want to deploy. 
-All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
+A Kubernetes resource definition is a yaml file that contains a description of all your deployments, services, or any other resources that you want to deploy. All resources can also be deleted from the cluster by using the same yaml file that you used to deploy them.
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -289,34 +237,18 @@ kubernetes.yaml
 include::finish/kubernetes.yaml[]
 ----
 
-This file defines four {kube} resources. It defines two deployments and two services. 
-A {kube} deployment is a resource that controls the creation and management of pods. 
-A service exposes your deployment so that you can make requests to your containers. 
-Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, 
-[hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. 
-The [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels` is a way for a {kube} service to reference specific deployments. 
-The [hotspot=image1 hotspot=image2]`image` is the name and tag of the Docker image that you want to use for this container. 
-Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes to access your application.
-For the services, the key point to understand is that they expose your deployments.
-The binding between deployments and services is specified by labels -- in this case the 
-[hotspot=app1 hotspot=app2 hotspot=app3 hotspot=app4 hotspot=app5 hotspot=app6 hotspot=app7 hotspot=app8]`app` label.
-You will also notice the service has a type of [hotspot=NodePort1 hotspot=NodePort2]`NodePort`.
-This means you can access these services from outside of your cluster via a specific port.
-In this case, the ports are `31000` and `32000`, but port numbers can also be randomized if the
-[hotspot=nodePort1 hotspot=nodePort2]`nodePort` field is not used.
+This file defines four {kube} resources. It defines two deployments and two services. A {kube} deployment is a resource that controls the creation and management of pods. A service exposes your deployment so that you can make requests to your containers. Three key items to look at when creating the deployments are the [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels`, [hotspot=image1 hotspot=image2]`image`, and [hotspot=containerPort1 hotspot=containerPort2]`containerPort` fields. The [hotspot=labels1 hotspot=labels2 hotspot=labels3 hotspot=labels4]`labels` is a way for a {kube} service to reference specific deployments. The [hotspot=image1 hotspot=image2]`image` is the name and tag of the Docker image that you want to use for this container. Finally, the [hotspot=containerPort1 hotspot=containerPort2]`containerPort` is the port that your container exposes to access your application. For the services, the key point to understand is that they expose your deployments. The binding between deployments and services is specified by labels -- in this case the [hotspot=app1 hotspot=app2 hotspot=app3 hotspot=app4 hotspot=app5 hotspot=app6 hotspot=app7 hotspot=app8]`app` label. You will also notice the service has a type of [hotspot=NodePort1 hotspot=NodePort2]`NodePort`. This means you can access these services from outside of your cluster via a specific port. In this case, the ports are `31000` and `32000`, but port numbers can also be randomized if the [hotspot=nodePort1 hotspot=nodePort2]`nodePort` field is not used.
 
 // Cloud hosted guide instruction
 ifdef::cloud-hosted[]
-Update the image names so that the images in your IBM Cloud container registry are used,
-and remove the **nodePort** fields so that the ports can be generated automatically:
+Update the image names so that the images in your IBM Cloud container registry are used, and remove the ***nodePort*** fields so that the ports can be generated automatically:
 
-```
-sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"$NAMESPACE_NAME"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
-sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"$NAMESPACE_NAME"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
+```bash
+sed -i 's=system:1.0-SNAPSHOT=us.icr.io/'"$SN_ICR_NAMESPACE"'/system:1.0-SNAPSHOT=g' kubernetes.yaml
+sed -i 's=inventory:1.0-SNAPSHOT=us.icr.io/'"$SN_ICR_NAMESPACE"'/inventory:1.0-SNAPSHOT=g' kubernetes.yaml
 sed -i 's=nodePort: 31000==g' kubernetes.yaml
 sed -i 's=nodePort: 32000==g' kubernetes.yaml
 ```
-{: codeblock}
 endif::[]
 
 Run the following commands to deploy the resources as defined in kubernetes.yaml:
@@ -346,8 +278,7 @@ You can also inspect individual pods in more detail by running the following com
 kubectl describe pods
 ```
 
-You can also issue the `kubectl get` and `kubectl describe` commands on other {kube} resources, so feel
-free to inspect all other resources.
+You can also issue the `kubectl get` and `kubectl describe` commands on other {kube} resources, so feel free to inspect all other resources.
 
 // Static guide instruction
 ifndef::cloud-hosted[]
@@ -370,39 +301,28 @@ Then, run the `curl` command or visit the following URLs to access your microser
 * `{system-api}`
 * `{inventory-api}/system-service`
 
-The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`.
-To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`.
-The second URL adds properties from the `system-service` endpoint to the inventory {kube} Service. 
-Visiting `{inventory-api}/[kube-service]` in general adds to the inventory
-depending on whether `kube-service` is a valid {kube} service that can be accessed.
+The first URL returns system properties and the name of the pod in an HTTP header called `X-Pod-Name`. To view the header, you may use the `-I` option in the `curl` when making a request to `{system-api}`. The second URL adds properties from the `system-service` endpoint to the inventory {kube} Service. Visiting `{inventory-api}/[kube-service]` in general adds to the inventory depending on whether `kube-service` is a valid {kube} service that can be accessed.
 endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-In this execise, you need to access the services by using the Kubernetes API.
-Run the following command to start a proxy to the Kubernetes API server:
+In this execise, you need to access the services by using the Kubernetes API. Run the following command to start a proxy to the Kubernetes API server:
 
-```
+```bash
 kubectl proxy
 ```
-{: codeblock}
 
-Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE.
-Run the following commands to store the proxy path of the **system** and **inventory** services.
+Open another command-line session by selecting **Terminal** > **New Terminal** from the menu of the IDE. Run the following commands to store the proxy path of the ***system*** and ***inventory*** services.
+```bash
+SYSTEM_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/system-service/proxy
+INVENTORY_PROXY=localhost:8001/api/v1/namespaces/$SN_ICR_NAMESPACE/services/inventory-service/proxy
 ```
-NAMESPACE_NAME=`bx cr namespace-list | grep sn-labs- | sed 's/ //g'`
-SYSTEM_PROXY=localhost:8001/api/v1/namespaces/$NAMESPACE_NAME/services/system-service/proxy
-INVENTORY_PROXY=localhost:8001/api/v1/namespaces/$NAMESPACE_NAME/services/inventory-service/proxy
-```
-{: codeblock}
 
 Run the following echo commands to verify the variables:
 
-```
+```bash
 echo $SYSTEM_PROXY && echo $INVENTORY_PROXY
 ```
-{: codeblock}
-
 
 The output appears as shown in the following example:
 
@@ -411,35 +331,25 @@ localhost:8001/api/v1/namespaces/sn-labs-yourname/services/system-service/proxy
 localhost:8001/api/v1/namespaces/sn-labs-yourname/services/inventory-service/proxy
 ```
 
-Then, use the following **curl** command to access your **system** microservice:
+Then, use the following ***curl*** command to access your ***system*** microservice:
 
-```
+```bash
 curl -s http://$SYSTEM_PROXY/system/properties | jq
 ```
-{: codeblock}
 
-Also, use the following **curl** command to access your **inventory** microservice:
+Also, use the following ***curl*** command to access your ***inventory*** microservice:
 
-```
+```bash
 curl -s http://$INVENTORY_PROXY/inventory/systems/system-service | jq
 ```
-{: codeblock}
 
-The `http://$SYSTEM_PROXY/system/properties` URL returns system properties and the name of the pod 
-in an HTTP header that is called **X-Pod-Name**.
-To view the header, you can use the **-I** option in the **curl** command when you make a request to the
-`http://$SYSTEM_PROXY/system/properties` URL.
+The ***http://$SYSTEM_PROXY/system/properties*** URL returns system properties and the name of the pod in an HTTP header that is called ***X-Pod-Name***. To view the header, you can use the ***-I*** option in the ***curl*** command when you make a request to the ***http://$SYSTEM_PROXY/system/properties*** URL.
 
-```
+```bash
 curl -I http://$SYSTEM_PROXY/system/properties
 ```
-{: codeblock}
 
-The `http://$INVENTORY_PROXY/inventory/systems/system-service` URL adds properties 
-from the **system-service** endpoint to the inventory {kube} Service. 
-Making a request to the `http://$INVENTORY_PROXY/inventory/systems/[kube-service]` URL in general 
-adds to the inventory. That result depends on whether the **kube-service** endpoint is a valid {kube} service 
-that can be accessed.
+The ***http://$INVENTORY_PROXY/inventory/systems/system-service*** URL adds properties from the ***system-service*** endpoint to the inventory {kube} Service. Making a request to the ***http://$INVENTORY_PROXY/inventory/systems/[kube-service]*** URL in general adds to the inventory. That result depends on whether the ***kube-service*** endpoint is a valid {kube} service that can be accessed.
 endif::[]
 
 // =================================================================================================
@@ -448,10 +358,7 @@ endif::[]
 
 == Scaling a deployment
 
-To use load balancing, you need to scale your deployments. 
-When you scale a deployment, you replicate its pods, creating more running instances of your applications. 
-Scaling is one of the primary advantages of {kube} because you can replicate your application to accommodate more traffic, 
-and then descale your deployments to free up resources when the traffic decreases.
+To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because you can replicate your application to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
 
 As an example, scale the `system` deployment to three pods by running the following command:
 [role='command']
@@ -481,17 +388,14 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-Wait for your two new pods to be in the ready state, then make the following **curl** command:
+Wait for your two new pods to be in the ready state, then make the following ***curl*** command:
 
-```
+```bash
 curl -I http://$SYSTEM_PROXY/system/properties
 ```
-{: codeblock}
 endif::[]
 
-Notice that the `X-Pod-Name` header has a different value when you call it multiple times.
-The value changes because three pods that all serve the `system` application are now running.
-Similarly, to descale your deployments you can use the same scale command with fewer replicas.
+Notice that the `X-Pod-Name` header has a different value when you call it multiple times. The value changes because three pods that all serve the `system` application are now running. Similarly, to descale your deployments you can use the same scale command with fewer replicas.
 
 [role='command']
 ```
@@ -500,9 +404,7 @@ kubectl scale deployment/system-deployment --replicas=1
 
 == Redeploy microservices
 
-When you're building your application, you might want to quickly test a change. 
-To run a quick test, you can rebuild your Docker images then delete and re-create your {kube} resources. 
-Note that there is only one `system` pod after you redeploy because you're deleting all of the existing pods.
+When you're building your application, you might want to quickly test a change. To run a quick test, you can rebuild your Docker images then delete and re-create your {kube} resources. Note that there is only one `system` pod after you redeploy because you're deleting all of the existing pods.
 
 // Static guide instruction
 ifndef::cloud-hosted[]
@@ -520,27 +422,23 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-```
+```bash
 cd /home/project/guide-kubernetes-intro/start
 kubectl delete -f kubernetes.yaml
 
 mvn clean package
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
-docker tag inventory:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker tag system:1.0-SNAPSHOT us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/inventory:1.0-SNAPSHOT
-docker push us.icr.io/$NAMESPACE_NAME/system:1.0-SNAPSHOT
+docker tag inventory:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker tag system:1.0-SNAPSHOT us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/inventory:1.0-SNAPSHOT
+docker push us.icr.io/$SN_ICR_NAMESPACE/system:1.0-SNAPSHOT
 
 kubectl apply -f kubernetes.yaml
 ```
-{: codeblock}
 endif::[]
 
-Updating your applications in this way is fine for development environments, but it is not suitable for production.
-If you want to deploy an updated image to a production cluster, 
-you can update the container in your deployment with a new image. 
-Once the new container is ready, {kube} automates both the creation of a new container and the decommissioning of the old one.
+Updating your applications in this way is fine for development environments, but it is not suitable for production. If you want to deploy an updated image to a production cluster, you can update the container in your deployment with a new image. Once the new container is ready, {kube} automates both the creation of a new container and the decommissioning of the old one.
 
 // =================================================================================================
 // Testing microservices that are running on {kube}
@@ -553,10 +451,7 @@ pom.xml
 include::finish/inventory/pom.xml[]
 ----
 
-A few tests are included for you to test the basic functionality of the microservices. 
-If a test failure occurs, then you might have introduced a bug into the code. 
-To run the tests, wait for all pods to be in the ready state before proceeding further. 
-The default properties defined in the [hotspot]`pom.xml` are:
+A few tests are included for you to test the basic functionality of the microservices. If a test failure occurs, then you might have introduced a bug into the code.  To run the tests, wait for all pods to be in the ready state before proceeding further. The default properties defined in the [hotspot]`pom.xml` are:
 
 [cols="15, 100", options="header"]
 |===
@@ -593,22 +488,19 @@ endif::[]
 
 // Cloud-hosted guide instruction
 ifdef::cloud-hosted[]
-Update the **pom.xml** files so that the **system.service.root** and **inventory.service.root** properties
-match the values to access the **system** and **inventory** services.
+Update the ***pom.xml*** files so that the ***system.service.root*** and ***inventory.service.root*** properties match the values to access the ***system*** and **inventory*** services.
 
-```
+```bash
 sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' inventory/pom.xml
 sed -i 's=localhost:32000='"$INVENTORY_PROXY"'=g' inventory/pom.xml
 sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' system/pom.xml
 ```
-{: codeblock}
 
 Run the integration tests by using the following command:
 
-```
+```bash
 mvn failsafe:integration-test
 ```
-{: codeblock}
 endif::[]
 
 If the tests pass, you'll see an output similar to the following for each service respectively:
@@ -645,8 +537,12 @@ Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 
 == Tearing down the environment
 
-When you no longer need your deployed microservices, 
-you can delete all {kube} resources by running the `kubectl delete` command:
+// Cloud-hosted guide instruction
+ifdef::cloud-hosted[]
+Press **CTRL+C** to stop the proxy server that was started at step 6 ***Deploying the microservices***.
+endif::[]
+
+When you no longer need your deployed microservices, you can delete all {kube} resources by running the ***kubectl delete*** command:
 [role='command']
 ```
 kubectl delete -f kubernetes.yaml
@@ -658,19 +554,13 @@ ifndef::cloud-hosted[]
 include::{common-includes}/kube-minikube-teardown.adoc[]
 endif::[]
 
-// Cloud-hosted guide instruction
-ifdef::cloud-hosted[]
-Press **CTRL+C** to stop the proxy server that was started at step 7.
-endif::[]
-
 // =================================================================================================
 // finish
 // =================================================================================================
 
 == Great work! You're done!
 
-You have just deployed two microservices that are running in Open Liberty to {kube}.
-You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
+You have just deployed two microservices that are running in Open Liberty to {kube}. You then scaled a microservice and ran integration tests against miroservices that are running in a {kube} cluster.
 
 // Include the below from the guides-common repo to tell users how they can contribute to the guide
 
