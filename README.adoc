@@ -147,7 +147,7 @@ Run the integration tests with the IP address for Minikube:
 [.tab_content]
 --
 
-[role="maven_section command"]
+[maven_section role="maven_section command"]
 ----
 Navigate to the `start` directory and build the applications by running the following commands:
 
