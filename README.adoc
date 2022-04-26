@@ -124,7 +124,7 @@ mvn clean package
 
 [role="gradle_section command"]
 ----
-Run the integration tests against a cluster running with a host name of `localhost`:
+Navigate to the `start` directory and build the applications by running the following commands:
 
 gradle clean assemble
 ----
