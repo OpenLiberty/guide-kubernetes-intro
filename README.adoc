@@ -109,63 +109,18 @@ The first step of deploying to {kube} is to build your microservices and contain
 
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven project that's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory, `start/system` and `start/inventory`. Each of these directories also contains a Dockerfile, which is necessary for building Docker images. If you're unfamiliar with Dockerfiles, check out the https://openliberty.io/guides/containerize.html[Containerizing Microservices^] guide, which covers Dockerfiles in depth.
 
-include::{common-includes}/os-tabs.adoc[]
-
-[.tab_content.windows_section.mac_section]
---
-
-[role="maven_section command", subs="macros"]
+[source, role="maven_section command hotspot"]
 ----
 Run the integration tests against a cluster running with a host name of `localhost`:
-
-+++
-<span class="hotspot">
-mvnw failsafe:integration-test
-</span>
-+++
+mvnw failsafe:integration-test`
 ----
-
 
 [source, role="gradle_section command hotspot file=0"]
 ----
 Run the integration tests against a cluster running with a host name of `localhost`:
 
-
 gradlew failsafe:integration-test
 ----
-
---
-
-
-[.tab_content.linux_section]
---
-Run the integration tests with the IP address for Minikube:
-[role='command']
-----
-`mvn failsafe:integration-test -Dsystem.service.root=$(minikube ip):31000 -Dinventory.service.root=$(minikube ip):32000
-----
---
-
-[.tab_content]
---
-
-[maven_section role="maven_section command"]
-----
-Navigate to the `start` directory and build the applications by running the following commands:
-
-cd start
-mvn clean package
-----
-
-
-[role="gradle_section command"]
-----
-Navigate to the `start` directory and build the applications by running the following commands:
-
-gradle clean assemble
-----
-
---
 
 include::{common-includes}/ol-icr-full-docker-pull.adoc[]
 
