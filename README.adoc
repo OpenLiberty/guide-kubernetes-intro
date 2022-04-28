@@ -109,17 +109,18 @@ The first step of deploying to {kube} is to build your microservices and contain
 
 The starting Java project, which you can find in the `start` directory, is a multi-module Maven project that's made up of the `system` and `inventory` microservices. Each microservice resides in its own directory, `start/system` and `start/inventory`. Each of these directories also contains a Dockerfile, which is necessary for building Docker images. If you're unfamiliar with Dockerfiles, check out the https://openliberty.io/guides/containerize.html[Containerizing Microservices^] guide, which covers Dockerfiles in depth.
 
-[source, role="maven_section command hotspot"]
+Navigate to the `start` directory and build the applications by running the following commands:
+
+[source, role="maven_section command"]
 ----
-Run the integration tests against a cluster running with a host name of `localhost`:
-mvnw failsafe:integration-test`
+cd start
+mvn clean package
 ----
 
-[source, role="gradle_section command hotspot file=0"]
+[source, role="gradle_section command"]
 ----
-Run the integration tests against a cluster running with a host name of `localhost`:
-
-gradlew failsafe:integration-test
+cd start
+gradle clean assemble
 ----
 
 include::{common-includes}/ol-icr-full-docker-pull.adoc[]
@@ -414,8 +415,8 @@ When you're building your application, you might want to quickly test a change. 
 
 // Static guide instruction
 ifndef::cloud-hosted[]
-[role='command']
-```
+[source, role="maven_section command"]
+----
 kubectl delete -f kubernetes.yaml
 
 mvn clean package
@@ -423,7 +424,18 @@ docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 
 kubectl apply -f kubernetes.yaml
-```
+----
+
+[source, role="gradle_section command"]
+----
+kubectl delete -f kubernetes.yaml
+
+gradle clean assemble
+docker build -t system:1.0-SNAPSHOT system/.
+docker build -t inventory:1.0-SNAPSHOT inventory/.
+
+kubectl apply -f kubernetes.yaml
+----
 endif::[]
 
 // Cloud-hosted guide instruction
@@ -476,19 +488,31 @@ include::{common-includes}/os-tabs.adoc[]
 [.tab_content.windows_section.mac_section]
 --
 Run the integration tests against a cluster running with a host name of `localhost`:
-[role='command']
-```
+[source, role="maven_section command"]
+----
 mvn failsafe:integration-test
-```
+----
+
+[source, role="gradle_section command"]
+----
+gradle failsafe:integration-test
+----
+
 --
 
 [.tab_content.linux_section]
 --
 Run the integration tests with the IP address for Minikube:
-[role='command']
-```
+[source, role="maven_section command"]
+----
 mvn failsafe:integration-test -Dsystem.service.root=$(minikube ip):31000 -Dinventory.service.root=$(minikube ip):32000
-```
+----
+
+[source, role="gradle_section command"]
+----
+gradle failsafe:integration-test -Dsystem.service.root=$(minikube ip):31000 -Dinventory.service.root=$(minikube ip):32000
+----
+
 --
 endif::[]
 
