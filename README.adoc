@@ -469,8 +469,6 @@ pom.xml
 include::finish/inventory/pom.xml[]
 ----
 
-[source, role="maven_section"]
-----
 A few tests are included for you to test the basic functionality of the microservices. If a test failure occurs, then you might have introduced a bug into the code.  To run the tests, wait for all pods to be in the ready state before proceeding further. The default properties defined in the [hotspot]`pom.xml` are:
 
 [cols="15, 100", options="header"]
@@ -480,12 +478,6 @@ A few tests are included for you to test the basic functionality of the microser
 | [hotspot=system.service.root]`system.service.root`       | The {kube} Service `system-service` root path, `localhost:31000` by default.
 | [hotspot=inventory.service.root]`inventory.service.root` | The {kube} Service `inventory-service` root path, `localhost:32000` by default.
 |===
-----
-
-[source, role="gradle_section"]
-----
-insert gradle instructions
-----
 
 Navigate back to the `start` directory.
 
