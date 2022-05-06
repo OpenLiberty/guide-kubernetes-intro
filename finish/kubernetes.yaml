@@ -14,6 +14,11 @@ spec:
       # tag::app2[]
       app: system
       # end::app2[]
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   template:
     metadata:
       # tag::labels2[]
@@ -32,6 +37,49 @@ spec:
         # tag::containerPort1[]
         - containerPort: 9080
         # end::containerPort1[]
+        # system probes
+        startupProbe:
+          httpGet:
+            # tag::start1[]
+            path: /health/started
+            # end::start1[]
+            port: 9080
+        livenessProbe:
+          httpGet:
+            # tag::live1[]
+            path: /health/live
+            # end::live1[]
+            port: 9080
+          # tag::delay1[]
+          initialDelaySeconds: 60
+          # end::delay1[]
+          # tag::period1[]
+          periodSeconds: 10
+          # end::period1[]
+          # tag::timeout1[]
+          timeoutSeconds: 3
+          # end::timeout1[]
+          # tag::threshold1[]
+          failureThreshold: 1
+          # end::threshold1[]
+        readinessProbe:
+          httpGet:
+            # tag::ready1[]
+            path: /health/ready
+            # end::ready1[]
+            port: 9080
+          # tag::delay2[]
+          initialDelaySeconds: 30
+          # end::delay2[]
+          # tag::period2[]
+          periodSeconds: 10
+          # end::period2[]
+          # tag::timeout2[]
+          timeoutSeconds: 3
+          # end::timeout2[]
+          # tag::threshold2[]
+          failureThreshold: 1
+          # end::threshold2[]
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -49,6 +97,11 @@ spec:
       # tag::app5[]
       app: inventory
       # end::app5[]
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1    
   template:
     metadata:
       # tag::labels4[]
@@ -67,6 +120,49 @@ spec:
         # tag::containerPort2[]
         - containerPort: 9080
         # end::containerPort2[]
+         # inventory probes
+        startupProbe:
+          httpGet:
+            # tag::start2[]
+            path: /health/started
+            # end::start2[]
+            port: 9080
+        livenessProbe:
+          httpGet:
+            # tag::live2[]
+            path: /health/live
+            # end::live2[]
+            port: 9080
+          # tag::delay3[]
+          initialDelaySeconds: 60
+          # end::delay3[]
+          # tag::period3[]
+          periodSeconds: 10
+          # end::period3[]
+          # tag::timeout3[]
+          timeoutSeconds: 3
+          # end::timeout3[]
+          # tag::threshold3[]
+          failureThreshold: 1
+          # end::threshold3[]
+        readinessProbe:
+          httpGet:
+            # tag::ready2[]
+            path: /health/ready
+            # end::ready2[]
+            port: 9080
+          # tag::delay4[]
+          initialDelaySeconds: 30
+          # end::delay4[]
+          # tag::period4[]
+          periodSeconds: 10
+          # end::period4[]
+          # tag::timeout4[]
+          timeoutSeconds: 3
+          # end::timeout4[]
+          # tag::threshold4[]
+          failureThreshold: 1
+          # end::threshold4[]
 ---
 apiVersion: v1
 kind: Service
