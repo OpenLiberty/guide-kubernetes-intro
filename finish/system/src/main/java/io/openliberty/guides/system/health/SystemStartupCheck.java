@@ -11,7 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 // tag::SystemStartupCheck[]
-package main.java.io.openliberty.guides.system.health;
+package io.openliberty.guides.system.health;
 
 import java.lang.management.ManagementFactory;
 import com.sun.management.OperatingSystemMXBean;

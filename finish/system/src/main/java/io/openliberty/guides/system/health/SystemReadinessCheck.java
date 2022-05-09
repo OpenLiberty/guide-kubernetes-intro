@@ -10,7 +10,7 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
-package main.java.io.openliberty.guides.system.health;
+package io.openliberty.guides.system.health;
 
 import java.time.LocalDateTime;
 

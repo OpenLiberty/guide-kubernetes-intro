@@ -11,7 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 // tag::InventoryStartupCheck[]
-package main.java.io.openliberty.guides.inventory.health;
+package io.openliberty.guides.inventory.health;
 
 import java.lang.management.ManagementFactory;
 

@@ -11,7 +11,7 @@
  *******************************************************************************/
 // end::copyright[]
 // tag::SystemHealth[]
-package main.java.io.openliberty.guides.system.health;
+package io.openliberty.guides.system.health;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
