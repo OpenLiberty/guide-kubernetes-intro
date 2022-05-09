@@ -16,6 +16,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
+import io.openliberty.guides.inventory.InventoryResource;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

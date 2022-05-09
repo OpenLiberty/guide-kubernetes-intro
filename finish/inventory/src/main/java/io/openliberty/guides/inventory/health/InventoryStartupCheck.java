@@ -14,6 +14,7 @@
 package io.openliberty.guides.inventory.health;
 
 import java.lang.management.ManagementFactory;
+import io.openliberty.guides.inventory.InventoryResource;
 
 import com.sun.management.OperatingSystemMXBean;
 

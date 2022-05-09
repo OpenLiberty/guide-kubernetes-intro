@@ -13,6 +13,7 @@
 package io.openliberty.guides.inventory.health;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import io.openliberty.guides.inventory.InventoryResource;
 
 import java.lang.management.MemoryMXBean;
 import java.lang.management.ManagementFactory;
