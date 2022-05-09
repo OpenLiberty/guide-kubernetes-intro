@@ -13,6 +13,7 @@
 // tag::SystemStartupCheck[]
 package io.openliberty.guides.system.health;
 
+import io.openliberty.guides.system.SystemResource;
 import java.lang.management.ManagementFactory;
 import com.sun.management.OperatingSystemMXBean;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -13,6 +13,7 @@
 // tag::SystemHealth[]
 package io.openliberty.guides.system.health;
 
+import io.openliberty.guides.system.SystemResource;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 

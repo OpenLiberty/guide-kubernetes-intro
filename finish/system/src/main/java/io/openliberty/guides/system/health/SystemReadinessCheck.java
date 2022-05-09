@@ -14,6 +14,7 @@ package io.openliberty.guides.system.health;
 
 import java.time.LocalDateTime;
 
+import io.openliberty.guides.system.SystemResource;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.Readiness;
 import org.eclipse.microprofile.health.HealthCheck;
