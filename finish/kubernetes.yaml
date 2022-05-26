@@ -37,31 +37,7 @@ spec:
         # tag::containerPort1[]
         - containerPort: 9080
         # end::containerPort1[]
-        # system probes
-        startupProbe:
-          httpGet:
-            # tag::start1[]
-            path: /health/started
-            # end::start1[]
-            port: 9080
-        livenessProbe:
-          httpGet:
-            # tag::live1[]
-            path: /health/live
-            # end::live1[]
-            port: 9080
-          # tag::delay1[]
-          initialDelaySeconds: 60
-          # end::delay1[]
-          # tag::period1[]
-          periodSeconds: 10
-          # end::period1[]
-          # tag::timeout1[]
-          timeoutSeconds: 3
-          # end::timeout1[]
-          # tag::threshold1[]
-          failureThreshold: 1
-          # end::threshold1[]
+        # system probe
         readinessProbe:
           httpGet:
             # tag::ready1[]
@@ -120,31 +96,7 @@ spec:
         # tag::containerPort2[]
         - containerPort: 9080
         # end::containerPort2[]
-         # inventory probes
-        startupProbe:
-          httpGet:
-            # tag::start2[]
-            path: /health/started
-            # end::start2[]
-            port: 9080
-        livenessProbe:
-          httpGet:
-            # tag::live2[]
-            path: /health/live
-            # end::live2[]
-            port: 9080
-          # tag::delay3[]
-          initialDelaySeconds: 60
-          # end::delay3[]
-          # tag::period3[]
-          periodSeconds: 10
-          # end::period3[]
-          # tag::timeout3[]
-          timeoutSeconds: 3
-          # end::timeout3[]
-          # tag::threshold3[]
-          failureThreshold: 1
-          # end::threshold3[]
+         # inventory probe
         readinessProbe:
           httpGet:
             # tag::ready2[]

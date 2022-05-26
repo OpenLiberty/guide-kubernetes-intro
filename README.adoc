@@ -356,6 +356,24 @@ endif::[]
 // Scaling a deployment
 // ================================================================================================
 
+== Rolling Update
+
+Rolling Update refers to continually installing Kubernetes patches without disrupting the availability of the deployed applications. Without continuous updates, a Kubernetes cluster will be susceptible to a denial of a service attack. Update the yaml as follows to add the rollingUpdate configuration. 
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Update the Kubernetes configuration file in the `start` directory.#
+`kubernetes.yaml`
+----
+
+kubernetes.yaml
+[source, yaml, linenums, role="code_column"]
+----
+include::finish/kubernetes.yaml[]
+----
+
+The readiness check for both Inventory and System has already been provided within the health directory of each. The remaining startup and liveness health checks can be found in the Kubernetes-microprofile-health guide. 
+
 == Scaling a deployment
 
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because you can replicate your application to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
