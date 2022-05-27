@@ -17,8 +17,10 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
+      # tag::max1[]
       maxUnavailable: 1
       maxSurge: 1
+      # end::max1[]
   template:
     metadata:
       # tag::labels2[]
@@ -37,8 +39,9 @@ spec:
         # tag::containerPort1[]
         - containerPort: 9080
         # end::containerPort1[]
-        # system probe
+        # tag::readinessProbe1[]
         readinessProbe:
+        # end::readinessProbe1[]
           httpGet:
             # tag::ready1[]
             path: /health/ready
@@ -76,8 +79,10 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
+      # tag::max2[]
       maxUnavailable: 1
-      maxSurge: 1    
+      maxSurge: 1
+      # end::max2[]    
   template:
     metadata:
       # tag::labels4[]
@@ -96,8 +101,9 @@ spec:
         # tag::containerPort2[]
         - containerPort: 9080
         # end::containerPort2[]
-         # inventory probe
+        # tag::readinessProbe2[]
         readinessProbe:
+        # end::readinessProbe2[]
           httpGet:
             # tag::ready2[]
             path: /health/ready
