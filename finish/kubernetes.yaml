@@ -17,10 +17,12 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      # tag::max1[]
+      # tag::maxUnavailable1[]
       maxUnavailable: 1
+      # end::maxUnavailable1[]
+      # tag::maxSurge1[]
       maxSurge: 1
-      # end::max1[]
+      # end::maxSurge1[]
   template:
     metadata:
       # tag::labels2[]
@@ -79,10 +81,12 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      # tag::max2[]
+      # tag::maxUnavailable2[]
       maxUnavailable: 1
+      # end::maxUnavailable2[]
+      # tag::maxSurge2[]
       maxSurge: 1
-      # end::max2[]    
+      # end::maxSurge2[]    
   template:
     metadata:
       # tag::labels4[]
