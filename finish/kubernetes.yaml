@@ -110,6 +110,9 @@ spec:
         - containerPort: 9080
         # end::containerPort2[]
         # tag::readinessProbe2[]
+        env:
+        - name: SYS_APP_HOSTNAME
+          value: system-service
         readinessProbe:
           httpGet:
             # tag::ready2[]
