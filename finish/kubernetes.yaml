@@ -14,6 +14,7 @@ spec:
       # tag::app2[]
       app: system
       # end::app2[]
+  # tag::rolling1[]
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -23,6 +24,7 @@ spec:
       # tag::maxSurge1[]
       maxSurge: 1
       # end::maxSurge1[]
+  # end::rolling1[]
   template:
     metadata:
       # tag::labels2[]
@@ -43,7 +45,6 @@ spec:
         # end::containerPort1[]
         # tag::readinessProbe1[]
         readinessProbe:
-        # end::readinessProbe1[]
           httpGet:
             # tag::ready1[]
             path: /health/ready
@@ -61,6 +62,7 @@ spec:
           # tag::threshold2[]
           failureThreshold: 1
           # end::threshold2[]
+        # end::readinessProbe1[]
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -78,6 +80,7 @@ spec:
       # tag::app5[]
       app: inventory
       # end::app5[]
+  # tag::rolling2[]
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -87,6 +90,7 @@ spec:
       # tag::maxSurge2[]
       maxSurge: 1
       # end::maxSurge2[]    
+  # end::rolling2[]
   template:
     metadata:
       # tag::labels4[]
@@ -107,7 +111,6 @@ spec:
         # end::containerPort2[]
         # tag::readinessProbe2[]
         readinessProbe:
-        # end::readinessProbe2[]
           httpGet:
             # tag::ready2[]
             path: /health/ready
@@ -125,6 +128,7 @@ spec:
           # tag::threshold4[]
           failureThreshold: 1
           # end::threshold4[]
+        # end::readinessProbe1[]
 ---
 apiVersion: v1
 kind: Service
