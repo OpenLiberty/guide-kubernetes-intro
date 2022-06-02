@@ -232,7 +232,7 @@ A Kubernetes resource definition is a yaml file that contains a description of a
 ----
 
 kubernetes.yaml
-[source, yaml, linenums, role="code_column"]
+[source, yaml, linenums, role="code_column hide_tags=rolling1,readinessProbe1,rolling2,readinessProbe1"]
 ----
 include::finish/kubernetes.yaml[]
 ----
@@ -375,6 +375,13 @@ include::finish/kubernetes.yaml[]
 The [hotspot=rolling1 hotspot=rolling2]`rollingUpdate` configuration has two attributes, `maxUnavailable` and `maxSurge`. The [hotspot=maxUnavailable1 hotspot=maxUnavailable2]`maxUnavailable` attribute specifies the the maximum number of Kubernetes pods that can be unavailable during the update process. Similarly, the [hotspot=maxSurge1 hotspot=maxSurge2]`maxSurge` attribute specifies the maximum number of additional pods that can be created during the update process.
 
 The [hotspot=readinessProbe1 hotspot=readinessProbe2]`readinessProbe` allows Kubernetes to know whether the service is ready to handle requests. The readiness health check classes for the `/health/ready` endpoint to the `inventory` and `system` services are provided for you. If you want to learn more about how to use health checks in Kubernetes, check out the https://openliberty.io/guides/kubernetes-microprofile-health.html[Kubernetes-microprofile-health^] guide. 
+
+Run the following command to deploy the `inventory` and `system` microservices with the new configuration:
+
+[role='command']
+```
+kubectl apply -f kubernetes.yaml
+```
 
 == Scaling a deployment
 
