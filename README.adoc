@@ -358,7 +358,7 @@ endif::[]
 
 == Rolling update
 
-Rolling update refers to continually installing Kubernetes patches without disrupting the availability of the deployed applications. Without continuous updates, a Kubernetes cluster will be susceptible to a denial of a service attack. Update the yaml file as follows to add the `rollingUpdate` configuration. 
+Without continuous updates, a Kubernetes cluster is susceptible to a denial of a service attack. Rolling updates continually install Kubernetes patches without disrupting the availability of the deployed applications. Update the yaml file as follows to add the `rollingUpdate` configuration. 
 
 [role="code_command hotspot", subs="quotes"]
 ----
