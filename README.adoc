@@ -356,6 +356,26 @@ endif::[]
 // Scaling a deployment
 // ================================================================================================
 
+== Rolling update
+
+Without continuous updates, a Kubernetes cluster is susceptible to a denial of a service attack. Rolling updates continually install Kubernetes patches without disrupting the availability of the deployed applications. Update the yaml file as follows to add the `rollingUpdate` configuration. 
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Replace the Kubernetes configuration file#
+`kubernetes.yaml`
+----
+
+kubernetes.yaml
+[source, yaml, linenums, role="code_column"]
+----
+include::finish/kubernetes.yaml[]
+----
+
+The [hotspot=rolling1 hotspot=rolling2]`rollingUpdate` configuration has two attributes, `maxUnavailable` and `maxSurge`. The [hotspot=maxUnavailable1 hotspot=maxUnavailable2]`maxUnavailable` attribute specifies the the maximum number of Kubernetes pods that can be unavailable during the update process. Similarly, the [hotspot=maxSurge1 hotspot=maxSurge2]`maxSurge` attribute specifies the maximum number of additional pods that can be created during the update process.
+
+The [hotspot=readinessProbe1 hotspot=readinessProbe2]`readinessProbe` allows Kubernetes to know whether the service is ready to handle requests. The readiness health check classes for the `/health/ready` endpoint to the `inventory` and `system` services are provided for you. If you want to learn more about how to use health checks in Kubernetes, check out the https://openliberty.io/guides/kubernetes-microprofile-health.html[Kubernetes-microprofile-health^] guide. 
+
 == Scaling a deployment
 
 To use load balancing, you need to scale your deployments. When you scale a deployment, you replicate its pods, creating more running instances of your applications. Scaling is one of the primary advantages of {kube} because you can replicate your application to accommodate more traffic, and then descale your deployments to free up resources when the traffic decreases.
