@@ -358,7 +358,7 @@ endif::[]
 
 == Rolling update
 
-Rolling Update refers to continually installing Kubernetes patches without disrupting the availability of the deployed applications. Without continuous updates, a Kubernetes cluster will be susceptible to a denial of a service attack. Update the yaml as follows to add the rollingUpdate configuration. 
+Rolling update refers to continually installing Kubernetes patches without disrupting the availability of the deployed applications. Without continuous updates, a Kubernetes cluster will be susceptible to a denial of a service attack. Update the yaml file as follows to add the `rollingUpdate` configuration. 
 
 [role="code_command hotspot", subs="quotes"]
 ----
@@ -374,7 +374,7 @@ include::finish/kubernetes.yaml[]
 
 The [hotspot=rolling1 hotspot=rolling2]`rollingUpdate` configuration has two attributes `maxUnavailable` and `maxSurge`. The [hotspot=maxUnavailable1 hotspot=maxUnavailable2]`maxUnavailable` attribute refers to the the number of Kubernetes pods that are allowed to be unavailable during the update process. Similarly, the [hotspot=maxSurge1 hotspot=maxSurge2]`maxSurge` attribute refers to the number of additional pods that are allowed to be created during the update process.
 
-The [hotspot=readinessProbe1 hotspot=readinessProbe2]`readiness check` allows third party applications and services to know whether the service is ready to handle requests. A readiness health check has already been implemented for the inventory and system services. You can learn more about how to use health checks in Kubernetes, check out the https://openliberty.io/guides/kubernetes-microprofile-health.html[Kubernetes-microprofile-health^] guide. 
+The [hotspot=readinessProbe1 hotspot=readinessProbe2]`readinessProbe` allows Kubernetes to know whether the service is ready to handle requests. The readiness health check classes for the `/health/ready` endpoint to the `inventory` and `system` services are provided for you. If you want to learn more about how to use health checks in Kubernetes, check out the https://openliberty.io/guides/kubernetes-microprofile-health.html[Kubernetes-microprofile-health^] guide. 
 
 == Scaling a deployment
 
