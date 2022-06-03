@@ -232,7 +232,7 @@ A Kubernetes resource definition is a yaml file that contains a description of a
 ----
 
 kubernetes.yaml
-[source, yaml, linenums, role="code_column hide_tags=rolling1,readinessProbe1,rolling2,readinessProbe1"]
+[source, yaml, linenums, role="code_column hide_tags=rolling1,readinessProbe1,rolling2,readinessProbe2"]
 ----
 include::finish/kubernetes.yaml[]
 ----
