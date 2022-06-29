@@ -148,15 +148,15 @@ The guide will show you the podman commands.
 `*LINUX*`
 
 [.tab_content.windows_section.mac_section]
----
+----
 podman not work in Windows
----
+----
 
 [.tab_content]
 [.linux_section]
----
+----
 Run the following podman command from a command line:
----
+----
 
 --
 
@@ -173,15 +173,15 @@ The guide will show you the docker commands.
 `*LINUX*`
 
 [.tab_content.windows_section.mac_section]
----
+----
 Start your Docker Desktop environment.
----
+----
 
 [.tab_content]
 [.linux_section]
----
+----
 Run the following docker command from a command line:
----
+----
 
 --
 
