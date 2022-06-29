@@ -127,6 +127,64 @@ include::{common-includes}/maven-gradle.adoc[]
 
 // no "try what you'll build" section in this guide since it would be too long due to all setup the user will have to do.
 
+Select the build tool you interest to use by clicking on `Maven` or `Gradle`:
+
+[.tab_link.podman_link]
+`*Podman*`
+[.tab_link.docker_link]
+`*Docker*`
+
+[.tab_content]
+[.podman_section]
+--
+
+The guide will show you the maven commands.
+
+[.tab_link.windows_link]
+`*WINDOWS*`
+[.tab_link.mac_link]
+`*MAC*`
+[.tab_link.linux_link]
+`*LINUX*`
+
+[.tab_content.windows_section.mac_section]
+--
+Start your Docker Desktop environment.
+--
+
+[.tab_content]
+[.linux_section]
+--
+Run the following command from a command line:
+--
+
+--
+
+[.tab_content]
+[.docker_section]
+--
+The guide will show you the docker commands.
+
+[.tab_link.windows_link]
+`*WINDOWS*`
+[.tab_link.mac_link]
+`*MAC*`
+[.tab_link.linux_link]
+`*LINUX*`
+
+[.tab_content.windows_section.mac_section]
+--
+Start your Docker Desktop environment.
+--
+
+[.tab_content]
+[.linux_section]
+--
+Run the following command from a command line:
+--
+
+--
+
 
 // =================================================================================================
 // Staring and preparing your cluster for deployment
