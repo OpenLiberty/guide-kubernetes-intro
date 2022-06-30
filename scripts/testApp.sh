@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
 
-../scripts/startMinikube.sh
-
 mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
@@ -29,5 +27,3 @@ mvn failsafe:verify
 
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep system)"
 kubectl logs "$(kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | grep inventory)"
-
-../scripts/stopMinikube.sh
