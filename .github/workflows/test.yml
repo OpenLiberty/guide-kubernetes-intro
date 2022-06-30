@@ -54,9 +54,10 @@ jobs:
       - run: unset _JAVA_OPTIONS
       - name: start minikube
         id: minikube
-        uses: medyagh/setup-minikube@master
         with:
           minikube-version: 1.25.2
+          driver: none
+        uses: medyagh/setup-minikube@master
       - name: Run tests
         run: sudo ../scripts/testApp.sh
       - name: Post tests
