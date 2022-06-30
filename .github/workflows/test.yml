@@ -55,6 +55,8 @@ jobs:
       - name: start minikube
         id: minikube
         uses: medyagh/setup-minikube@master
+        with:
+          minikube-version: 1.25.2
       - name: Run tests
         run: sudo ../scripts/testApp.sh
       - name: Post tests
