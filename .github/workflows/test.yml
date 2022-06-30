@@ -57,6 +57,7 @@ jobs:
         with:
           minikube-version: 1.25.2
           driver: none
+          bootstrapper: kubeadm
         uses: medyagh/setup-minikube@master
       - name: Run tests
         run: sudo ../scripts/testApp.sh
