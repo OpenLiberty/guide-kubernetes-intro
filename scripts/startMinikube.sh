@@ -7,10 +7,14 @@
 #wget https://github.com/kubernetes/minikube/releases/download/v0.28.2/minikube-linux-amd64 -q -O minikube
 #chmod +x minikube
 
-apt-get update -y
-apt-get install -y conntrack
+#apt-get update -y
+#apt-get install -y conntrack
 
-sysctl fs.protected_regular=0
+#sysctl fs.protected_regular=0
 
-#minikube start --driver=none --bootstrapper=kubeadm
-#eval "$(minikube docker-env)"
+eval $(minikube docker-env -u)
+minikube stop
+minikube delete
+
+minikube start --driver=none --bootstrapper=kubeadm
+eval "$(minikube docker-env)"
