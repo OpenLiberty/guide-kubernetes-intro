@@ -52,14 +52,8 @@ jobs:
         with:
           java-version: 8
       - run: unset _JAVA_OPTIONS
-      - name: Install conntrack
+      - name: restart minikube
         run: sudo ../scripts/startMinikube.sh
-      - name: start minikube
-        id: minikube
-        with:
-          minikube-version: 1.25.2
-          driver: none
-        uses: medyagh/setup-minikube@v0.0.7
       - name: Run tests
         run: sudo ../scripts/testApp.sh
       - name: Post tests
