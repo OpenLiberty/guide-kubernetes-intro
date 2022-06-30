@@ -52,6 +52,9 @@ jobs:
         with:
           java-version: 8
       - run: unset _JAVA_OPTIONS
+      - name: start minikube
+        id: minikube
+        uses: medyagh/setup-minikube@1.25.2
       - name: Run tests
         run: sudo ../scripts/testApp.sh
       - name: Post tests
