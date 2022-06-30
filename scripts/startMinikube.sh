@@ -12,7 +12,7 @@
 
 #sysctl fs.protected_regular=0
 
-eval $(minikube docker-env -u)
+eval "$(minikube docker-env -u)"
 minikube stop
 minikube delete
 
