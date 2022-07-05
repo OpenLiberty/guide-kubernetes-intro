@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
 
-../scripts/startMinikube.sh
-
 mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
