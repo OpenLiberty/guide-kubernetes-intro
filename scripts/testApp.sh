@@ -11,6 +11,8 @@ docker pull icr.io/appcafe/open-liberty:full-java11-openj9-ubi
 docker build -t system:1.0-SNAPSHOT system/.
 docker build -t inventory:1.0-SNAPSHOT inventory/.
 
+eval $(minikube docker-env -u)
+
 kubectl apply -f kubernetes.yaml
 
 sleep 120
