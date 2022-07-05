@@ -31,6 +31,11 @@ wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/sys
 mv cri-docker.socket cri-docker.service /etc/systemd/system/
 sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
 
+VERSION="v1.24.2"
+wget "https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz"
+sudo tar zxvf "crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin"
+rm -f "crictl-$VERSION-linux-amd64.tar.gz"
+
 systemctl daemon-reload
 systemctl enable cri-docker.service
 systemctl enable --now cri-docker.socket
