@@ -29,4 +29,4 @@ cri-dockerd --version
 
 minikube stop
 minikube delete
-minikube start --driver=none --bootstrapper=kubeadm
+minikube start
