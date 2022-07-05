@@ -37,4 +37,4 @@ systemctl enable --now cri-docker.socket
 
 minikube stop
 minikube delete
-minikube start --driver=none --bootstrapper=kubeadm
+minikube start --driver=none
