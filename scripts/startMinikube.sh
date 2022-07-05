@@ -33,7 +33,7 @@ sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/syst
 
 VERSION="v1.24.2"
 wget "https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz"
-tar zxvf "crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin/"
+tar zxvf "crictl-$VERSION-linux-amd64.tar.gz" -C /usr/local/bin
 rm -f "crictl-$VERSION-linux-amd64.tar.gz"
 
 systemctl daemon-reload
