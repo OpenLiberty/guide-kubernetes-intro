@@ -26,3 +26,7 @@ wget "https://github.com/Mirantis/cri-dockerd/releases/download/v${VER}/cri-dock
 tar xvf "cri-dockerd-${VER}.amd64.tgz"
 mv cri-dockerd/cri-dockerd /usr/local/bin/
 cri-dockerd --version
+
+minikube stop
+minikube delete
+minikube start --driver=none --bootstrapper=kubeadm
