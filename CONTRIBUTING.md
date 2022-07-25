@@ -12,7 +12,7 @@ A good bug report makes it easy for everyone to understand what you were trying 
 
 ## Contributions
 
-Contributing to an Open Liberty guide is simple. All you need to do is create your own branch to include your contribution and open a pull request to the `staging` (quality assurance) branch.
+Contributing to an Open Liberty guide is simple. All you need to do is create your branch to include your contribution and open a pull request to the `staging` (quality assurance) branch.
 
 ### Text or content contributions
 
@@ -30,20 +30,20 @@ Use your real name when you sign. We can't accept pseudonyms or anonymous contri
 
 Many Git UI tools have support for adding the `Signed-off-by` line to the end of your commit message. This line can be automatically added by the `git commit` command by using the `-s` option.
 
-If reviewers agree with your change, your change will be merged to the `master` branch for publishing.
+If reviewers agree with your change, your change will be merged to the `prod` branch for publishing.
 
 ### Code contributions
 
 If you are contributing trivial code changes such as typos, redundant spaces, or minor formatting and spelling errors, follow the instructions under [Text or content contributions](./CONTRIBUTING.md#text-or-content-contributions).
 
-If you are contributing code changes via a pull request for non-trivial changes, you must sign off on the [Individual Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/master/cla/open-liberty-cla-individual.pdf). An example of a non-trivial change could be adding a new
+If you are contributing code changes via a pull request for non-trivial changes, you must sign off on the [Individual Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/release/cla/open-liberty-cla-individual.pdf). An example of a non-trivial change could be adding a new
 microservice to the backend application of the guide.
 
-If you are contributing changes as part of your job, you may also wish to have your employer sign a [Corporate Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/master/cla/open-liberty-cla-corporate.pdf).
+If you are contributing changes as part of your job, you may also wish to have your employer sign a [Corporate Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/release/cla/open-liberty-cla-corporate.pdf).
 
 Instructions for how to sign and submit these agreements are located at the top of each document.
 
-After we obtain the signed CLA, you are welcome to open a pull request against the `staging` branch, and the team will be notified for review. We ask you follow these steps through the submission process:
+After we obtain the signed CLA, you are welcome to open a pull request against the `staging` branch, and the team will be notified for review. We ask you to follow these steps through the submission process:
 
 1. Open a pull request against the `staging` branch.
 2. A "CLA signed" label will be manually added by the team.
