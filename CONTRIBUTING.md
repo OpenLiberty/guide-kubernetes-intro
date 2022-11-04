@@ -12,13 +12,8 @@ A good bug report makes it easy for everyone to understand what you were trying 
 
 ## Contributions
 
-Contributing to an Open Liberty guide is simple. All you need to do is create your branch to include your contribution and open a pull request to the `staging` (quality assurance) branch.
-
-### Text or content contributions
-
-If you are contributing text or content changes via a pull request, you need to certify that the originality of the work follows the [Developer Certificate of Origin (DCO)](https://developercertificate.org).
-
-Add a line to the end of the Git commit message to sign your work:
+Contributing to an Open Liberty guide is simple. Each guide is maintained in its own GitHub repository. To contribute, just fork from the `prod` branch for your chosen guide.  Then create a branch in your forked repository to include your contribution and open a pull request to the `staging` branch for the guide.
+Certify the originality of your work by following the [Developer Certificate of Origin (DCO)](https://developercertificate.org) approach and adding a line to the end of the Git commit message to sign your work:
 
 ```text
 Signed-off-by: Jane Williams <jane.williams@gmail.com>
@@ -30,30 +25,15 @@ Use your real name when you sign. We can't accept pseudonyms or anonymous contri
 
 Many Git UI tools have support for adding the `Signed-off-by` line to the end of your commit message. This line can be automatically added by the `git commit` command by using the `-s` option.
 
-If reviewers agree with your change, your change will be merged to the `prod` branch for publishing.
+The team is then notified and your contribution is reviewed according to the following process:
 
-### Code contributions
-
-If you are contributing trivial code changes such as typos, redundant spaces, or minor formatting and spelling errors, follow the instructions under [Text or content contributions](./CONTRIBUTING.md#text-or-content-contributions).
-
-If you are contributing code changes via a pull request for non-trivial changes, you must sign off on the [Individual Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/release/cla/open-liberty-cla-individual.pdf). An example of a non-trivial change could be adding a new
-microservice to the backend application of the guide.
-
-If you are contributing changes as part of your job, you may also wish to have your employer sign a [Corporate Contributor License Agreement](https://github.com/OpenLiberty/open-liberty/blob/release/cla/open-liberty-cla-corporate.pdf).
-
-Instructions for how to sign and submit these agreements are located at the top of each document.
-
-After we obtain the signed CLA, you are welcome to open a pull request against the `staging` branch, and the team will be notified for review. We ask you to follow these steps through the submission process:
-
-1. Open a pull request against the `staging` branch.
-2. A "CLA signed" label will be manually added by the team.
-3. The team will be notified and will review your change(s).
+1. The team will review your change(s).
     - If there are further changes to be made, the team will request changes on the pull request.
     - If the team does not agree with the change, the PR will be closed with an explanation and suggestion for follow-up.
-4. If the team approves, a full Open Liberty site build will be run.
-5. Based on the results of the build:
+2. If the team approves, the team will merge your PR. A full Open Liberty staging site build will be run.
+3. Based on the results of the build:
     - If further review is needed, we will let you know about a pending review from our team and discuss any necessary improvements that need to be made to your change(s).
-    - If everything is successful, the team will merge your PR.
+    - If everything is successful, the team will publish your change(s) to the `prod` branch and update the Open Liberty production site, if necessary.
 
 ## Questions and concerns
 
