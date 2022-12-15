@@ -20,4 +20,4 @@ sed -i "s;FROM icr.io/appcafe/open-liberty:full-java11-openj9-ubi;FROM $DOCKER_U
 cat system/Dockerfile
 cat inventory/Dockerfile
 
-sudo ../scripts/testApp.sh
+sudo -u runner ../scripts/testApp.sh
