@@ -9,7 +9,7 @@ minikube status
 #kubectl config view
 eval "$(minikube docker-env)"
 
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -q clean package
