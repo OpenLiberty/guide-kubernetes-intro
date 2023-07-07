@@ -1,7 +1,7 @@
 // INSTRUCTION: Please remove all comments that start INSTRUCTION prior to commit. Most comments should be removed, although not the copyright.
 // INSTRUCTION: The copyright statement must appear at the top of the file
 //
-// Copyright (c) 2018, 2022 IBM Corporation and others.
+// Copyright (c) 2018, 2023 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -116,7 +116,7 @@ cd start
 mvn clean package
 ```
 
-include::{common-includes}/ol-icr-full-docker-pull.adoc[]
+
 
 Next, run the `docker build` commands to build container images for your application:
 [role='command']
@@ -146,7 +146,7 @@ include::{common-includes}/os-tabs.adoc[]
 REPOSITORY                                                       TAG
 inventory                                                        1.0-SNAPSHOT
 system                                                           1.0-SNAPSHOT
-openliberty/open-liberty                                         full-java11-openj9-ubi
+openliberty/open-liberty                                         kernel-slim-java11-openj9-ubi
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.3
 k8s.gcr.io/kube-scheduler-amd64                                  v1.10.3
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.3
@@ -166,7 +166,7 @@ k8s.gcr.io/pause-amd64                                           3.1
 REPOSITORY                                                       TAG
 inventory                                                        1.0-SNAPSHOT
 system                                                           1.0-SNAPSHOT
-openliberty/open-liberty                                         full-java11-openj9-ubi
+openliberty/open-liberty                                         kernel-slim-java11-openj9-ubi
 k8s.gcr.io/kube-proxy-amd64                                      v1.10.0
 k8s.gcr.io/kube-controller-manager-amd64                         v1.10.0
 k8s.gcr.io/kube-apiserver-amd64                                  v1.10.0
@@ -202,7 +202,7 @@ Verify that the ***system:1.0-SNAPSHOT*** and ***inventory:1.0-SNAPSHOT*** image
 REPOSITORY                                TAG                       
 inventory                                 1.0-SNAPSHOT
 system                                    1.0-SNAPSHOT
-openliberty/open-liberty                  full-java11-openj9-ubi
+openliberty/open-liberty                  kernel-slim-java11-openj9-ubi
 ```
 
 If you don't see the ***system:1.0-SNAPSHOT*** and ***inventory:1.0-SNAPSHOT*** images, then check the Maven build log for any potential errors. If the images built without errors, push them to your container registry on IBM Cloud with the following commands:
