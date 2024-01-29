@@ -41,7 +41,7 @@ spec:
         # end::image1[]
         ports:
         # tag::containerPort1[]
-        - containerPort: 9080
+        - containerPort: 9090
         # end::containerPort1[]
         # tag::readinessProbe1[]
         readinessProbe:
@@ -49,7 +49,7 @@ spec:
             # tag::ready1[]
             path: /health/ready
             # end::ready1[]
-            port: 9080
+            port: 9090
           # tag::delay2[]
           initialDelaySeconds: 30
           # end::delay2[]
@@ -107,7 +107,7 @@ spec:
         # end::image2[]
         ports:
         # tag::containerPort2[]
-        - containerPort: 9080
+        - containerPort: 9090
         # end::containerPort2[]
         env:
         - name: SYS_APP_HOSTNAME
@@ -118,7 +118,7 @@ spec:
             # tag::ready2[]
             path: /health/ready
             # end::ready2[]
-            port: 9080
+            port: 9090
           # tag::delay4[]
           initialDelaySeconds: 30
           # end::delay4[]
@@ -147,8 +147,8 @@ spec:
     # end::app7[]
   ports:
   - protocol: TCP
-    port: 9080
-    targetPort: 9080
+    port: 9090
+    targetPort: 9090
     # tag::nodePort1[]
     nodePort: 31000
     # end::nodePort1[]
@@ -168,8 +168,8 @@ spec:
     # end::app8[]
   ports:
   - protocol: TCP
-    port: 9080
-    targetPort: 9080
+    port: 9090
+    targetPort: 9090
     # tag::nodePort2[]
     nodePort: 32000
     # end::nodePort2[]
