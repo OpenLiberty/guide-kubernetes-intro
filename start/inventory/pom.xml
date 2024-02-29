@@ -22,8 +22,8 @@
         <inventory.service.root>localhost:32000</inventory.service.root>
 
         <!-- Liberty configuration -->
-        <liberty.var.default.http.port>9080</liberty.var.default.http.port>
-        <liberty.var.default.https.port>9443</liberty.var.default.https.port>
+        <liberty.var.http.port>9090</liberty.var.http.port>
+        <liberty.var.https.port>9453</liberty.var.https.port>
     </properties>
 
     <dependencies>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
-            <version>6.0</version>
+            <version>6.1</version>
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
@@ -45,25 +45,25 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>3.14.0</version>
         </dependency>
         <!-- For tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.9.2</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
-            <version>6.2.3.Final</version>
+            <version>6.2.7.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-json-binding-provider</artifactId>
-            <version>6.2.3.Final</version>
+            <version>6.2.7.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -85,19 +85,19 @@
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <version>3.8.2</version>
+                <version>3.10</version>
             </plugin>
              <!-- Plugin to run unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.5</version>
             </plugin>
             <!-- Plugin to run functional tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.5</version>
                 <configuration>
                     <systemPropertyVariables>
                         <inventory.service.root>${inventory.service.root}</inventory.service.root>
