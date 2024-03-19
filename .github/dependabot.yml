@@ -1,7 +1,12 @@
 version: 2
 updates:
 - package-ecosystem: maven
-  directory: "/"
+  directory: "/finish"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 50
+- package-ecosystem: maven
+  directory: "/start"
   schedule:
     interval: monthly
   open-pull-requests-limit: 50
