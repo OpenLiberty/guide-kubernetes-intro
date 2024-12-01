@@ -63,7 +63,7 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-json-binding-provider</artifactId>
-            <version>6.2.10.Final</version>
+            <version>6.2.11.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
