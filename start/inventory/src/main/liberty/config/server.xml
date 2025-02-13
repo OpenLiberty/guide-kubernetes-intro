@@ -1,12 +1,14 @@
 <server description="Sample Liberty server">
 
     <featureManager>
-        <feature>restfulWS-3.1</feature>
-        <feature>jsonb-3.0</feature>
-        <feature>cdi-4.0</feature>
-        <feature>mpConfig-3.1</feature>
-        <feature>jsonp-2.1</feature>
-        <feature>mpHealth-4.0</feature>
+        <platform>jakartaee-10.0</platform>
+        <platform>microprofile-7.0</platform>
+        <feature>restfulWS</feature>
+        <feature>jsonb</feature>
+        <feature>cdi</feature>
+        <feature>mpConfig</feature>
+        <feature>jsonp</feature>
+        <feature>mpHealth</feature>
     </featureManager>
 
     <variable name="http.port" defaultValue="9090" />
