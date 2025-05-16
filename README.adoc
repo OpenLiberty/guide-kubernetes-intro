@@ -14,7 +14,7 @@
 :page-duration: 25 minutes
 :page-releasedate: 2018-10-05
 :page-description: Explore how to deploy microservices to Kubernetes and manage your cluster.
-:page-tags: ['Kubernetes', 'Docker']
+:page-tags: ['kubernetes', 'docker']
 :page-permalink: /guides/{projectid}
 :page-related-guides: ['docker', 'istio-intro']
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
