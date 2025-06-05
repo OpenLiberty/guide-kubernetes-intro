@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
+./mvnw -version
 
-mvn -q package
+./mvnw -q package
 
 docker pull icr.io/appcafe/open-liberty:kernel-slim-java11-openj9-ubi
 
@@ -36,8 +37,8 @@ sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' inventory/pom.xml
 sed -i 's=localhost:32000='"$INVENTORY_PROXY"'=g' inventory/pom.xml
 sed -i 's=localhost:31000='"$SYSTEM_PROXY"'=g' system/pom.xml
 
-mvn failsafe:integration-test 
-mvn failsafe:verify
+./mvnw failsafe:integration-test 
+./mvnw failsafe:verify
 
 curl http://"${SYSTEM_PROXY}"/system/properties
 curl http://"${INVENTORY_PROXY}"/inventory/systems
