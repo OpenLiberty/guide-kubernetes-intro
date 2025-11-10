@@ -48,11 +48,11 @@ jobs:
         working-directory: finish
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'semeru'
-          java-version: 11
+          java-version: 17
       - run: unset _JAVA_OPTIONS
       - name: Run tests
         run: ../scripts/testApp.sh
