@@ -1,7 +1,7 @@
 <server description="Sample Liberty server">
 
     <featureManager>
-        <platform>jakartaee-10.0</platform>
+        <platform>jakartaee-11.0</platform>
         <platform>microprofile-7.1</platform>
         <feature>restfulWS</feature>
         <feature>jsonb</feature>
